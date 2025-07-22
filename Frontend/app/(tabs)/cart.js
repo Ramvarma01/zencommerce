@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useMemo } from "react";
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   Image,
   Alert,
   Dimensions,
+  TextInput,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -23,30 +24,46 @@ const CartPage = () => {
   const [state, setState, getLocalStorageData] = useContext(AuthContext);
   const { user, token } = state;
 
-  // Compute cart items from user.cart and products (new cart structure)
-  const cartItems =
-    user?.cart
-      ?.map((cartItem) => {
-        const product = products.find((p) => p._id === cartItem.productId);
-        return product
-          ? {
-              ...product,
-              cartQuantity: cartItem.quantity,
-              variantId: cartItem.variantId,
-            }
-          : null;
-      })
-      .filter(Boolean) || [];
+  // Helper to create a unique key for each cart item (product + variant)
+  const getCartItemKey = (item) =>
+    item._id + (item.variantId ? `-${item.variantId}` : "");
 
-  // Selection state (by product _id)
+  // Compute cart items from user.cart and products
+  const cartItems = useMemo(
+    () =>
+      user?.cart
+        ?.map((cartItem) => {
+          const product = products.find((p) => p._id === cartItem.productId);
+          return product
+            ? {
+                ...product,
+                cartQuantity: cartItem.quantity,
+                variantId: cartItem.variantId,
+              }
+            : null;
+        })
+        .filter(Boolean) || [],
+    [user, products]
+  );
+
+  // Selection state (by unique cart item key)
   const [selectedItems, setSelectedItems] = useState(new Set());
+  const [selectionInitialized, setSelectionInitialized] = useState(false);
   const [shippingOption, setShippingOption] = useState("standard");
+  const [couponCode, setCouponCode] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
 
   useEffect(() => {
-    // Sync selected items with user.cart when user changes
-    const cartProductIds = user?.cart?.map((item) => item.productId) || [];
-    setSelectedItems(new Set(cartProductIds));
-  }, [user]);
+    // When cartItems are loaded or changed, select all of them by default.
+    const cartItemKeys = cartItems.map(getCartItemKey);
+    setSelectedItems(new Set(cartItemKeys));
+    if (cartItems.length > 0) {
+      setSelectionInitialized(true);
+    } else {
+      // Reset if cart becomes empty
+      setSelectionInitialized(false);
+    }
+  }, [cartItems]);
 
   const shippingOptions = [
     {
@@ -63,14 +80,33 @@ const CartPage = () => {
     },
   ];
 
+  const coupons = [
+    { code: "ZEN10", discount: 10, type: "percentage" },
+    { code: "SAVE50", discount: 50, type: "fixed" },
+  ];
+
+  const handleApplyCoupon = () => {
+    const foundCoupon = coupons.find(
+      // (c) => c.code.toLowerCase() === couponCode.toLowerCase()
+      (c) => c.code === couponCode
+    );
+    if (foundCoupon) {
+      setAppliedCoupon(foundCoupon);
+      Alert.alert("Success", "Coupon applied successfully!");
+    } else {
+      setAppliedCoupon(null);
+      Alert.alert("Error", "Invalid coupon code.");
+    }
+  };
+
   // Calculate totals
   const selectedItemsList = cartItems.filter((item) =>
-    selectedItems.has(item._id)
+    selectedItems.has(getCartItemKey(item))
   );
 
   const subtotal = selectedItemsList.reduce((sum, item) => {
     if (item.hasVariant && item.variantId) {
-      const variant = item.variants.find(v => v._id === item.variantId);
+      const variant = item.variants.find((v) => v._id === item.variantId);
       return sum + (variant ? variant.price : 0);
     }
     return sum + item.price;
@@ -78,8 +114,8 @@ const CartPage = () => {
 
   const totalSavings = selectedItemsList.reduce((sum, item) => {
     if (item.hasVariant && item.variantId) {
-      const variant = item.variants.find(v => v._id === item.variantId);
-      return sum + (variant ? (variant.originalPrice - variant.price) : 0);
+      const variant = item.variants.find((v) => v._id === item.variantId);
+      return sum + (variant ? variant.originalPrice - variant.price : 0);
     }
     return sum + (item.originalPrice - item.price);
   }, 0);
@@ -88,7 +124,18 @@ const CartPage = () => {
       ? shippingOptions.find((option) => option.id === shippingOption)?.price ||
         0
       : 0;
-  const total = subtotal + shippingCost;
+  const couponDiscount = useMemo(() => {
+    if (!appliedCoupon) return 0;
+    if (appliedCoupon.type === "percentage") {
+      return (subtotal * appliedCoupon.discount) / 100;
+    }
+    if (appliedCoupon.type === "fixed") {
+      return appliedCoupon.discount;
+    }
+    return 0;
+  }, [appliedCoupon, subtotal]);
+
+  const total = subtotal - couponDiscount + shippingCost;
 
   // Remove from cart (backend + context)
   const removeItem = async (productId, variantId) => {
@@ -136,24 +183,29 @@ const CartPage = () => {
   };
 
   // Toggle selection
-  const toggleItemSelection = (productId) => {
+  const toggleItemSelection = (item) => {
+    const itemKey = getCartItemKey(item);
     setSelectedItems((prev) => {
       const newSet = new Set(prev);
-      if (newSet.has(productId)) {
-        newSet.delete(productId);
+      if (newSet.has(itemKey)) {
+        newSet.delete(itemKey);
       } else {
-        newSet.add(productId);
+        newSet.add(itemKey);
       }
       return newSet;
     });
   };
 
+  // Check if all items are selected
+  const allItemsSelected =
+    cartItems.length > 0 && selectedItems.size === cartItems.length;
+
   // Toggle all
   const toggleAllItems = () => {
-    if (selectedItems.size === cartItems.length) {
+    if (allItemsSelected) {
       setSelectedItems(new Set());
     } else {
-      setSelectedItems(new Set(cartItems.map((item) => item._id)));
+      setSelectedItems(new Set(cartItems.map(getCartItemKey)));
     }
   };
 
@@ -196,15 +248,23 @@ const CartPage = () => {
 
   // Update renderCartItem to use _id
   const renderCartItem = (item) => (
-    <TouchableOpacity key={item._id + (item.variantId ? '-' + item.variantId : '')} style={styles.cartItem}  onPress={() => handleProductPress(item)}>
+    <TouchableOpacity
+      key={getCartItemKey(item)}
+      style={styles.cartItem}
+      onPress={() => handleProductPress(item)}
+    >
       <TouchableOpacity
         style={styles.checkbox}
-        onPress={() => toggleItemSelection(item._id)}
+        onPress={() => toggleItemSelection(item)}
       >
         <Ionicons
-          name={selectedItems.has(item._id) ? "checkbox" : "square-outline"}
+          name={
+            selectedItems.has(getCartItemKey(item))
+              ? "checkbox"
+              : "square-outline"
+          }
           size={24}
-          color={selectedItems.has(item._id) ? "#007AFF" : "#666"}
+          color={selectedItems.has(getCartItemKey(item)) ? "#007AFF" : "#666"}
         />
       </TouchableOpacity>
       <View style={styles.imageContainer}>
@@ -221,34 +281,43 @@ const CartPage = () => {
           {item.name}
         </Text>
         {/* Show variant name if present */}
-        {item.hasVariant && item.variantId && (
+        {item.hasVariant &&
+          item.variantId &&
           (() => {
-            const selectedVariant = item.variants.find(v => v._id === item.variantId);
+            const selectedVariant = item.variants.find(
+              (v) => v._id === item.variantId
+            );
             return selectedVariant ? (
               <Text style={styles.variantName} numberOfLines={1}>
                 {item.variantName}: {selectedVariant.name}
               </Text>
             ) : null;
-          })()
-        )}
+          })()}
         <View style={styles.priceContainer}>
           {item.hasVariant && item.variantId ? (
             (() => {
               // Find the specific variant based on variantId
-              const selectedVariant = item.variants.find(variant => variant._id === item.variantId);
+              const selectedVariant = item.variants.find(
+                (variant) => variant._id === item.variantId
+              );
               if (selectedVariant) {
                 return (
                   <>
-                    <Text style={styles.currentPrice}>₹{selectedVariant.price}</Text>
+                    <Text style={styles.currentPrice}>
+                      ₹{selectedVariant.price}
+                    </Text>
                     <Text style={styles.originalPrice}>
                       ₹{selectedVariant.originalPrice}
                     </Text>
                     <Text style={styles.savingsText}>
-                      Save ₹{(selectedVariant.originalPrice - selectedVariant.price).toFixed(2)}
+                      Save ₹
+                      {(
+                        selectedVariant.originalPrice - selectedVariant.price
+                      ).toFixed(2)}
                     </Text>
                   </>
                 );
-              } 
+              }
               // else {
               //   // Fallback to first variant if selected variant not found
               //   return (
@@ -292,6 +361,29 @@ const CartPage = () => {
       </View>
       {/* No quantity controls, as only one of each product is supported */}
     </TouchableOpacity>
+  );
+
+  const renderCouponCode = () => (
+    <View style={styles.section}>
+      <Text style={styles.sectionTitle}>Coupon Code</Text>
+      <View style={styles.couponContainer}>
+        <TextInput
+          style={styles.couponInput}
+          placeholder="Enter coupon code"
+          value={couponCode}
+          onChangeText={setCouponCode}
+          autoCapitalize="characters"
+        />
+        <TouchableOpacity style={[styles.applyButton]} onPress={handleApplyCoupon}>
+          <Text style={styles.applyButtonText}>Apply</Text>
+        </TouchableOpacity>
+      </View>
+      {appliedCoupon && (
+        <Text style={styles.appliedCouponText}>
+          Applied "{appliedCoupon.code}": -₹{couponDiscount.toFixed(2)}
+        </Text>
+      )}
+    </View>
   );
 
   const renderShippingOptions = () => (
@@ -338,6 +430,15 @@ const CartPage = () => {
         <Text style={styles.summaryValue}>₹{subtotal.toFixed(2)}</Text>
       </View>
 
+      {appliedCoupon && (
+        <View style={styles.summaryRow}>
+          <Text style={styles.summaryLabel}>Coupon Discount</Text>
+          <Text style={[styles.summaryValue, { color: "#4CAF50" }]}>
+            -₹{couponDiscount.toFixed(2)}
+          </Text>
+        </View>
+      )}
+
       <View style={styles.summaryRow}>
         <Text style={styles.summaryLabel}>Shipping</Text>
         <Text style={styles.summaryValue}>₹{shippingCost.toFixed(2)}</Text>
@@ -381,13 +482,13 @@ const CartPage = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Shopping Cart</Text>
-        <TouchableOpacity onPress={toggleAllItems}>
-          <Text style={styles.selectAllText}>
-            {selectedItems.size === cartItems.length
-              ? "Deselect All"
-              : "Select All"}
-          </Text>
-        </TouchableOpacity>
+        {selectionInitialized && cartItems.length > 0 && (
+          <TouchableOpacity onPress={toggleAllItems}>
+            <Text style={styles.selectAllText}>
+              {allItemsSelected ? "Deselect All" : "Select All"}
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
       {cartItems.length > 0 ? (
         <ScrollView
@@ -398,6 +499,7 @@ const CartPage = () => {
             {cartItems.map(renderCartItem)}
           </View>
 
+          {renderCouponCode()}
           {/* {renderShippingOptions()} */}
           {renderOrderSummary()}
           <View style={{ height: 100 }} />
@@ -464,14 +566,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   cartItemsContainer: {
-    padding: 15,
+    paddingHorizontal: 15,
   },
   cartItem: {
     flexDirection: "row",
     backgroundColor: "#fff",
     borderRadius: 12,
     padding: 15,
-    marginBottom: 15,
+    marginTop: 15,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -608,7 +710,7 @@ const styles = StyleSheet.create({
   section: {
     backgroundColor: "#fff",
     marginHorizontal: 15,
-    marginBottom: 15,
+    marginTop: 15,
     borderRadius: 12,
     padding: 15,
     shadowColor: "#000",
@@ -625,6 +727,37 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#1A1A1A",
     marginBottom: 12,
+  },
+  couponContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  couponInput: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: "#E5E5E5",
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    marginRight: 10,
+    fontSize: 14,
+  },
+  applyButton: {
+    backgroundColor: "#007AFF",
+    borderRadius: 8,
+    paddingVertical: 11,
+    paddingHorizontal: 20,
+  },
+  applyButtonText: {
+    color: "#fff",
+    fontWeight: "600",
+    fontSize: 14,
+  },
+  appliedCouponText: {
+    color: "#4CAF50",
+    fontWeight: "600",
+    marginTop: 5,
   },
   shippingOption: {
     flexDirection: "row",
@@ -665,7 +798,7 @@ const styles = StyleSheet.create({
   orderSummary: {
     backgroundColor: "#fff",
     marginHorizontal: 15,
-    // marginBottom: 15,
+    marginTop: 15,
     borderRadius: 12,
     padding: 15,
     shadowColor: "#000",
@@ -784,8 +917,8 @@ const styles = StyleSheet.create({
   },
   variantName: {
     fontSize: 12,
-    color: '#007AFF',
-    fontWeight: '500',
+    color: "#007AFF",
+    fontWeight: "500",
     marginBottom: 2,
   },
 });
