@@ -9,6 +9,8 @@ import {
   Alert,
   Dimensions,
   TextInput,
+  Modal,
+  Pressable,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -52,6 +54,9 @@ const CartPage = () => {
   const [shippingOption, setShippingOption] = useState("standard");
   const [couponCode, setCouponCode] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [showAddressModal, setShowAddressModal] = useState(false);
+  const [selectedAddressIdx, setSelectedAddressIdx] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState("online"); // "cod" or "online"
 
   useEffect(() => {
     // When cartItems are loaded or changed, select all of them by default.
@@ -135,7 +140,10 @@ const CartPage = () => {
     return 0;
   }, [appliedCoupon, subtotal]);
 
-  const total = subtotal - couponDiscount + shippingCost;
+  // Payment method charge
+  const paymentMethodCharge = paymentMethod === "cod" ? 40 : 0;
+
+  const total = subtotal - couponDiscount + shippingCost + paymentMethodCharge;
 
   // Remove from cart (backend + context)
   const removeItem = async (productId, variantId) => {
@@ -239,7 +247,24 @@ const CartPage = () => {
       Alert.alert("Empty Cart", "Please select items to checkout.");
       return;
     }
-    Alert.alert("Checkout", "Proceeding to checkout...");
+    // Check for phone
+    if (!user?.phone || !/^\d{10}$/.test(user.phone)) {
+      Alert.alert(
+        "Phone Number Required",
+        "Please add and verify your phone number by going to Profile → Edit Profile."
+      );
+      return;
+    }
+    // Check for shipping address
+    if (!user?.shippingAddress || !Array.isArray(user.shippingAddress) || user.shippingAddress.length === 0) {
+      Alert.alert(
+        "Shipping Address Required",
+        "Please add a shipping address by going to Profile → Add Shipping Address."
+      );
+      return;
+    }
+    // Both present, show address selection modal
+    setShowAddressModal(true);
   };
 
   const handleProductPress = (product) => {
@@ -386,36 +411,40 @@ const CartPage = () => {
     </View>
   );
 
-  const renderShippingOptions = () => (
+  // Payment method selection UI
+  const renderPaymentMethod = () => (
     <View style={styles.section}>
-      <Text style={styles.sectionTitle}>Shipping Options</Text>
-      {shippingOptions.map((option) => (
+      <Text style={styles.sectionTitle}>Payment Method</Text>
+      <View style={{ flexDirection: 'clomun' }}>
         <TouchableOpacity
-          key={option.id}
           style={[
-            styles.shippingOption,
-            shippingOption === option.id && styles.selectedShippingOption,
+            styles.paymentOption,
+            paymentMethod === "cod" && styles.selectedPaymentOption,
           ]}
-          onPress={() => setShippingOption(option.id)}
+          onPress={() => setPaymentMethod("cod")}
         >
-          <View style={styles.shippingInfo}>
-            <Text style={styles.shippingName}>{option.name}</Text>
-            <Text style={styles.shippingTime}>{option.time}</Text>
-          </View>
-          <View style={styles.shippingPrice}>
-            <Text style={styles.shippingPriceText}>₹{option.price}</Text>
-            <Ionicons
-              name={
-                shippingOption === option.id
-                  ? "radio-button-on"
-                  : "radio-button-off"
-              }
-              size={20}
-              color={shippingOption === option.id ? "#007AFF" : "#666"}
-            />
-          </View>
+          <Ionicons
+            name={paymentMethod === "cod" ? "radio-button-on" : "radio-button-off"}
+            size={20}
+            color={paymentMethod === "cod" ? "#007AFF" : "#666"}
+          />
+          <Text style={styles.paymentOptionText}>Cash on Delivery (₹40 extra)</Text>
         </TouchableOpacity>
-      ))}
+        <TouchableOpacity
+          style={[
+            styles.paymentOption,
+            paymentMethod === "online" && styles.selectedPaymentOption,
+          ]}
+          onPress={() => setPaymentMethod("online")}
+        >
+          <Ionicons
+            name={paymentMethod === "online" ? "radio-button-on" : "radio-button-off"}
+            size={20}
+            color={paymentMethod === "online" ? "#007AFF" : "#666"}
+          />
+          <Text style={styles.paymentOptionText}>Online Payment (No extra charge)</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 
@@ -433,9 +462,7 @@ const CartPage = () => {
       {appliedCoupon && (
         <View style={styles.summaryRow}>
           <Text style={styles.summaryLabel}>Coupon Discount</Text>
-          <Text style={[styles.summaryValue, { color: "#4CAF50" }]}>
-            -₹{couponDiscount.toFixed(2)}
-          </Text>
+          <Text style={[styles.summaryValue, { color: "#4CAF50" }]}>-₹{couponDiscount.toFixed(2)}</Text>
         </View>
       )}
 
@@ -444,12 +471,19 @@ const CartPage = () => {
         <Text style={styles.summaryValue}>₹{shippingCost.toFixed(2)}</Text>
       </View>
 
+     <View style={styles.summaryRow}>
+        <Text style={styles.summaryLabel}>Payment Method</Text>
+        <Text style={styles.summaryValue}>{paymentMethod === "cod" ? "Cash on Delivery" : "Online Payment"}</Text>
+      </View>
+      <View style={styles.summaryRow}>
+        <Text style={styles.summaryLabel}>Payment Charges</Text>
+        <Text style={styles.summaryValue}>₹{paymentMethodCharge.toFixed(2)}</Text>
+      </View>
+
       {totalSavings > 0 && (
         <View style={styles.summaryRow}>
           <Text style={styles.summaryLabel}>Total Savings</Text>
-          <Text style={[styles.summaryValue, { color: "#4CAF50" }]}>
-            -₹{totalSavings.toFixed(2)}
-          </Text>
+          <Text style={[styles.summaryValue, { color: "#4CAF50" }]}>-₹{totalSavings.toFixed(2)}</Text>
         </View>
       )}
 
@@ -478,8 +512,57 @@ const CartPage = () => {
     </View>
   );
 
+  // Address selection modal
+  const renderAddressModal = () => (
+    <Modal
+      visible={showAddressModal}
+      animationType="slide"
+      transparent={true}
+      onRequestClose={() => setShowAddressModal(false)}
+    >
+      <View style={styles.modalOverlay}>
+        <View style={styles.modalContent}>
+          <Text style={styles.modalTitle}>Select Delivery Address</Text>
+          <ScrollView style={{ maxHeight: 300 }}>
+            {user.shippingAddress.map((address, idx) => (
+              <Pressable
+                key={idx}
+                style={[
+                  styles.addressCard,
+                  selectedAddressIdx === idx && styles.selectedAddressCard,
+                ]}
+                onPress={() => setSelectedAddressIdx(idx)}
+              >
+                <Text style={styles.addressName}>{address.fullName}</Text>
+                <Text style={styles.addressText}>Phone: {address.phone}</Text>
+                <Text style={styles.addressText}>Address: {address.address}, {address.city}, {address.state}, {address.pincode}, {address.country}</Text>
+              </Pressable>
+            ))}
+          </ScrollView>
+          <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 20 }}>
+            <TouchableOpacity onPress={() => setShowAddressModal(false)} style={[styles.applyButton, { backgroundColor: '#ccc', marginRight: 10 }]}>
+              <Text style={[styles.applyButtonText, { color: '#333' }]}>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.applyButton, { opacity: selectedAddressIdx === null ? 0.5 : 1 }]}
+              disabled={selectedAddressIdx === null}
+              onPress={() => {
+                setShowAddressModal(false);
+                // Proceed to next step with user.shippingAddress[selectedAddressIdx]
+                Alert.alert('Address Selected', 'Proceeding with selected address.');
+              }}
+            >
+              <Text style={styles.applyButtonText}>Deliver Here</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </Modal>
+  );
+
   return (
     <SafeAreaView style={styles.container}>
+      {renderAddressModal()}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Shopping Cart</Text>
         {selectionInitialized && cartItems.length > 0 && (
@@ -500,6 +583,7 @@ const CartPage = () => {
           </View>
 
           {renderCouponCode()}
+          {renderPaymentMethod()}
           {/* {renderShippingOptions()} */}
           {renderOrderSummary()}
           <View style={{ height: 100 }} />
@@ -920,6 +1004,71 @@ const styles = StyleSheet.create({
     color: "#007AFF",
     fontWeight: "500",
     marginBottom: 2,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 20,
+    width: '90%',
+    maxWidth: 400,
+    alignItems: 'stretch',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 15,
+    color: '#1A1A1A',
+    textAlign: 'center',
+  },
+  addressCard: {
+    borderWidth: 1,
+    borderColor: '#E5E5E5',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 10,
+    backgroundColor: '#F8F9FA',
+  },
+  selectedAddressCard: {
+    borderColor: '#007AFF',
+    backgroundColor: '#E6F0FF',
+  },
+  addressName: {
+    fontWeight: 'bold',
+    fontSize: 15,
+    marginBottom: 2,
+  },
+  addressText: {
+    fontSize: 13,
+    color: '#333',
+    marginBottom: 1,
+  },
+  paymentOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderWidth: 1,
+    borderColor: '#E5E5E5',
+    borderRadius: 8,
+    marginRight: 10,
+    backgroundColor: '#fff',
+    marginBottom: 5,
+  },
+  selectedPaymentOption: {
+    borderColor: '#007AFF',
+    backgroundColor: '#E6F0FF',
+  },
+  paymentOptionText: {
+    fontSize: 14,
+    color: '#1A1A1A',
+    marginLeft: 8,
+    fontWeight: '500',
   },
 });
 
