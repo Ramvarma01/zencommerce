@@ -1,135 +1,149 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
-import Header from '../components/header';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useEffect, useState, useContext } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  FlatList,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
+import Header from "../components/header";
+import { SafeAreaView } from "react-native-safe-area-context";
+import axios from "axios";
+import { AuthContext } from "../../context/authContext";
+import { ProductContext } from "../../context/productContext";
 
-const MOCK_ORDERS = [
-  {
-    id: 'ORD123456',
-    date: '2024-06-18',
-    status: 'Delivered',
-    total: 28998,
-    items: [
-      {
-        id: '1',
-        name: 'Wireless Bluetooth Headphones',
-        image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400',
-        qty: 1,
-      },
-      {
-        id: '2',
-        name: 'Smart Fitness Watch',
-        image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400',
-        qty: 1,
-      },
-    ],
-  },
-  {
-    id: 'ORD654321',
-    date: '2024-06-10',
-    status: 'Shipped',
-    total: 14999,
-    items: [
-      {
-        id: '3',
-        name: 'Premium Coffee Maker',
-        image: 'https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=400',
-        qty: 1,
-      },
-    ],
-  },
-  {
-    id: 'ORD789012',
-    date: '2024-05-28',
-    status: 'Cancelled',
-    total: 3999,
-    items: [
-      {
-        id: '4',
-        name: 'Wireless Charging Pad',
-        image: 'https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=400',
-        qty: 1,
-      },
-    ],
-  },
-];
+const YourOrders = () => {
+  const [orders, setOrders] = useState([]);
+  // const [products, setProducts] = useState({}); // productId -> product
+  const [state, setState] = useContext(AuthContext);
+  const [products, setProducts] = useContext(ProductContext);
+  const { user, token } = state;
 
-const statusColors = {
-  Delivered: '#4CAF50',
-  Shipped: '#007AFF',
-  Cancelled: '#FF3B30',
-};
+  useEffect(() => {
+    // Fetch orders for the user
+    const fetchOrders = async () => {
+      const { data } = await axios.get(`/user-orders/${user._id}`); // adjust endpoint as needed
+      setOrders(data.orders);
 
-export default function YourOrder() {
+      // Collect all unique productIds from all orders
+      const productIds = [
+        ...new Set(
+          data.orders.flatMap((order) =>
+            order.items.map((item) => item.productId)
+          )
+        ),
+      ];
+
+      // Fetch all products in one go (if you have such an endpoint)
+      const productsRes = await axios.post("/api/products/bulk", {
+        ids: productIds,
+      });
+      // productsRes.data.products should be an array of product objects
+      const productsMap = {};
+      productsRes.data.products.forEach((prod) => {
+        productsMap[prod._id] = prod;
+      });
+      setProducts(productsMap);
+    };
+
+    fetchOrders();
+  }, []);
+
+  const renderOrderItem = (item) => {
+    const product = products.find((p) => p._id === item.productId);
+    // If product has variants, find the
+    let variant = null;
+    // variant = product.variants.find((v) => v._id === item.variantId);
+    if (product && item.variantId) {
+      variant = product.variants.find((v) => v._id === item.variantId);
+    }
+    return (
+      <View style={{ flexDirection: "row", marginBottom: 12 }}>
+        <View style={{ width: 60, height: 60, borderRadius: 8 }}>
+          <Image
+            source={{ uri: product?.thumbnail }}
+            style={{ width: "100%", height: 60, objectFit: "contain" }}
+          />
+        </View>
+        <View style={{ marginLeft: 12 }}>
+          {/* <Text style={{ fontWeight: "bold" }}>{product?.name}</Text> */}
+
+          <Text>Qty: {item.quantity}</Text>
+          <Text>Price: ₹{item.price}</Text>
+          {variant && (
+            <Text>
+              {product.variantName}: {variant.name}
+            </Text>
+          )}
+        </View>
+      </View>
+    );
+  };
+
   return (
     <SafeAreaView style={styles.Container}>
-      {/* <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#007AFF" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Your Orders</Text>
-        <View style={styles.placeholder} />
-      </View> */}
-      <Header title={'Your Orders'} />
-      <ScrollView contentContainerStyle={styles.listContent} showsVerticalScrollIndicator={false}>
-        {MOCK_ORDERS.length === 0 ? (
-          <Text style={styles.emptyText}>No orders found.</Text>
-        ) : (
-          MOCK_ORDERS.map(order => (
-            <View key={order.id} style={styles.orderCard}>
-              <View style={styles.orderHeader}>
-                <Text style={styles.orderId}>Order #{order.id}</Text>
-                <Text style={[styles.status, { color: statusColors[order.status] || '#888' }]}>{order.status}</Text>
-              </View>
-              <Text style={styles.orderDate}>Placed on {order.date}</Text>
-              <View style={styles.itemsRow}>
-                {order.items.map((product) => (
-                  <View key={product.id} style={styles.itemThumb}>
-                    <Image source={{ uri: product.image }} style={styles.itemImage} />
-                    <Text style={styles.qtyText}>x{product.qty}</Text>
-                  </View>
-                ))}
-              </View>
-              {/* <View style={styles.orderFooter}> */}
-                <Text style={styles.totalText}>Total: ₹{order.total.toFixed(2)}</Text>
-                {/* <TouchableOpacity style={styles.detailsButton}>
-                  <Ionicons name="chevron-forward" size={18} color="#007AFF" />
-                  <Text style={styles.detailsText}>Details</Text>
-                </TouchableOpacity> */}
-              {/* </View> */}
+      <Header title={"Your Orders"} />
+      <FlatList
+        data={orders}
+        keyExtractor={(order) => order._id}
+        renderItem={({ item: order }) => (
+          <View
+            style={{
+              marginHorizontal: 16,
+              marginVertical: 10,
+              shadowColor: "#000",
+              elevation: 3,
+              backgroundColor: "#fff",
+              borderRadius: 8,
+              padding: 12,
+            }}
+          >
+            <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+              Order #{order._id}
+            </Text>
+            <Text>Status: {order.Orderstatus}</Text>
+            <Text>Total: ₹{order.totalAmount}</Text>
+            {/* <Text>Date: {new Date(order.createdAt).toLocaleString()}</Text> */}
+            <Text>Date: {new Date(order.createdAt).toLocaleDateString()}</Text>
+            <View style={{ marginTop: 8 }}>
+              {order.items.map((item, idx) => (
+                <View key={idx}>{renderOrderItem(item)}</View>
+              ))}
             </View>
-          ))
+          </View>
         )}
-      </ScrollView>
+      />
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   Container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: "#F8F9FA",
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingHorizontal: 16,
     paddingVertical: 8,
     paddingTop: 35,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: "#e0e0e0",
   },
   backButton: {
     padding: 4,
   },
   headerTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#1A1A1A',
+    fontWeight: "bold",
+    color: "#1A1A1A",
   },
   placeholder: {
     width: 28,
@@ -140,44 +154,44 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
   },
   orderCard: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 12,
     padding: 16,
     marginBottom: 18,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 3.84,
     elevation: 4,
   },
   orderHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 4,
   },
   orderId: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#222',
+    fontWeight: "600",
+    color: "#222",
   },
   status: {
     fontSize: 14,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   orderDate: {
     fontSize: 13,
-    color: '#888',
+    color: "#888",
     marginBottom: 10,
   },
   itemsRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 12,
     gap: 10,
   },
   itemThumb: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   itemImage: {
     width: 48,
@@ -187,36 +201,38 @@ const styles = StyleSheet.create({
   },
   qtyText: {
     fontSize: 12,
-    color: '#666',
+    color: "#666",
   },
   orderFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   totalText: {
     fontSize: 15,
-    fontWeight: '600',
-    color: '#1A1A1A',
+    fontWeight: "600",
+    color: "#1A1A1A",
   },
   detailsButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 3,
     paddingVertical: 4,
     paddingHorizontal: 8,
     borderRadius: 6,
   },
   detailsText: {
-    color: '#007AFF',
+    color: "#007AFF",
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
     marginLeft: 2,
   },
   emptyText: {
-    color: '#888',
+    color: "#888",
     fontSize: 16,
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: 40,
   },
-}); 
+});
+
+export default YourOrders;
