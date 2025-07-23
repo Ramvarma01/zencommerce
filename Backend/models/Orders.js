@@ -14,9 +14,10 @@ const orderItemSchema = new mongoose.Schema({
     type: Number,
     required: true,
   }, // snapshot of price at time of order
-  variant: {
-    type: String,
-  }, // Optional: For color/size etc.
+  variantId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: false,
+  }, // Only if product has variant
 });
 
 const orderSchema = new mongoose.Schema(
@@ -27,7 +28,7 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
     items: {
-      type:  [orderItemSchema],
+      type: [orderItemSchema],
       required: true,
     },
     shippingAddress: {
@@ -50,17 +51,17 @@ const orderSchema = new mongoose.Schema(
       default: "Pending",
     },
     Orderstatus: {
-        type: String,
-        enum: ["Ordered", "Shipped", "Delivered", "Cancelled"],
-        required: true,
-        default: "Ordered",
+      type: String,
+      enum: ["Ordered", "Shipped", "Delivered", "Cancelled"],
+      required: true,
+      default: "Ordered",
     },
-    deliveredAt: { 
-        type: Date 
+    deliveredAt: {
+      type: Date,
     },
-    totalAmount: { 
-        type: Number, 
-        required: true 
+    totalAmount: {
+      type: Number,
+      required: true,
     },
   },
   { timestamps: true }
