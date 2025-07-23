@@ -57,6 +57,7 @@ const CartPage = () => {
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [selectedAddressIdx, setSelectedAddressIdx] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("online"); // "cod" or "online"
+  const [placingOrder, setPlacingOrder] = useState(false);
 
   useEffect(() => {
     // When cartItems are loaded or changed, select all of them by default.
@@ -648,25 +649,72 @@ const CartPage = () => {
             <TouchableOpacity
               style={[
                 styles.applyButton,
-                { opacity: selectedAddressIdx === null ? 0.5 : 1 },
+                { opacity: selectedAddressIdx === null || placingOrder ? 0.5 : 1 }
               ]}
-              disabled={selectedAddressIdx === null}
-              onPress={() => {
-                setShowAddressModal(false);
-                // Proceed to next step with user.shippingAddress[selectedAddressIdx]
-                Alert.alert(
-                  "Address Selected",
-                  "Proceeding with selected address."
-                );
-              }}
+              disabled={selectedAddressIdx === null || placingOrder}
+              onPress={placeOrder}
             >
-              <Text style={styles.applyButtonText}>Deliver Here</Text>
+              <Text style={styles.applyButtonText}>{placingOrder ? 'Placing Order...' : 'Deliver Here & Place Order'}</Text>
             </TouchableOpacity>
           </View>
         </View>
       </View>
     </Modal>
   );
+
+  // Place order function
+  const placeOrder = async () => {
+    if (selectedAddressIdx === null) {
+      Alert.alert('Select Address', 'Please select a delivery address.');
+      return;
+    }
+    setPlacingOrder(true);
+    try {
+      // Prepare order items
+      const items = selectedItemsList.map((item) => {
+        let variantName = '';
+        if (item.hasVariant && item.variantId) {
+          const variant = item.variants.find((v) => v._id === item.variantId);
+          variantName = variant ? variant.name : '';
+        }
+        return {
+          productId: item._id,
+          quantity: item.cartQuantity,
+          price: item.hasVariant && item.variantId
+            ? (item.variants.find((v) => v._id === item.variantId)?.price || item.price)
+            : item.price,
+          variant: item.hasVariant && item.variantId ? variantName : undefined,
+        };
+      });
+      const orderPayload = {
+        user: user._id,
+        items,
+        shippingAddress: user.shippingAddress[selectedAddressIdx],
+        paymentMethod: paymentMethod === 'cod' ? 'COD' : 'Online',
+        totalAmount: total,
+      };
+      const { data } = await axios.post('/create-order', orderPayload);
+      if (data.success) {
+        // Remove ordered items from cart
+        const remainingCart = user.cart.filter((cartItem) => {
+          return !selectedItemsList.some((item) =>
+            cartItem.productId === item._id &&
+            (!item.hasVariant || cartItem.variantId === item.variantId)
+          );
+        });
+        setState({ ...state, user: { ...user, cart: remainingCart } });
+        Alert.alert('Order Placed', 'Your order has been placed successfully!');
+        setShowAddressModal(false);
+        setSelectedAddressIdx(null);
+      } else {
+        Alert.alert('Order Failed', data.message || 'Could not place order.');
+      }
+    } catch (error) {
+      Alert.alert('Order Failed', error.response?.data?.message || error.message || 'Could not place order.');
+    } finally {
+      setPlacingOrder(false);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>

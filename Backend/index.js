@@ -22,6 +22,7 @@ app.use(morgan('dev'))
 //ROUTES
 app.use(require('./routes/UserRoutes'));
 app.use(require('./routes/ProductRoutes'));
+app.use(require('./routes/OrderRoutes'));
 
 //PORT
 const  PORT = process.env.PORT || 8080;
