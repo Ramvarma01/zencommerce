@@ -10,9 +10,9 @@ const ProductProvider =({children}) => {
     const [products, setProducts] = useState([]);
 
     //BaseURL Setting
-    axios.defaults.baseURL = "http://192.168.0.103:8080"   //home
+    // axios.defaults.baseURL = "http://192.168.0.103:8080"   //home
     // axios.defaults.baseURL = "http://192.168.0.105:8080"   //home 5G
-    // axios.defaults.baseURL = "http://192.168.29.251:8080"  //office
+    axios.defaults.baseURL = "http://192.168.29.251:8080"  //office
     const fetchProducts = async () => {
         try {
             const res = await axios.get('/get-products');

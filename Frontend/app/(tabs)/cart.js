@@ -256,7 +256,11 @@ const CartPage = () => {
       return;
     }
     // Check for shipping address
-    if (!user?.shippingAddress || !Array.isArray(user.shippingAddress) || user.shippingAddress.length === 0) {
+    if (
+      !user?.shippingAddress ||
+      !Array.isArray(user.shippingAddress) ||
+      user.shippingAddress.length === 0
+    ) {
       Alert.alert(
         "Shipping Address Required",
         "Please add a shipping address by going to Profile → Add Shipping Address."
@@ -269,6 +273,32 @@ const CartPage = () => {
 
   const handleProductPress = (product) => {
     router.push(`/product/${product._id}`);
+  };
+
+  // Add this helper to get max quantity for a cart item
+  const getMaxQuantity = (item) => {
+    if (item.hasVariant && item.variantId) {
+      const variant = item.variants.find((v) => v._id === item.variantId);
+      return variant ? variant.quantity : 1;
+    }
+    return item.quantity;
+  };
+
+  // Add this function to update cartQuantity in the user.cart array in AuthContext
+  const updateCartQuantity = (item, newQuantity) => {
+    // Find the cart item in user.cart
+    const cartIndex = user.cart.findIndex(
+      (cartItem) =>
+        cartItem.productId === item._id &&
+        (item.hasVariant ? cartItem.variantId === item.variantId : true)
+    );
+    if (cartIndex === -1) return;
+    // Clamp newQuantity between 1 and max
+    const max = getMaxQuantity(item);
+    const clamped = Math.max(1, Math.min(newQuantity, max));
+    user.cart[cartIndex].quantity = clamped;
+    // Update context state
+    setState({ ...state, user: { ...user, cart: [...user.cart] } });
   };
 
   // Update renderCartItem to use _id
@@ -368,23 +398,57 @@ const CartPage = () => {
             </>
           )}
         </View>
-        <View style={styles.actionButtons}>
-          <View style={{ flex: 1, marginRight: 70 }} />
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={() => moveToWishlist(item)}
-          >
-            <Ionicons name="heart-outline" size={16} color="#666" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={() => removeItem(item._id, item.variantId)}
-          >
-            <Ionicons name="trash-outline" size={16} color="#FF3B30" />
-          </TouchableOpacity>
+        <View style={{ flexDirection: "row", gap: 8, alignItems: "center" }}>
+          <View style={styles.quantityContainer}>
+            <TouchableOpacity
+              style={styles.quantityButton}
+              onPress={(e) => {
+                e.stopPropagation && e.stopPropagation();
+                updateCartQuantity(item, item.cartQuantity - 1);
+              }}
+              disabled={item.cartQuantity <= 1}
+            >
+              <Ionicons
+                name="remove"
+                size={18}
+                color={item.cartQuantity <= 1 ? "#ccc" : "#007AFF"}
+              />
+            </TouchableOpacity>
+            <Text style={styles.quantityText}>{item.cartQuantity}</Text>
+            <TouchableOpacity
+              style={styles.quantityButton}
+              onPress={(e) => {
+                e.stopPropagation && e.stopPropagation();
+                updateCartQuantity(item, item.cartQuantity + 1);
+              }}
+              disabled={item.cartQuantity >= getMaxQuantity(item)}
+            >
+              <Ionicons
+                name="add"
+                size={18}
+                color={
+                  item.cartQuantity >= getMaxQuantity(item) ? "#ccc" : "#007AFF"
+                }
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.actionButtons}>
+            {/* <View style={{ flex: 1, marginRight: 70 }} /> */}
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={() => moveToWishlist(item)}
+            >
+              <Ionicons name="heart-outline" size={16} color="#666" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={() => removeItem(item._id, item.variantId)}
+            >
+              <Ionicons name="trash-outline" size={16} color="#FF3B30" />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-      {/* No quantity controls, as only one of each product is supported */}
     </TouchableOpacity>
   );
 
@@ -399,7 +463,10 @@ const CartPage = () => {
           onChangeText={setCouponCode}
           autoCapitalize="characters"
         />
-        <TouchableOpacity style={[styles.applyButton]} onPress={handleApplyCoupon}>
+        <TouchableOpacity
+          style={[styles.applyButton]}
+          onPress={handleApplyCoupon}
+        >
           <Text style={styles.applyButtonText}>Apply</Text>
         </TouchableOpacity>
       </View>
@@ -415,7 +482,7 @@ const CartPage = () => {
   const renderPaymentMethod = () => (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>Payment Method</Text>
-      <View style={{ flexDirection: 'clomun' }}>
+      <View style={{ flexDirection: "clomun", gap: 10 }}>
         <TouchableOpacity
           style={[
             styles.paymentOption,
@@ -424,11 +491,15 @@ const CartPage = () => {
           onPress={() => setPaymentMethod("cod")}
         >
           <Ionicons
-            name={paymentMethod === "cod" ? "radio-button-on" : "radio-button-off"}
+            name={
+              paymentMethod === "cod" ? "radio-button-on" : "radio-button-off"
+            }
             size={20}
             color={paymentMethod === "cod" ? "#007AFF" : "#666"}
           />
-          <Text style={styles.paymentOptionText}>Cash on Delivery (₹40 extra)</Text>
+          <Text style={styles.paymentOptionText}>
+            Cash on Delivery (₹40 extra)
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[
@@ -438,11 +509,17 @@ const CartPage = () => {
           onPress={() => setPaymentMethod("online")}
         >
           <Ionicons
-            name={paymentMethod === "online" ? "radio-button-on" : "radio-button-off"}
+            name={
+              paymentMethod === "online"
+                ? "radio-button-on"
+                : "radio-button-off"
+            }
             size={20}
             color={paymentMethod === "online" ? "#007AFF" : "#666"}
           />
-          <Text style={styles.paymentOptionText}>Online Payment (No extra charge)</Text>
+          <Text style={styles.paymentOptionText}>
+            Online Payment (No extra charge)
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -462,7 +539,9 @@ const CartPage = () => {
       {appliedCoupon && (
         <View style={styles.summaryRow}>
           <Text style={styles.summaryLabel}>Coupon Discount</Text>
-          <Text style={[styles.summaryValue, { color: "#4CAF50" }]}>-₹{couponDiscount.toFixed(2)}</Text>
+          <Text style={[styles.summaryValue, { color: "#4CAF50" }]}>
+            -₹{couponDiscount.toFixed(2)}
+          </Text>
         </View>
       )}
 
@@ -471,19 +550,25 @@ const CartPage = () => {
         <Text style={styles.summaryValue}>₹{shippingCost.toFixed(2)}</Text>
       </View>
 
-     <View style={styles.summaryRow}>
+      <View style={styles.summaryRow}>
         <Text style={styles.summaryLabel}>Payment Method</Text>
-        <Text style={styles.summaryValue}>{paymentMethod === "cod" ? "Cash on Delivery" : "Online Payment"}</Text>
+        <Text style={styles.summaryValue}>
+          {paymentMethod === "cod" ? "Cash on Delivery" : "Online Payment"}
+        </Text>
       </View>
       <View style={styles.summaryRow}>
         <Text style={styles.summaryLabel}>Payment Charges</Text>
-        <Text style={styles.summaryValue}>₹{paymentMethodCharge.toFixed(2)}</Text>
+        <Text style={styles.summaryValue}>
+          ₹{paymentMethodCharge.toFixed(2)}
+        </Text>
       </View>
 
       {totalSavings > 0 && (
         <View style={styles.summaryRow}>
           <Text style={styles.summaryLabel}>Total Savings</Text>
-          <Text style={[styles.summaryValue, { color: "#4CAF50" }]}>-₹{totalSavings.toFixed(2)}</Text>
+          <Text style={[styles.summaryValue, { color: "#4CAF50" }]}>
+            -₹{totalSavings.toFixed(2)}
+          </Text>
         </View>
       )}
 
@@ -535,21 +620,44 @@ const CartPage = () => {
               >
                 <Text style={styles.addressName}>{address.fullName}</Text>
                 <Text style={styles.addressText}>Phone: {address.phone}</Text>
-                <Text style={styles.addressText}>Address: {address.address}, {address.city}, {address.state}, {address.pincode}, {address.country}</Text>
+                <Text style={styles.addressText}>
+                  Address: {address.address}, {address.city}, {address.state},{" "}
+                  {address.pincode}, {address.country}
+                </Text>
               </Pressable>
             ))}
           </ScrollView>
-          <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 20 }}>
-            <TouchableOpacity onPress={() => setShowAddressModal(false)} style={[styles.applyButton, { backgroundColor: '#ccc', marginRight: 10 }]}>
-              <Text style={[styles.applyButtonText, { color: '#333' }]}>Cancel</Text>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "flex-end",
+              marginTop: 20,
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => setShowAddressModal(false)}
+              style={[
+                styles.applyButton,
+                { backgroundColor: "#ccc", marginRight: 10 },
+              ]}
+            >
+              <Text style={[styles.applyButtonText, { color: "#333" }]}>
+                Cancel
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.applyButton, { opacity: selectedAddressIdx === null ? 0.5 : 1 }]}
+              style={[
+                styles.applyButton,
+                { opacity: selectedAddressIdx === null ? 0.5 : 1 },
+              ]}
               disabled={selectedAddressIdx === null}
               onPress={() => {
                 setShowAddressModal(false);
                 // Proceed to next step with user.shippingAddress[selectedAddressIdx]
-                Alert.alert('Address Selected', 'Proceeding with selected address.');
+                Alert.alert(
+                  "Address Selected",
+                  "Proceeding with selected address."
+                );
               }}
             >
               <Text style={styles.applyButtonText}>Deliver Here</Text>
@@ -740,10 +848,12 @@ const styles = StyleSheet.create({
   quantityContainer: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent:"center",
     backgroundColor: "#F8F9FA",
     borderRadius: 8,
-    padding: 4,
-    marginBottom: 8,
+    padding: 5,
+    marginTop: 8,
+    width: 100
   },
   quantityButton: {
     width: 28,
@@ -766,14 +876,14 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#1A1A1A",
     marginHorizontal: 12,
-    minWidth: 20,
+    // minWidth: 20,
     textAlign: "center",
   },
   actionButtons: {
     flexDirection: "row",
-    alignItems: "center",
-    // paddingTop: 5,
-    gap: 15,
+    // alignItems: "center",
+    paddingTop: 5,
+    gap: 8,
   },
   actionButton: {
     width: 32,
@@ -1007,68 +1117,68 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.3)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "rgba(0,0,0,0.3)",
+    justifyContent: "center",
+    alignItems: "center",
   },
   modalContent: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 12,
     padding: 20,
-    width: '90%',
+    width: "90%",
     maxWidth: 400,
-    alignItems: 'stretch',
+    alignItems: "stretch",
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 15,
-    color: '#1A1A1A',
-    textAlign: 'center',
+    color: "#1A1A1A",
+    textAlign: "center",
   },
   addressCard: {
     borderWidth: 1,
-    borderColor: '#E5E5E5',
+    borderColor: "#E5E5E5",
     borderRadius: 8,
     padding: 12,
     marginBottom: 10,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: "#F8F9FA",
   },
   selectedAddressCard: {
-    borderColor: '#007AFF',
-    backgroundColor: '#E6F0FF',
+    borderColor: "#007AFF",
+    backgroundColor: "#E6F0FF",
   },
   addressName: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     fontSize: 15,
     marginBottom: 2,
   },
   addressText: {
     fontSize: 13,
-    color: '#333',
+    color: "#333",
     marginBottom: 1,
   },
   paymentOption: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: 10,
     paddingHorizontal: 12,
     borderWidth: 1,
-    borderColor: '#E5E5E5',
+    borderColor: "#E5E5E5",
     borderRadius: 8,
     marginRight: 10,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     marginBottom: 5,
   },
   selectedPaymentOption: {
-    borderColor: '#007AFF',
-    backgroundColor: '#E6F0FF',
+    borderColor: "#007AFF",
+    backgroundColor: "#E6F0FF",
   },
   paymentOptionText: {
     fontSize: 14,
-    color: '#1A1A1A',
+    color: "#1A1A1A",
     marginLeft: 8,
-    fontWeight: '500',
+    fontWeight: "500",
   },
 });
 

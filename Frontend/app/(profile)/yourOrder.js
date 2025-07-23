@@ -92,13 +92,13 @@ export default function YourOrder() {
                   </View>
                 ))}
               </View>
-              <View style={styles.orderFooter}>
+              {/* <View style={styles.orderFooter}> */}
                 <Text style={styles.totalText}>Total: ₹{order.total.toFixed(2)}</Text>
-                <TouchableOpacity style={styles.detailsButton}>
+                {/* <TouchableOpacity style={styles.detailsButton}>
                   <Ionicons name="chevron-forward" size={18} color="#007AFF" />
                   <Text style={styles.detailsText}>Details</Text>
-                </TouchableOpacity>
-              </View>
+                </TouchableOpacity> */}
+              {/* </View> */}
             </View>
           ))
         )}
