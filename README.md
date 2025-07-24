@@ -57,10 +57,22 @@
 
 ### 🖥️ Admin Panel
 
-<!-- Add admin panel screenshots here -->
-<!-- Example:
-<img src="https://your-image-url.com/admin1.jpg" alt="Admin Panel Screenshot 1" width="300" />
--->
+<p align="center">
+  <img src="https://www.dropbox.com/scl/fi/8oplw3vvlawwu3r4y5ry4/Screenshot-2025-07-24-123526.png?rlkey=iujb0r7ukm7sdmlsrj2x1byh9&raw=1" width="250" />
+  <img src="https://www.dropbox.com/scl/fi/z5owgd6n40pvdcdpblg7h/Screenshot-2025-07-24-123513.png?rlkey=kqaq0voqxj0jboheu033ol6oa&raw=1" width="250" />
+  <img src="https://www.dropbox.com/scl/fi/fhe5r94jt7t5fap2vxmvw/Screenshot-2025-07-24-123500.png?rlkey=6x8bphs0iz05b03pr71p749xo&raw=1" width="250" />
+</p>
+
+<p align="center">
+  <img src="https://www.dropbox.com/scl/fi/36d4vxbxaqz8dw3eg5he1/Screenshot-2025-07-24-123440.png?rlkey=5qqchykud9pwai3nhmqnanw0q&raw=1" width="250" />
+  <img src="https://www.dropbox.com/scl/fi/gfluveo0rxo3tre5110n9/Screenshot-2025-07-24-123430.png?rlkey=o7hd1rns82rbfzoecksfvtcii&raw=1" width="250" />
+  <img src="https://www.dropbox.com/scl/fi/lfav1opmjxx8y3cdhv6ly/Screenshot-2025-07-24-123411.png?rlkey=omrt1qat8wcbl8ggb8ud32x5w&raw=1" width="250" />
+</p>
+
+<p align="center">
+  <img src="https://www.dropbox.com/scl/fi/7pm3j9732bjp2amgf9f71/Screenshot-2025-07-24-123356.png?rlkey=6wse57u6ap9rxjlkwnhuvu939&raw=1" width="250" />
+  <img src="https://www.dropbox.com/scl/fi/sj2to0wwpx07gfv2g0j4w/Screenshot-2025-07-24-123318.png?rlkey=wexe13ogqpscm50vmmne3vkb2&raw=1" width="250" />
+</p>
 
 Or use your Dropbox images, e.g.:
 ![Dropbox Image](https://www.dropbox.com/scl/fi/your-image-path/image.jpg?rlkey=yr7h232jqy3lqd22413jo9d2e&raw=1)
