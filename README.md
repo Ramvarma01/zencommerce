@@ -1,6 +1,6 @@
 # Zencommerce
 
-![Zencommerce Logo](https://www.dropbox.com/scl/fi/your-logo-path/logo.png?rlkey=yr7h232jqy3lqd22413jo9d2e&raw=1)
+![Zencommerce Logo](https://www.dropbox.com/scl/fi/cjyn3ixdqjlyi4yf45hlb/zencommerce_logo.png?rlkey=1r80m0mggosm4wo5dmlx0as3o&st=7c1cx1sx&dl=0)
 
 ## Overview
 
