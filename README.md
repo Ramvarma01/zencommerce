@@ -5,7 +5,7 @@
        alt="Zencommerce Logo"
        width="80"
        height="80"
-       style="border-radius: 50%;" />
+       style="border-radius: 10;" />
 </p>
 
 
