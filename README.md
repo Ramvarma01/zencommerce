@@ -1,5 +1,12 @@
-# Zencommerce ![Zencommerce Logo](https://res.cloudinary.com/dg1wavm3u/image/upload/v1753352208/zencommerce_logo_jyhhkt.png)
-
+# Zencommerce 
+<!-- ![Zencommerce Logo](https://res.cloudinary.com/dg1wavm3u/image/upload/v1753352208/zencommerce_logo_jyhhkt.png) -->
+<p align="center">
+  <img src="https://www.dropbox.com/scl/fi/cjyn3ixdqjlyi4yf45hlb/zencommerce_logo.png?rlkey=1r80m0mggosm4wo5dmlx0as3o&raw=1"
+       alt="Zencommerce Logo"
+       width="80"
+       height="80"
+       style="border-radius: 50%;" />
+</p>
 
 
 ## Overview
