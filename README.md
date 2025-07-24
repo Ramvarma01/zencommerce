@@ -149,25 +149,3 @@ expo start
 
 ---
 
-## Contributing
-
-Pull requests are welcome! For major changes, please open an issue first.
-
----
-
-## License
-
-[MIT](LICENSE)
-
----
-
-## Credits
-
-- Images and screenshots from [Dropbox folder](https://www.dropbox.com/scl/fo/m9r9wa44yps85g06sdd9b/AMtyk91hlBdEMT5_QJBIGwY?rlkey=yr7h232jqy3lqd22413jo9d2e&dl=0)
-
----
-
-**How to use Dropbox images:**  
-Replace `your-logo-path/logo.png` and `your-image-path/image.jpg` with the actual file paths from your Dropbox folder. To embed Dropbox images in markdown, use the `?raw=1` query at the end of the link.
-
----
