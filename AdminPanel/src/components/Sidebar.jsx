@@ -11,7 +11,7 @@ const menuItems = [
   // { text: 'Dashboard', icon: <DashboardIcon />, path: '/' },
   { text: 'Products', icon: <WarehouseIcon />, path: '/' },
   { text: 'Add Product', icon: <AddBoxIcon />, path: '/AddProduct' },
-  // { text: 'Orders', icon: <ShoppingCartIcon />, path: '/Orders' },
+  { text: 'Orders', icon: <ShoppingCartIcon />, path: '/Orders' },
 ];
 
 const Sidebar = () => {

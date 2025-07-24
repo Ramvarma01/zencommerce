@@ -3,7 +3,7 @@ const router = express.Router();
 const {
   createOrder,
   getUserOrders,
-  getOrderById,
+  // getOrderById,
   getAllOrders,
   updateOrderStatus,
   cancelOrder,
@@ -16,7 +16,7 @@ router.post('/create-order', createOrder);
 // Get all orders for a user
 router.get('/user-orders/:userId', getUserOrders);
 // Get a single order by ID
-router.get('/order/:id', getOrderById);
+// router.get('/order/:id', getOrderById);
 // Admin: Get all orders
 router.get('/all-orders', getAllOrders);
 // Admin: Update order status
