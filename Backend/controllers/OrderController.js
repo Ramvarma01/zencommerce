@@ -1,6 +1,12 @@
 const Orders = require('../models/Orders');
 const Users = require('../models/Users');
 const Products = require('../models/Products');
+const Razorpay = require('razorpay');
+const instance = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET
+});
+const crypto = require('crypto');
 
 // Place a new order
 const createOrder = async (req, res) => {
@@ -156,6 +162,69 @@ const cancelOrder = async (req, res) => {
   }
 };
 
+// Create Razorpay order
+const createRazorpayOrder = async (req, res) => {
+  try {
+    const { amount, currency = 'INR' } = req.body;
+    if (!amount) {
+      return res.status(400).json({ success: false, message: 'Amount is required' });
+    }
+    const options = {
+      amount: Math.round(amount * 100), // Razorpay expects paise
+      currency,
+      receipt: "order_rcptid_" + Date.now(),
+    };
+    const order = await instance.orders.create(options);
+    res.json({ success: true, order });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error creating Razorpay order', error: error.message });
+  }
+};
+
+// Verify Razorpay payment and create order in DB
+const verifyRazorpayPayment = async (req, res) => {
+  try {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderPayload } = req.body;
+    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || !orderPayload) {
+      return res.status(400).json({ success: false, message: 'Missing payment or order details' });
+    }
+    // Verify signature
+    const generated_signature = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+      .update(razorpay_order_id + '|' + razorpay_payment_id)
+      .digest('hex');
+    if (generated_signature !== razorpay_signature) {
+      return res.status(400).json({ success: false, message: 'Invalid payment signature' });
+    }
+    // Create order in DB
+    const { user, items, shippingAddress, paymentMethod, totalAmount } = orderPayload;
+    const order = await Orders.create({
+      user,
+      items,
+      shippingAddress,
+      paymentMethod,
+      paymentStatus: 'Paid',
+      totalAmount,
+    });
+    // Remove ordered items from user's cart (reuse logic)
+    const userDetails = await Users.findById(user);
+    if (userDetails && Array.isArray(userDetails.cart)) {
+      const orderedKeys = new Set(
+        items.map(
+          (item) => item.productId + (item.variantId ? `-${item.variantId}` : "")
+        )
+      );
+      userDetails.cart = userDetails.cart.filter((cartItem) => {
+        const key = cartItem.productId + (cartItem.variantId ? `-${cartItem.variantId}` : "");
+        return !orderedKeys.has(key);
+      });
+      await userDetails.save();
+    }
+    res.status(201).json({ success: true, message: 'Order placed and payment verified', order, userDetails });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error verifying payment or placing order', error: error.message });
+  }
+};
+
 module.exports = {
   createOrder,
   getUserOrders,
@@ -163,4 +232,6 @@ module.exports = {
   getAllOrders,
   updateOrderStatus,
   cancelOrder,
+  createRazorpayOrder,
+  verifyRazorpayPayment,
 };

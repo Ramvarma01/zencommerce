@@ -19,6 +19,7 @@ import { ProductContext } from "../../context/productContext";
 import { AuthContext } from "../../context/authContext";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import RazorpayCheckout from 'react-native-razorpay';
 const { width } = Dimensions.get("window");
 
 const CartPage = () => {
@@ -631,16 +632,14 @@ const CartPage = () => {
           <View
             style={{
               flexDirection: "row",
-              justifyContent: "flex-end",
+              justifyContent: "space-between",
               marginTop: 20,
+              gap: 8,
             }}
           >
             <TouchableOpacity
               onPress={() => setShowAddressModal(false)}
-              style={[
-                styles.applyButton,
-                { backgroundColor: "#ccc", marginRight: 10 },
-              ]}
+              style={[styles.applyButton, { backgroundColor: "#ccc" }]}
             >
               <Text style={[styles.applyButtonText, { color: "#333" }]}>
                 Cancel
@@ -649,12 +648,19 @@ const CartPage = () => {
             <TouchableOpacity
               style={[
                 styles.applyButton,
-                { opacity: selectedAddressIdx === null || placingOrder ? 0.5 : 1 }
+                {
+                  opacity:
+                    selectedAddressIdx === null || placingOrder ? 0.5 : 1,
+                },
               ]}
               disabled={selectedAddressIdx === null || placingOrder}
               onPress={placeOrder}
             >
-              <Text style={styles.applyButtonText}>{placingOrder ? 'Placing Order...' : 'Deliver Here & Place Order'}</Text>
+              <Text style={styles.applyButtonText}>
+                {placingOrder
+                  ? "Placing Order..."
+                  : "Deliver Here & Place Order"}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -665,25 +671,19 @@ const CartPage = () => {
   // Place order function
   const placeOrder = async () => {
     if (selectedAddressIdx === null) {
-      Alert.alert('Select Address', 'Please select a delivery address.');
+      Alert.alert("Select Address", "Please select a delivery address.");
       return;
     }
     setPlacingOrder(true);
     try {
       // Prepare order items
       const items = selectedItemsList.map((item) => {
-        // let variantName = '';
-        // if (item.hasVariant && item.variantId) {
-        //   const variant = item.variants.find((v) => v._id === item.variantId);
-        //   variantName = variant ? variant.name : '';
-        // }
         return {
           productId: item._id,
           quantity: item.cartQuantity,
           price:
             item.hasVariant && item.variantId
-              ? item.variants.find((v) => v._id === item.variantId)?.price ||
-                item.price
+              ? item.variants.find((v) => v._id === item.variantId)?.price || item.price
               : item.price,
           variantId: item.hasVariant ? item.variantId : undefined,
         };
@@ -695,6 +695,62 @@ const CartPage = () => {
         paymentMethod: paymentMethod === "cod" ? "COD" : "Online",
         totalAmount: total,
       };
+      if (paymentMethod === 'online') {
+        // 1. Create Razorpay order on backend
+        const { data: razorpayData } = await axios.post('/create-razorpay-order', {
+          amount: total,
+          currency: 'INR',
+        });
+        if (!razorpayData.success) throw new Error(razorpayData.message || 'Failed to create Razorpay order');
+        const { id: razorpayOrderId, amount: razorpayAmount } = razorpayData.order;
+        // 2. Open Razorpay payment UI
+        const options = {
+          description: 'Order Payment',
+          image: 'https://zencommerce.in/logo.png', // Replace with your logo
+          currency: 'INR',
+          key: 'rzp_test_1234567890', // Replace with your Razorpay key id
+          amount: razorpayAmount,
+          order_id: razorpayOrderId,
+          name: 'Zencommerce',
+          prefill: {
+            email: user.email,
+            contact: user.phone,
+            name: user.name,
+          },
+          theme: { color: '#007AFF' },
+        };
+        RazorpayCheckout.open(options)
+          .then(async (paymentData) => {
+            // 3. Verify payment on backend and create order
+            const verifyPayload = {
+              razorpay_order_id: paymentData.razorpay_order_id,
+              razorpay_payment_id: paymentData.razorpay_payment_id,
+              razorpay_signature: paymentData.razorpay_signature,
+              orderPayload,
+            };
+            const { data: verifyData } = await axios.post('/verify-razorpay-payment', verifyPayload);
+            if (verifyData.success) {
+              await AsyncStorage.setItem(
+                "@auth",
+                JSON.stringify({ user: verifyData.userDetails })
+              );
+              getLocalStorageData();
+              Alert.alert("Order Placed", "Your payment was successful and order has been placed!");
+              setShowAddressModal(false);
+              setSelectedAddressIdx(null);
+            } else {
+              Alert.alert("Payment Verification Failed", verifyData.message || "Could not verify payment.");
+            }
+          })
+          .catch((error) => {
+            Alert.alert("Payment Failed", error.description || error.message || "Payment was not completed.");
+          })
+          .finally(() => {
+            setPlacingOrder(false);
+          });
+        return;
+      }
+      // COD fallback
       const { data } = await axios.post("/create-order", orderPayload);
       if (data.success) {
         await AsyncStorage.setItem(
@@ -709,9 +765,15 @@ const CartPage = () => {
         Alert.alert("Order Failed", data.message || "Could not place order.");
       }
     } catch (error) {
-      Alert.alert('Order Failed', error.response?.data?.message || error.message || 'Could not place order.');
-    } finally {
+      Alert.alert(
+        "Order Failed",
+        error.response?.data?.message ||
+          error.message ||
+          "Could not place order."
+      );
       setPlacingOrder(false);
+    } finally {
+      if (paymentMethod !== 'online') setPlacingOrder(false);
     }
   };
 
@@ -895,12 +957,12 @@ const styles = StyleSheet.create({
   quantityContainer: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent:"center",
+    justifyContent: "center",
     backgroundColor: "#F8F9FA",
     borderRadius: 8,
     padding: 5,
     marginTop: 8,
-    width: 100
+    width: 100,
   },
   quantityButton: {
     width: 28,
@@ -988,7 +1050,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#007AFF",
     borderRadius: 8,
     paddingVertical: 11,
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
   },
   applyButtonText: {
     color: "#fff",
@@ -1171,10 +1233,10 @@ const styles = StyleSheet.create({
   modalContent: {
     backgroundColor: "#fff",
     borderRadius: 12,
-    padding: 20,
+    padding: 15,
     width: "90%",
     maxWidth: 400,
-    alignItems: "stretch",
+    alignItems: "center",
   },
   modalTitle: {
     fontSize: 18,
