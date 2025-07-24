@@ -4,8 +4,7 @@
   <img src="https://www.dropbox.com/scl/fi/cjyn3ixdqjlyi4yf45hlb/zencommerce_logo.png?rlkey=1r80m0mggosm4wo5dmlx0as3o&raw=1"
        alt="Zencommerce Logo"
        width="80"
-       height="80"
-       style="border-radius: 10;" />
+       height="80"/>
 </p>
 
 
@@ -21,18 +20,22 @@
 
 ## Screenshots
 
-### Customer App
+### 📱 Android App
 
-![App Screenshot 1](UI/Screenshot_2025-07-24-12-39-54-462_com.ramvarma01.Frontend.jpg)
-![App Screenshot 2](UI/Screenshot_2025-07-24-12-39-50-180_com.ramvarma01.Frontend.jpg)
-![App Screenshot 3](UI/Screenshot_2025-07-24-12-39-47-063_com.ramvarma01.Frontend.jpg)
-<!-- Add more as needed -->
+<div align="center">
+  <img src="https://www.dropbox.com/scl/fi/31be4mrmqo6t0ptgap7a7/Screenshot_2025-07-24-12-39-54-462_com.ramvarma01.Frontend.jpg?rlkey=80tci30c1we373matbmq6ylxd&raw=1" alt="Android Screenshot 1" width="250" style="margin: 10px;" />
+  <img src="https://www.dropbox.com/scl/fi/i16wc4ie5izisqpqhd44p/Screenshot_2025-07-24-12-39-50-180_com.ramvarma01.Frontend.jpg?rlkey=sw6w4akixmcfeagl50nwbxnq7&raw=1" alt="Android Screenshot 2" width="250" style="margin: 10px;" />
+  <img src="https://www.dropbox.com/scl/fi/jyww8eax0he7itmbmn30w/Screenshot_2025-07-24-12-39-47-063_com.ramvarma01.Frontend.jpg?rlkey=1ueoeo3cro2m45kclxjuno6cc&raw=1" alt="Android Screenshot 3" width="250" style="margin: 10px;" />
+</div>
 
-### Product Images
+---
 
-![Product 1](Data/81qP-BrYCjL._SL1500_.jpg)
-![Product 2](Data/81HUSJKoQkL._SL1500_.jpg)
-<!-- Add more as needed -->
+### 🖥️ Admin Panel
+
+<!-- Add admin panel screenshots here -->
+<!-- Example:
+<img src="https://your-image-url.com/admin1.jpg" alt="Admin Panel Screenshot 1" width="300" />
+-->
 
 Or use your Dropbox images, e.g.:
 ![Dropbox Image](https://www.dropbox.com/scl/fi/your-image-path/image.jpg?rlkey=yr7h232jqy3lqd22413jo9d2e&raw=1)
