@@ -706,9 +706,9 @@ const CartPage = () => {
         // 2. Open Razorpay payment UI
         const options = {
           description: 'Order Payment',
-          image: 'https://zencommerce.in/logo.png', // Replace with your logo
+          image: 'https://res.cloudinary.com/dg1wavm3u/image/upload/v1753352208/zencommerce_logo_jyhhkt.png', // Replace with your logo
           currency: 'INR',
-          key: 'rzp_test_1234567890', // Replace with your Razorpay key id
+          key: 'rzp_test_PzGN0iD8UN5M5F', // Replace with your Razorpay key id
           amount: razorpayAmount,
           order_id: razorpayOrderId,
           name: 'Zencommerce',
@@ -718,6 +718,12 @@ const CartPage = () => {
             name: user.name,
           },
           theme: { color: '#007AFF' },
+          method: {
+            netbanking: true,
+            card: true,
+            upi: true, // <-- This enables UPI
+            wallet: true
+          }
         };
         RazorpayCheckout.open(options)
           .then(async (paymentData) => {

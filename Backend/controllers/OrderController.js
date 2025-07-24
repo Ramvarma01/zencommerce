@@ -175,9 +175,10 @@ const createRazorpayOrder = async (req, res) => {
       receipt: "order_rcptid_" + Date.now(),
     };
     const order = await instance.orders.create(options);
-    res.json({ success: true, order });
+    res.send({ success: true, order });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Error creating Razorpay order', error: error.message });
+    console.log(error);
+    res.status(500).send({ success: false, message: 'Error creating Razorpay order', error: error.message });
   }
 };
 
