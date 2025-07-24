@@ -1,6 +1,6 @@
-# Zencommerce
+# Zencommerce ![Zencommerce Logo](https://res.cloudinary.com/dg1wavm3u/image/upload/v1753352208/zencommerce_logo_jyhhkt.png)
 
-![Zencommerce Logo](https://res.cloudinary.com/dg1wavm3u/image/upload/v1753352208/zencommerce_logo_jyhhkt.png)
+
 
 ## Overview
 
