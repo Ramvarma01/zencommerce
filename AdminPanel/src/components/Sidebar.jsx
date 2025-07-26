@@ -9,7 +9,7 @@ import WarehouseIcon from '@mui/icons-material/Warehouse';
 
 const menuItems = [
   // { text: 'Dashboard', icon: <DashboardIcon />, path: '/' },
-  { text: 'Products', icon: <WarehouseIcon />, path: '/' },
+  { text: 'Products', icon: <WarehouseIcon />, path: '/products' },
   { text: 'Add Product', icon: <AddBoxIcon />, path: '/AddProduct' },
   { text: 'Orders', icon: <ShoppingCartIcon />, path: '/Orders' },
 ];
@@ -22,7 +22,7 @@ const Sidebar = () => {
 
   const handleLogout = async () => {
     localStorage.removeItem('adminToken');
-    navigate('/login');
+    navigate('/');
   };
 
   const drawerContent = (

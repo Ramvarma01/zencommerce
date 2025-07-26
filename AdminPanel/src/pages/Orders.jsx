@@ -161,7 +161,10 @@ function Orders() {
                   {order.items.map((item, i) => {
                     const { product, variant } = getProductDetails(item);
                     return (
+                      <div>
+                      <div className="order-item-name">{product ? product.name : item.productId}</div>
                       <div key={i} className="order-item-card">
+                      {/* <div className="order-item-name">{product ? product.name : item.productId}</div> */}
                         {product && (
                           <img
                             src={product.thumbnail}
@@ -169,8 +172,9 @@ function Orders() {
                             style={{ width: 48, height: 48, borderRadius: 8, objectFit: 'cover' }}
                           />
                         )}
+                        {/* <div className="order-item-name">{product ? product.name : item.productId}</div> */}
                         <div className="order-item-details">
-                          <div className="order-item-name">{product ? product.name : item.productId}</div>
+                          {/* <div className="order-item-name">{product ? product.name : item.productId}</div> */}
                           <div className="order-item-info">Qty: {item.quantity}</div>
                           <div className="order-item-info">Price: ₹{item.price}</div>
                           {variant && (
@@ -179,6 +183,7 @@ function Orders() {
                             </div>
                           )}
                         </div>
+                      </div>
                       </div>
                     );
                   })}

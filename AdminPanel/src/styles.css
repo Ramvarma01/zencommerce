@@ -752,10 +752,10 @@ body {
   transition: box-shadow 0.2s;
 }
 
-.order-item-card:hover {
+/* .order-item-card:hover {
   box-shadow: 0 4px 16px rgb(20, 20, 35);
   border-color: #6366f1;
-}
+} */
 
 .order-item-details {
   flex: 1;

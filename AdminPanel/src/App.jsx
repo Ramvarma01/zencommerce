@@ -10,11 +10,20 @@ import EditProduct from './pages/EditProduct'
 
 function App() {
   const location = useLocation();
-  const onLoginPage = location.pathname === '/login';
+  const onLoginPage = location.pathname === '/';
 
   return (
     <div className="app-container">
       {/* {!onLoginPage && <Sidebar />} */}
+
+      {onLoginPage && (
+        <div className="login-container">
+          <Routes>
+            <Route path="/" element={<Login />} />
+          </Routes>
+        </div>
+      )}
+
       {!onLoginPage && (
         <>
         <Sidebar />
@@ -22,7 +31,7 @@ function App() {
         {/* <Sidebar /> */}
         <Routes>
             {/* <Route path="/" element={<Dashboard />} /> */}
-            <Route path="/" element={<Products />} />
+            <Route path="/Products" element={<Products />} />
             <Route path="/AddProduct" element={<AddProduct />} />
             <Route path="/Orders" element={<Orders />} />
             <Route path="/Products/EditProduct" element={<EditProduct />} />
@@ -30,14 +39,6 @@ function App() {
       </Routes>
       </div>
       </>
-      )}
-
-      {onLoginPage && (
-        <div className="login-container">
-          <Routes>
-            <Route path="/login" element={<Login />} />
-          </Routes>
-        </div>
       )}
     </div>
   );
