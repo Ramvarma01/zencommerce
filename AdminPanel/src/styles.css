@@ -684,3 +684,93 @@ body {
   font-size: 10px;
   font-weight: 600;
 }
+
+/* Shipping Address Styles */
+.shipping-address-section {
+  margin-top: 12px;
+  padding: 16px;
+  background: #36364a;
+  border-radius: 12px;
+  border: 1px solid #4A4A5F;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.13);
+  transition: box-shadow 0.2s;
+}
+
+.shipping-address-section:hover {
+  box-shadow: 0 4px 16px rgb(20, 20, 35);
+}
+
+.shipping-address-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #6366f1;
+}
+
+.shipping-address-title {
+  font-weight: 600;
+  color: #fff;
+  font-size: 16px;
+  margin-left: 8px;
+}
+
+.shipping-address-content {
+  font-size: 14px;
+  color: #b0b0b0;
+  line-height: 1.6;
+  white-space: pre-line;
+  font-family: 'Courier New', monospace;
+  background: #232336;
+  padding: 12px;
+  border-radius: 6px;
+  border-left: 4px solid #6366f1;
+}
+
+.order-items-section {
+  margin-top: 16px;
+}
+
+.order-items-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #4A4A5F;
+}
+
+.order-item-card {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 12px;
+  background: #36364a;
+  border-radius: 8px;
+  border: 1px solid #4A4A5F;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.13);
+  transition: box-shadow 0.2s;
+}
+
+.order-item-card:hover {
+  box-shadow: 0 4px 16px rgb(20, 20, 35);
+  border-color: #6366f1;
+}
+
+.order-item-details {
+  flex: 1;
+  margin-left: 12px;
+}
+
+.order-item-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.order-item-info {
+  font-size: 13px;
+  color: #b0b0b0;
+  margin-bottom: 2px;
+}

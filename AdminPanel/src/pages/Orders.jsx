@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import axios from 'axios';
 import { ProductContext } from '../context/productContext';
 
 function Orders() {
   const [orders, setOrders] = useState([]);
   // const [products, setProducts] = useState([]);
-  const [products, setProducts,fetchProducts] = useContext(ProductContext);
+  const [products, setProducts, fetchProducts] = useContext(ProductContext);
   const [menuOpen, setMenuOpen] = useState(null); // index of open menu
   const cardRefs = useRef([]);
 
@@ -91,6 +92,26 @@ function Orders() {
     return { product, variant };
   };
 
+  // Helper to format shipping address
+  const formatShippingAddress = (shippingAddress) => {
+    if (!shippingAddress) return 'No address provided';
+    
+    const { fullName, phone, address, city, state, pincode, country } = shippingAddress;
+    return `${fullName} (${phone})\n${address}\n${city}, ${state} ${pincode}\n${country}`;
+  };
+
+  // Helper to format order date
+  const formatOrderDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
   return (
     <div className="products-container">
       <h1 className="products-title">All Orders</h1>
@@ -115,25 +136,45 @@ function Orders() {
                 <p className="product-brand">Status: {order.Orderstatus}</p>
                 <p className="product-quantity">Payment: {order.paymentMethod} ({order.paymentStatus})</p>
                 <p className="product-quantity">Total: ₹{order.totalAmount}</p>
-                <p className="product-quantity">Date: {new Date(order.createdAt).toLocaleDateString()}</p>
-                <div style={{ marginTop: 8 }}>
+                <p className="product-quantity">Date: {formatOrderDate(order.createdAt)}</p>
+                
+                {/* Shipping Address Section */}
+                <div className="shipping-address-section">
+                  <div className="shipping-address-header">
+                    <LocationOnIcon style={{ color: '#6366f1', fontSize: 20 }} />
+                    <span className="shipping-address-title">Shipping Address</span>
+                  </div>
+                  <div className="shipping-address-content">
+                    {formatShippingAddress(order.shippingAddress)}
+                    {/* <p>{order.shippingAddress.fullName}</p>
+                    <p>{order.shippingAddress.phone}</p>
+                    <p>{order.shippingAddress.address}</p>
+                    <p>{order.shippingAddress.city}</p>
+                    <p>{order.shippingAddress.state}</p>
+                    <p>{order.shippingAddress.pincode}</p>
+                    <p>{order.shippingAddress.country}</p> */}
+                  </div>
+                </div>
+
+                <div className="order-items-section">
+                  <h4 className="order-items-title">Order Items:</h4>
                   {order.items.map((item, i) => {
                     const { product, variant } = getProductDetails(item);
                     return (
-                      <div key={i} style={{ display: 'flex', alignItems: 'center', marginBottom: 8 }}>
+                      <div key={i} className="order-item-card">
                         {product && (
                           <img
                             src={product.thumbnail}
                             alt={product.name}
-                            style={{ width: 48, height: 48, borderRadius: 8, objectFit: 'cover', marginRight: 12 }}
+                            style={{ width: 48, height: 48, borderRadius: 8, objectFit: 'cover' }}
                           />
                         )}
-                        <div>
-                          <div style={{ fontWeight: 'bold' }}>{product ? product.name : item.productId}</div>
-                          <div>Qty: {item.quantity}</div>
-                          <div>Price: ₹{item.price}</div>
+                        <div className="order-item-details">
+                          <div className="order-item-name">{product ? product.name : item.productId}</div>
+                          <div className="order-item-info">Qty: {item.quantity}</div>
+                          <div className="order-item-info">Price: ₹{item.price}</div>
                           {variant && (
-                            <div>
+                            <div className="order-item-info">
                               {product.variantName}: {variant.name}
                             </div>
                           )}
