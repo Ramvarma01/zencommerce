@@ -14,12 +14,16 @@ const {
     clearWishlistController,
     addProductToCartController,
     removeProductFromCartController,
+    sendOtpController,
+    verifyOtpController,
 } = require('../controllers/UserController');
 
 //router Object
 const router = express.Router();
 
 //routes
+router.post('/send-otp', sendOtpController);
+router.post('/verify-otp', verifyOtpController);
 router.post('/register', registerController);
 router.post('/login', loginController);
 router.post('/google-login', googleLoginController);

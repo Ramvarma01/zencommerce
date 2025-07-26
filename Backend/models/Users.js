@@ -72,7 +72,7 @@ const usersSchema = new mongoose.Schema(
         password :{
             type: String,
             required: function() {
-                return !this.isGoogleUser; // Password only required for non-Google users
+                return !this.isGoogleUser && this.isPhoneVerified; // Password only required for non-Google users
             },
             min: 6,
             max: 64
@@ -92,6 +92,19 @@ const usersSchema = new mongoose.Schema(
         isGoogleUser: {
             type: Boolean,
             default: false
+        },
+        // Email verification fields
+        emailVerified: {
+            type: Boolean,
+            default: false
+        },
+        otp: {
+            type: String,
+            default: null
+        },
+        otpExpiry: {
+            type: Date,
+            default: null
         },
         shippingAddress: {
             type: [addressSchema],

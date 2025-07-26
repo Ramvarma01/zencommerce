@@ -2,6 +2,8 @@ const JWT = require("jsonwebtoken");
 const Users = require("../models/Users");
 const Products = require("../models/Products");
 const bcrypt = require("bcrypt");
+const axios = require("axios");
+const nodemailer = require('nodemailer');
 // const { OAuth2Client } = require('google-auth-library');
 // var { expressjwt: jwt } = require("express-jwt");
 
@@ -14,18 +16,164 @@ const bcrypt = require("bcrypt");
 //     algorithms: ["HS256"],
 //   });
 
-//REGISTER CONTROLLER
+//SEND OTP CONTROLLER
+const sendOtpController = async (req, res) => {
+  try {
+    const { name, email } = req.body;
+
+    //validation
+    if (!name || !email) {
+      return res.status(400).send({
+        success: false,
+        message: "Please provide name and email",
+      });
+    }
+
+    // Check if email format is valid
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      return res.status(400).send({
+        success: false,
+        message: "Invalid email format",
+      });
+    }
+
+    // Check if user already exists
+    const existingUser = await Users.findOne({ email: email });
+    if (existingUser && existingUser.emailVerified) {
+      return res.status(409).send({
+        success: false,
+        message: "User already registered with this email",
+      });
+    }
+
+    // Generate 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+    // Save or update user with OTP
+    if (existingUser) {
+      existingUser.name = name;
+      existingUser.otp = otp;
+      existingUser.otpExpiry = otpExpiry;
+      await existingUser.save();
+    } else {
+      await Users({
+        name,
+        email,
+        otp,
+        otpExpiry,
+      }).save();
+    }
+
+    // Send OTP via email using a free API (using EmailJS or similar)
+    // For now, we'll use a mock email service
+    try {
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.GMAIL_USER,
+          pass: process.env.GMAIL_PASS,
+        },
+      });
+
+      // Send OTP email using Nodemailer
+      await transporter.sendMail({
+        from: process.env.GMAIL_USER,
+        to: email,
+        subject: 'Email Verification OTP',
+        text: `Your OTP for email verification is: ${otp}. This OTP will expire in 10 minutes.`,
+      });
+
+    } catch (emailError) {
+      console.error("Email sending failed:", emailError);
+      // Don't fail the request if email fails, just log it
+    }
+
+    return res.status(200).send({
+      success: true,
+      message: "OTP sent successfully to your email",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      success: false,
+      message: "Error in sending OTP",
+      error: error.message,
+    });
+  }
+};
+
+//VERIFY OTP CONTROLLER
+const verifyOtpController = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    //validation
+    if (!email || !otp) {
+      return res.status(400).send({
+        success: false,
+        message: "Please provide email and OTP",
+      });
+    }
+
+    // Find user
+    const user = await Users.findOne({ email: email });
+    if (!user) {
+      return res.status(404).send({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Check if OTP matches
+    if (user.otp !== otp) {
+      return res.status(400).send({
+        success: false,
+        message: "Invalid OTP",
+      });
+    }
+
+    // Check if OTP is expired
+    if (user.otpExpiry < new Date()) {
+      return res.status(400).send({
+        success: false,
+        message: "OTP has expired",
+      });
+    }
+
+    // Mark email as verified
+    user.emailVerified = true;
+    user.otp = null;
+    user.otpExpiry = null;
+    await user.save();
+
+    return res.status(200).send({
+      success: true,
+      message: "Email verified successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      success: false,
+      message: "Error in verifying OTP",
+      error: error.message,
+    });
+  }
+};
+
+//REGISTER CONTROLLER (Modified for two-step registration)
 const registerController = async (req, res) => {
   try {
-    const { name, email, password, phone } = req.body;
+    const { name, email, password } = req.body;
+    
     //validation
-    // if (!name || !email || !password || !phone) {
     if (!name || !email || !password) {
       return res.status(400).send({
         success: false,
         message: "Please fill all fields",
       });
     }
+    
     if (password.length < 6) {
       return res.status(400).send({
         success: false,
@@ -33,36 +181,40 @@ const registerController = async (req, res) => {
       });
     }
 
-    // existing user with email
-    const existingUser = await Users.findOne({ email: email });
-    if (existingUser) {
-      return res.status(409).send({
+    // Find user and check if email is verified
+    const user = await Users.findOne({ email: email });
+    if (!user || !user.emailVerified) {
+      return res.status(400).send({
         success: false,
-        message: "User ALready Register With this Email-ID",
+        message: "Please verify your email first",
       });
     }
 
-    //hashed password
+    // Check if user already has password (already registered)
+    if (user.password) {
+      return res.status(409).send({
+        success: false,
+        message: "User already registered",
+      });
+    }
+
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    //save user
-    const user = await Users({
-      name,
-      email,
-      password: hashedPassword,
-      // phone,
-    }).save();
+    // Update user with password
+    user.password = hashedPassword;
+    await user.save();
 
     return res.status(200).send({
       success: true,
-      message: "Registeration Successfull Please login",
+      message: "Registration successful! Please login",
     });
   } catch (error) {
     console.log(error);
     return res.status(500).send({
       success: false,
       message: "Error in register API",
-      error: error,
+      error: error.message,
     });
   }
 };
@@ -804,4 +956,6 @@ module.exports = {
   clearWishlistController,
   addProductToCartController,
   removeProductFromCartController,
+  sendOtpController,
+  verifyOtpController,
 };
