@@ -13,6 +13,7 @@ export default function ShippingAddress() {
   const { user } = state || {};
   const addresses = user?.shippingAddress || [];
   const [showForm, setShowForm] = useState(false);
+  const [editingIndex, setEditingIndex] = useState(null);
   const [form, setForm] = useState({
     fullName: '',
     phone: '',
@@ -25,6 +26,25 @@ export default function ShippingAddress() {
 
   const handleFormChange = (key, value) => {
     setForm({ ...form, [key]: value });
+  };
+
+  const resetForm = () => {
+    setForm({
+      fullName: '',
+      phone: '',
+      address: '',
+      city: '',
+      state: '',
+      pincode: '',
+      country: '',
+    });
+    setEditingIndex(null);
+  };
+
+  const handleEdit = (address, index) => {
+    setForm(address);
+    setEditingIndex(index);
+    setShowForm(true);
   };
 
   const handleSave = async () => {
@@ -40,25 +60,37 @@ export default function ShippingAddress() {
     try {
       const email = user.email;
       const shippingAddress = { fullName, phone, address, city, state, pincode, country };
-      const {data} = await axios.post('/add-shipping-address', {
-        email,
-        shippingAddress
-      });
-      if (data.success) {
-        setState({ ...state, user: data.user });
-        setShowForm(false);
-        setForm({
-          fullName: '',
-          phone: '',
-          address: '',
-          city: '',
-          state: '',
-          pincode: '',
-          country: '',
+      
+      if (editingIndex !== null) {
+        // Update existing address
+        const oldAddress = addresses[editingIndex];
+        const { data } = await axios.put('/update-shipping-address', {
+          email,
+          oldAddress,
+          newAddress: shippingAddress
         });
-        Alert.alert('Success', 'Address saved!');
+        if (data.success) {
+          setState({ ...state, user: data.user });
+          setShowForm(false);
+          resetForm();
+          Alert.alert('Success', 'Address updated!');
+        } else {
+          Alert.alert('Error', data.message || 'Failed to update address');
+        }
       } else {
-        Alert.alert('Error', data.message || 'Failed to add address');
+        // Add new address
+        const { data } = await axios.post('/add-shipping-address', {
+          email,
+          shippingAddress
+        });
+        if (data.success) {
+          setState({ ...state, user: data.user });
+          setShowForm(false);
+          resetForm();
+          Alert.alert('Success', 'Address saved!');
+        } else {
+          Alert.alert('Error', data.message || 'Failed to add address');
+        }
       }
     } catch (error) {
       Alert.alert('Error', error.response?.data?.message || 'Server error');
@@ -66,23 +98,49 @@ export default function ShippingAddress() {
   };
 
   const handleDelete = async (idx) => {
+    Alert.alert(
+      'Delete Address',
+      'Are you sure you want to delete this address?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              const email = user.email;
+              const selectedAddress = addresses[idx];
+              const { data } = await axios.put('/delete-shipping-address', {
+                email,
+                shippingAddress: selectedAddress
+              });
+              if (data.success) {
+                setState({ ...state, user: data.user });
+                Alert.alert('Success', 'Address deleted!');
+              } else {
+                Alert.alert('Error', data.message || 'Failed to delete address');
+              }
+            } catch (error) {
+              Alert.alert('Error', error.response?.data?.message || 'Server error');
+            }
+          }
+        }
+      ]
+    );
+  };
+
+  const handleSetDefault = async (idx) => {
     try {
-        console.log(idx);
       const email = user.email;
-      // Remove address at idx
-    //   const selectedAddresses = addresses.filter((_, i) => i !== idx);
-    const selectedAddress = addresses[idx];
-      console.log(selectedAddress);
-      // Update backend (optional: create a dedicated API for deleting, or update the whole array)
-      const {data} = await axios.put('/delete-shipping-address', {
+      const { data } = await axios.put('/set-default-address', {
         email,
-        shippingAddress: selectedAddress
+        addressIndex: idx
       });
       if (data.success) {
         setState({ ...state, user: data.user });
-        Alert.alert('Success', 'Address deleted!');
+        Alert.alert('Success', 'Default address set!');
       } else {
-        Alert.alert('Error', data.message || 'Failed to delete address');
+        Alert.alert('Error', data.message || 'Failed to set default address');
       }
     } catch (error) {
       Alert.alert('Error', error.response?.data?.message || 'Server error');
@@ -108,24 +166,37 @@ export default function ShippingAddress() {
           keyboardShouldPersistTaps= "always"
           showsVerticalScrollIndicator={false}
         >
-          {/* <View style={styles.header}>
-            <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-              <Ionicons name="arrow-back" size={24} color="#007AFF" />
-            </TouchableOpacity>
-            <Text style={styles.headerTitle}>Shipping Address</Text>
-            <View style={styles.placeholder} />
-          </View> */}
     
-          <View >
+          <View style={styles.content}>
+            <View style={styles.addressesContainer}>
+              <Text style={styles.sectionTitle}>Your Addresses</Text>
             {addresses.length > 0 ? (
               addresses.map((address, idx) => (
                 <View style={styles.card} key={idx}>
-                    {console.log(address,idx)}
                   <View style={styles.cardHeader}>
-                    <Text style={styles.cardName}>{address.fullName}</Text>
-                    <TouchableOpacity onPress={() => handleDelete(idx)} style={styles.deleteIcon}>
-                      <Ionicons name="trash" size={22} color="#ff3b30" />
-                    </TouchableOpacity>
+                    <View style={styles.cardHeaderLeft}>
+                      <Text style={styles.cardName}>{address.fullName}</Text>
+                      {user.defaultAddressIndex === idx && (
+                        <View style={styles.defaultBadge}>
+                          <Text style={styles.defaultText}>Default</Text>
+                        </View>
+                      )}
+                    </View>
+                    <View style={styles.cardActions}>
+                      <TouchableOpacity 
+                        onPress={() => handleSetDefault(idx)} 
+                        style={[styles.actionButton, user.defaultAddressIndex === idx && styles.disabledButton]}
+                        disabled={user.defaultAddressIndex === idx}
+                      >
+                        <Ionicons name="star" size={18} color={user.defaultAddressIndex === idx ? "#ccc" : "#007AFF"} />
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => handleEdit(address, idx)} style={styles.actionButton}>
+                        <Ionicons name="pencil" size={18} color="#007AFF" />
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => handleDelete(idx)} style={styles.actionButton}>
+                        <Ionicons name="trash" size={18} color="#ff3b30" />
+                      </TouchableOpacity>
+                    </View>
                   </View>
                   <Text style={styles.cardText}>Phone: {address.phone}</Text>
                   <Text style={styles.cardText}>Address: {address.address}</Text>
@@ -138,8 +209,13 @@ export default function ShippingAddress() {
             ) : (
               <Text style={styles.noAddress}>No Addresses Found</Text>
             )}
+            </View>
+            
             {showForm ? (
               <View style={styles.formContainer}>
+                <Text style={styles.formTitle}>
+                  {editingIndex !== null ? 'Edit Address' : 'Add New Address'}
+                </Text>
                 <TextInput
                   style={styles.input}
                   placeholder="Full Name"
@@ -184,9 +260,22 @@ export default function ShippingAddress() {
                   value={form.country}
                   onChangeText={v => handleFormChange('country', v)}
                 />
-                <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-                  <Text style={styles.saveButtonText}>Save Address</Text>
-                </TouchableOpacity>
+                <View style={styles.formButtons}>
+                  <TouchableOpacity 
+                    style={[styles.saveButton, styles.cancelButton]} 
+                    onPress={() => {
+                      setShowForm(false);
+                      resetForm();
+                    }}
+                  >
+                    <Text style={styles.buttonText}>Cancel</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+                    <Text style={styles.buttonText}>
+                      {editingIndex !== null ? 'Update' : 'Save'} Address
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             ) : (
               <TouchableOpacity style={styles.fab} onPress={() => setShowForm(true)}>
@@ -235,8 +324,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 20,
     // marginBottom: 24,
-    marginVertical: 12,
-    marginHorizontal: 14,
+    marginVertical: 10,
+    // marginHorizontal: 14,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: 6,
@@ -277,14 +366,15 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     backgroundColor: '#3E64FF',
-    height: 50,
+    // height: 50,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
+    padding: 16,
     marginVertical: 30,
     marginHorizontal: 14,
   },
-  saveButtonText: {
+  buttonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
@@ -308,5 +398,61 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     textAlign: 'center',
     margin:20,
+  },
+  content: {
+    flex: 1,
+    padding: 16,
+  },
+  addressesContainer: {
+    marginBottom: 20,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 10,
+    color: '#333',
+  },
+  cardHeaderLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  defaultBadge: {
+    backgroundColor: '#e0f7fa',
+    borderRadius: 5,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    marginLeft: 10,
+    borderWidth: 1,
+    borderColor: '#b2ebf2',
+  },
+  defaultText: {
+    color: '#00796b',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  cardActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  actionButton: {
+    marginLeft: 15,
+  },
+  disabledButton: {
+    opacity: 0.5,
+  },
+  formTitle: {
+    fontSize: 22,
+    fontWeight: '700',
+    marginBottom: 15,
+    textAlign: 'center',
+    color: '#333',
+  },
+  formButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 20,
+  },
+  cancelButton: {
+    backgroundColor: '#ccc',
   },
 }); 

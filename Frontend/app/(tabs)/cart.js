@@ -60,6 +60,14 @@ const CartPage = () => {
   const [paymentMethod, setPaymentMethod] = useState("online"); // "cod" or "online"
   const [placingOrder, setPlacingOrder] = useState(false);
 
+  // Set default address when modal opens
+  useEffect(() => {
+    if (showAddressModal && user?.shippingAddress?.length > 0) {
+      const defaultIdx = user.defaultAddressIndex || 0;
+      setSelectedAddressIdx(defaultIdx);
+    }
+  }, [showAddressModal, user]);
+
   useEffect(() => {
     // When cartItems are loaded or changed, select all of them by default.
     const cartItemKeys = cartItems.map(getCartItemKey);

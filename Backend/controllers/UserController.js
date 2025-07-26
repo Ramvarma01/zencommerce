@@ -259,6 +259,31 @@ const updatePasswordController = async (req, res) => {
 const addShippingAddressController = async (req, res) => {
   try {
     const { email, shippingAddress } = req.body;
+    
+    // Validate required fields
+    if (!email || !shippingAddress) {
+      return res.status(400).send({
+        success: false,
+        message: "Email and shipping address are required",
+      });
+    }
+
+    const { fullName, phone, address, city, state, pincode, country } = shippingAddress;
+    if (!fullName || !phone || !address || !city || !state || !pincode || !country) {
+      return res.status(400).send({
+        success: false,
+        message: "All address fields are required",
+      });
+    }
+
+    // Validate phone number format
+    if (!/^\d{10}$/.test(phone)) {
+      return res.status(400).send({
+        success: false,
+        message: "Phone number must be 10 digits",
+      });
+    }
+
     const user = await Users.findOne({ email });
     if (!user) {
       return res.status(404).send({
@@ -266,6 +291,25 @@ const addShippingAddressController = async (req, res) => {
         message: "User not found",
       });
     }
+
+    // Check if address already exists
+    const addressExists = user.shippingAddress.some(addr => 
+      addr.fullName === fullName &&
+      addr.phone === phone &&
+      addr.address === address &&
+      addr.city === city &&
+      addr.state === state &&
+      addr.pincode === pincode &&
+      addr.country === country
+    );
+
+    if (addressExists) {
+      return res.status(400).send({
+        success: false,
+        message: "This address already exists",
+      });
+    }
+
     user.shippingAddress.push(shippingAddress);
     await user.save();
     res.status(200).send({
@@ -318,6 +362,120 @@ const deleteShippingAddressController = async (req, res) => {
     res.status(500).send({
       success: false,
       message: "Error In User Delete API",
+      error,
+    });
+  }
+};
+
+//UPDATE SHIPPING ADDRESS CONTROLLER
+const updateShippingAddressController = async (req, res) => {
+  try {
+    const { email, oldAddress, newAddress } = req.body;
+    
+    // Validate required fields
+    if (!email || !oldAddress || !newAddress) {
+      return res.status(400).send({
+        success: false,
+        message: "Email, old address, and new address are required",
+      });
+    }
+
+    const { fullName, phone, address, city, state, pincode, country } = newAddress;
+    if (!fullName || !phone || !address || !city || !state || !pincode || !country) {
+      return res.status(400).send({
+        success: false,
+        message: "All address fields are required",
+      });
+    }
+
+    // Validate phone number format
+    if (!/^\d{10}$/.test(phone)) {
+      return res.status(400).send({
+        success: false,
+        message: "Phone number must be 10 digits",
+      });
+    }
+
+    const user = await Users.findOne({ email });
+    if (!user) {
+      return res.status(404).send({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Find and update the address that matches oldAddress
+    const addressIndex = user.shippingAddress.findIndex((addr) => {
+      return (
+        addr.fullName === oldAddress.fullName &&
+        addr.phone === oldAddress.phone &&
+        addr.address === oldAddress.address &&
+        addr.city === oldAddress.city &&
+        addr.state === oldAddress.state &&
+        addr.pincode === oldAddress.pincode &&
+        addr.country === oldAddress.country
+      );
+    });
+
+    if (addressIndex === -1) {
+      return res.status(404).send({
+        success: false,
+        message: "Address not found",
+      });
+    }
+
+    // Update the address
+    user.shippingAddress[addressIndex] = newAddress;
+    await user.save();
+    
+    res.status(200).send({
+      success: true,
+      message: "Shipping Address Updated Successfully",
+      user,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({
+      success: false,
+      message: "Error In User Update API",
+      error,
+    });
+  }
+};
+
+//SET DEFAULT ADDRESS CONTROLLER
+const setDefaultAddressController = async (req, res) => {
+  try {
+    const { email, addressIndex } = req.body;
+    const user = await Users.findOne({ email });
+    if (!user) {
+      return res.status(404).send({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    if (addressIndex < 0 || addressIndex >= user.shippingAddress.length) {
+      return res.status(400).send({
+        success: false,
+        message: "Invalid address index",
+      });
+    }
+
+    // Set default address index
+    user.defaultAddressIndex = addressIndex;
+    await user.save();
+    
+    res.status(200).send({
+      success: true,
+      message: "Default Address Set Successfully",
+      user,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({
+      success: false,
+      message: "Error In Setting Default Address",
       error,
     });
   }
@@ -639,6 +797,8 @@ module.exports = {
   updatePasswordController,
   addShippingAddressController,
   deleteShippingAddressController,
+  updateShippingAddressController,
+  setDefaultAddressController,
   addProductToWishlistController,
   removeProductFromWishlistController,
   clearWishlistController,

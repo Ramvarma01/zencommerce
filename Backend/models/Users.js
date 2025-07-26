@@ -97,6 +97,10 @@ const usersSchema = new mongoose.Schema(
             type: [addressSchema],
             default: []
         },
+        defaultAddressIndex: {
+            type: Number,
+            default: 0
+        },
         wishlist:{ 
             type: [mongoose.Schema.Types.ObjectId], 
             ref: 'Products', 
