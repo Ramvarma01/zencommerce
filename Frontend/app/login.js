@@ -94,6 +94,12 @@ export default function Login() {
           }
       }
 
+      const handleFacebookLogin = async() => {
+        setLoading(true);
+        Alert.alert("Login With Facebook","Coming Soon!!")
+        setLoading(false);
+      }
+
       //DON'T DELETE THIS FUNCTION
       // const handleLogout = async () => {
       //   try {
@@ -189,12 +195,7 @@ export default function Login() {
         <View style={styles.socialRow}>
           <TouchableOpacity 
             style={[styles.circleButton, loading && styles.disabledButton]} 
-            // onPress={() => promptAsync()
-            onPress={() => {
-              // console.log('Google login button pressed');
-              // promptAsync();
-              handleGoogleLogin(); // Call the function to handle Google login
-            }}
+            onPress={handleGoogleLogin}
             disabled={loading}
           >
             <Image 
@@ -203,7 +204,7 @@ export default function Login() {
            />
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.circleButton, loading && styles.disabledButton]} disabled={loading}>
+          <TouchableOpacity style={[styles.circleButton, loading && styles.disabledButton]} disabled={loading} onPress={handleFacebookLogin}>
             <Image
               source={require("../assets/images/facebookLogo.png")}
               style={styles.socialIconCircle}

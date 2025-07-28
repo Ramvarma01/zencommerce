@@ -19,8 +19,8 @@ const {
     sendResetCodeController,
     verifyResetCodeController,
     resetPasswordController,
-    sendOtpToPhoneNumberController,
-    verifyOtpFromPhoneNumberController,
+    // sendOtpToPhoneNumberController,
+    // verifyOtpFromPhoneNumberController,
 } = require('../controllers/UserController');
 
 //router Object

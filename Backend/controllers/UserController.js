@@ -3,7 +3,7 @@ const Users = require("../models/Users");
 const Products = require("../models/Products");
 const bcrypt = require("bcrypt");
 const axios = require("axios");
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 // const { OAuth2Client } = require('google-auth-library');
 // var { expressjwt: jwt } = require("express-jwt");
 
@@ -69,7 +69,7 @@ const sendOtpController = async (req, res) => {
     // For now, we'll use a mock email service
     try {
       const transporter = nodemailer.createTransport({
-        service: 'gmail',
+        service: "gmail",
         auth: {
           user: process.env.GMAIL_USER,
           pass: process.env.GMAIL_PASS,
@@ -80,10 +80,9 @@ const sendOtpController = async (req, res) => {
       await transporter.sendMail({
         from: process.env.GMAIL_USER,
         to: email,
-        subject: 'Email Verification OTP',
+        subject: "Email Verification OTP",
         text: `Your OTP for email verification is: ${otp}. This OTP will expire in 10 minutes.`,
       });
-
     } catch (emailError) {
       console.error("Email sending failed:", emailError);
       // Don't fail the request if email fails, just log it
@@ -165,7 +164,7 @@ const verifyOtpController = async (req, res) => {
 const registerController = async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    
+
     //validation
     if (!name || !email || !password) {
       return res.status(400).send({
@@ -173,7 +172,7 @@ const registerController = async (req, res) => {
         message: "Please fill all fields",
       });
     }
-    
+
     if (password.length < 6) {
       return res.status(400).send({
         success: false,
@@ -366,14 +365,16 @@ const updateUserController = async (req, res) => {
 };
 
 //SEND OTP TO PHONE NUMBER
-// const sendOtpToPhoneNumberController = async (req, res) =>{
+// const sendOtpToPhoneNumberController = async (req, res) => {
 //   const { phone } = req.body;
 
 //   try {
+//     // Generate 6-digit OTP
+//     const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
 //     const response = await axios.get(
-//       // `https://2factor.in/API/V1/${process.env.TWO_FACTOR_API_KEY}/SMS/${phone}/AUTOGEN` 
-//       // `https://2factor.in/API/V1/${process.env.TWO_FACTOR_API_KEY}/SMS/${phone}/AUTOGEN3`
-//       `https://2factor.in/API/R1/?module=TRANS_SMS&apikey=${process.env.TWO_FACTOR_API_KEY}&to=${phone}&from=ZenOTP&templatename=OTP&var1=123456`
+//       // `https://2factor.in/API/V1/${process.env.TWO_FACTOR_API_KEY}/SMS/${phone}/AUTOGEN/`
+//       `https://2factor.in/API/R1/?module=TRANS_SMS&apikey=${process.env.TWO_FACTOR_API_KEY}&to=${phone}&from=ZenOTP&templatename=OTP&var1=${otp}`
 //     );
 //     const { Details } = response.data;
 //     console.log(Details);
@@ -392,7 +393,7 @@ const updateUserController = async (req, res) => {
 //     const response = await axios.get(
 //       `https://2factor.in/API/V1/${process.env.TWO_FACTOR_API_KEY}/SMS/VERIFY/${sessionId}/${otp}`
 //     );
- 
+
 //     const { Status } = response.data;
 
 //     if (Status === 'Success') {
@@ -452,7 +453,7 @@ const updatePasswordController = async (req, res) => {
 const addShippingAddressController = async (req, res) => {
   try {
     const { email, shippingAddress } = req.body;
-    
+
     // Validate required fields
     if (!email || !shippingAddress) {
       return res.status(400).send({
@@ -461,8 +462,17 @@ const addShippingAddressController = async (req, res) => {
       });
     }
 
-    const { fullName, phone, address, city, state, pincode, country } = shippingAddress;
-    if (!fullName || !phone || !address || !city || !state || !pincode || !country) {
+    const { fullName, phone, address, city, state, pincode, country } =
+      shippingAddress;
+    if (
+      !fullName ||
+      !phone ||
+      !address ||
+      !city ||
+      !state ||
+      !pincode ||
+      !country
+    ) {
       return res.status(400).send({
         success: false,
         message: "All address fields are required",
@@ -486,14 +496,15 @@ const addShippingAddressController = async (req, res) => {
     }
 
     // Check if address already exists
-    const addressExists = user.shippingAddress.some(addr => 
-      addr.fullName === fullName &&
-      addr.phone === phone &&
-      addr.address === address &&
-      addr.city === city &&
-      addr.state === state &&
-      addr.pincode === pincode &&
-      addr.country === country
+    const addressExists = user.shippingAddress.some(
+      (addr) =>
+        addr.fullName === fullName &&
+        addr.phone === phone &&
+        addr.address === address &&
+        addr.city === city &&
+        addr.state === state &&
+        addr.pincode === pincode &&
+        addr.country === country
     );
 
     if (addressExists) {
@@ -564,7 +575,7 @@ const deleteShippingAddressController = async (req, res) => {
 const updateShippingAddressController = async (req, res) => {
   try {
     const { email, oldAddress, newAddress } = req.body;
-    
+
     // Validate required fields
     if (!email || !oldAddress || !newAddress) {
       return res.status(400).send({
@@ -573,8 +584,17 @@ const updateShippingAddressController = async (req, res) => {
       });
     }
 
-    const { fullName, phone, address, city, state, pincode, country } = newAddress;
-    if (!fullName || !phone || !address || !city || !state || !pincode || !country) {
+    const { fullName, phone, address, city, state, pincode, country } =
+      newAddress;
+    if (
+      !fullName ||
+      !phone ||
+      !address ||
+      !city ||
+      !state ||
+      !pincode ||
+      !country
+    ) {
       return res.status(400).send({
         success: false,
         message: "All address fields are required",
@@ -620,7 +640,7 @@ const updateShippingAddressController = async (req, res) => {
     // Update the address
     user.shippingAddress[addressIndex] = newAddress;
     await user.save();
-    
+
     res.status(200).send({
       success: true,
       message: "Shipping Address Updated Successfully",
@@ -658,7 +678,7 @@ const setDefaultAddressController = async (req, res) => {
     // Set default address index
     user.defaultAddressIndex = addressIndex;
     await user.save();
-    
+
     res.status(200).send({
       success: true,
       message: "Default Address Set Successfully",
@@ -782,7 +802,6 @@ const removeProductFromWishlistController = async (req, res) => {
   }
 };
 
-
 //REMOVE ALL PRODUCTS FROM WISHLIST CONTROLLER
 const clearWishlistController = async (req, res) => {
   try {
@@ -807,7 +826,7 @@ const clearWishlistController = async (req, res) => {
 
     // Store original length before filtering
     const originalWishlistLength = user.wishlist.length;
-    
+
     user.wishlist = [];
     // Calculate removed count
     const removedCount = originalWishlistLength - user.wishlist.length;
@@ -828,7 +847,6 @@ const clearWishlistController = async (req, res) => {
     });
   }
 };
-
 
 //ADD PRODUCT TO THE CART
 const addProductToCartController = async (req, res) => {
@@ -873,7 +891,9 @@ const addProductToCartController = async (req, res) => {
 
     // Validate variant if provided
     if (cartItem.variantId) {
-      const variant = product.variants?.find(v => v._id.toString() === cartItem.variantId);
+      const variant = product.variants?.find(
+        (v) => v._id.toString() === cartItem.variantId
+      );
       if (!variant) {
         return res.status(404).send({
           success: false,
@@ -885,7 +905,7 @@ const addProductToCartController = async (req, res) => {
     // Add to cart with new structure
     const newCartItem = {
       productId: cartItem.productId,
-      quantity: cartItem.quantity || 1
+      quantity: cartItem.quantity || 1,
     };
 
     if (cartItem.variantId) {
@@ -895,7 +915,7 @@ const addProductToCartController = async (req, res) => {
     user.cart.push(newCartItem);
 
     // Remove from wishlist if present
-    if (user.wishlist.includes(cartItem.productId)){
+    if (user.wishlist.includes(cartItem.productId)) {
       user.wishlist = user.wishlist.filter(
         (productId) => productId != cartItem.productId
       );
@@ -984,10 +1004,16 @@ const removeProductFromCartController = async (req, res) => {
 // 1. Send Reset Code
 const sendResetCodeController = async (req, res) => {
   const { email } = req.body;
-  if (!email) return res.status(400).send({ success: false, message: "Email is required" });
+  if (!email)
+    return res
+      .status(400)
+      .send({ success: false, message: "Email is required" });
 
   const user = await Users.findOne({ email });
-  if (!user) return res.status(404).send({ success: false, message: "No user found with this email" });
+  if (!user)
+    return res
+      .status(404)
+      .send({ success: false, message: "No user found with this email" });
 
   const code = Math.floor(100000 + Math.random() * 900000).toString();
   const expiry = new Date(Date.now() + 10 * 60 * 1000);
@@ -1000,7 +1026,7 @@ const sendResetCodeController = async (req, res) => {
   // Send code via email (reuse your Nodemailer transporter)
   try {
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      service: "gmail",
       auth: {
         user: process.env.GMAIL_USER,
         pass: process.env.GMAIL_PASS,
@@ -1010,7 +1036,7 @@ const sendResetCodeController = async (req, res) => {
     await transporter.sendMail({
       from: process.env.GMAIL_USER,
       to: email,
-      subject: 'Password Reset Code',
+      subject: "Password Reset Code",
       text: `Your password reset code is: ${code}. It expires in 10 minutes.`,
     });
   } catch (emailError) {
@@ -1026,7 +1052,9 @@ const verifyResetCodeController = async (req, res) => {
   const { email, code } = req.body;
   const user = await Users.findOne({ email });
   if (!user || !user.resetPasswordCode || !user.resetPasswordExpiry)
-    return res.status(400).send({ success: false, message: "No reset request found" });
+    return res
+      .status(400)
+      .send({ success: false, message: "No reset request found" });
 
   if (user.resetPasswordCode !== code)
     return res.status(400).send({ success: false, message: "Invalid code" });
@@ -1044,7 +1072,9 @@ const resetPasswordController = async (req, res) => {
   const { email, password } = req.body;
   const user = await Users.findOne({ email });
   if (!user || !user.resetPasswordVerified)
-    return res.status(400).send({ success: false, message: "Code not verified" });
+    return res
+      .status(400)
+      .send({ success: false, message: "Code not verified" });
 
   user.password = await bcrypt.hash(password, 10);
   user.resetPasswordCode = null;
@@ -1054,7 +1084,6 @@ const resetPasswordController = async (req, res) => {
 
   res.send({ success: true, message: "Password reset successful" });
 };
-
 
 module.exports = {
   registerController,
