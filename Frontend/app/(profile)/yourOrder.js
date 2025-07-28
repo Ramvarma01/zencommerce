@@ -87,42 +87,49 @@ const YourOrders = () => {
   return (
     <SafeAreaView style={styles.Container}>
       <Header title={"Your Orders"} />
-      <FlatList
-        data={orders}
-        keyExtractor={(order) => order._id}
-        renderItem={({ item: order }) => (
-          <View
-            style={{
-              marginHorizontal: 16,
-              marginVertical: 10,
-              shadowColor: "#000",
-              elevation: 3,
-              backgroundColor: "#fff",
-              borderRadius: 8,
-              padding: 12,
-            }}
-          >
-            <Text style={{ fontWeight: "bold", fontSize: 16 }}>
-              Order #{order._id}
-            </Text>
-            <Text>Status: {order.Orderstatus}</Text>
-            <Text>Total: ₹{order.totalAmount}</Text>
-            {/* <Text>Date: {new Date(order.createdAt).toLocaleString()}</Text> */}
-            <Text>Date: {new Date(order.createdAt).toLocaleDateString()}</Text>
-            <View style={{ marginTop: 8 }}>
-              {order.items.map((item, idx) => (
-                <View key={idx}>{renderOrderItem(item)}</View>
-              ))}
+      {orders.length > 0 ? (
+        <FlatList
+          data={orders}
+          keyExtractor={(order) => order._id}
+          renderItem={({ item: order }) => (
+            <View
+              style={{
+                marginHorizontal: 16,
+                marginVertical: 10,
+                shadowColor: "#000",
+                elevation: 3,
+                backgroundColor: "#fff",
+                borderRadius: 8,
+                padding: 12,
+              }}
+            >
+              <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+                Order #{order._id}
+              </Text>
+              <Text>Status: {order.Orderstatus}</Text>
+              <Text>Total: ₹{order.totalAmount}</Text>
+              {/* <Text>Date: {new Date(order.createdAt).toLocaleString()}</Text> */}
+              <Text>
+                Date: {new Date(order.createdAt).toLocaleDateString()}
+              </Text>
+              <View style={{ marginTop: 8 }}>
+                {order.items.map((item, idx) => (
+                  <View key={idx}>{renderOrderItem(item)}</View>
+                ))}
+              </View>
             </View>
-          </View>
-        )}
-      />
+          )}
+        />
+      ) : (
+        <Text style={styles.emptyText}>No Orders Found</Text>
+      )}
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   Container: {
+    display: "flex",
     flex: 1,
     backgroundColor: "#F8F9FA",
   },
@@ -230,8 +237,11 @@ const styles = StyleSheet.create({
   emptyText: {
     color: "#888",
     fontSize: 16,
+    height: "100%",
     textAlign: "center",
-    marginTop: 40,
+    textAlignVertical: "center",
+    // paddingVertical: 250,
+    // marginTop: 50,
   },
 });
 
