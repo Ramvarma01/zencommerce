@@ -104,7 +104,7 @@ export default function Register() {
       const { data } = await axios.post('/register', { name, email, password });
 
       Alert.alert("Success", data.message);
-      if (data.success) router.push('/login');
+      if (data.success) router.replace('/login');
     } catch (error) {
       Alert.alert("Error", error.response?.data?.message || "Something went wrong");
       console.error(error);
