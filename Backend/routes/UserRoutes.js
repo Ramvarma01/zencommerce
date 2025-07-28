@@ -16,6 +16,11 @@ const {
     removeProductFromCartController,
     sendOtpController,
     verifyOtpController,
+    sendResetCodeController,
+    verifyResetCodeController,
+    resetPasswordController,
+    sendOtpToPhoneNumberController,
+    verifyOtpFromPhoneNumberController,
 } = require('../controllers/UserController');
 
 //router Object
@@ -38,5 +43,11 @@ router.delete("/remove-product-from-wishlist/:id", removeProductFromWishlistCont
 router.delete("/clear-wishlist/:id", clearWishlistController);
 router.put("/add-product-to-cart/:id",addProductToCartController);
 router.delete("/remove-product-from-cart/:id", removeProductFromCartController);
+router.post('/send-reset-code', sendResetCodeController);
+router.post('/verify-reset-code', verifyResetCodeController);
+router.post('/reset-password', resetPasswordController);
+// router.post('/send-otp-to-phone-number', sendOtpToPhoneNumberController);
+// router.post('/verify-otp-from-phone-number', verifyOtpFromPhoneNumberController);
+
 
 module.exports = router;

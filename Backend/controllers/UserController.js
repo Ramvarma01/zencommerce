@@ -365,6 +365,47 @@ const updateUserController = async (req, res) => {
   }
 };
 
+//SEND OTP TO PHONE NUMBER
+// const sendOtpToPhoneNumberController = async (req, res) =>{
+//   const { phone } = req.body;
+
+//   try {
+//     const response = await axios.get(
+//       // `https://2factor.in/API/V1/${process.env.TWO_FACTOR_API_KEY}/SMS/${phone}/AUTOGEN` 
+//       // `https://2factor.in/API/V1/${process.env.TWO_FACTOR_API_KEY}/SMS/${phone}/AUTOGEN3`
+//       `https://2factor.in/API/R1/?module=TRANS_SMS&apikey=${process.env.TWO_FACTOR_API_KEY}&to=${phone}&from=ZenOTP&templatename=OTP&var1=123456`
+//     );
+//     const { Details } = response.data;
+//     console.log(Details);
+//     res.status(200).json({ sessionId: Details });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: "Failed to send OTP" });
+//   }
+// };
+
+// VERIFY OTP FROM PHONE NUMBER
+// const verifyOtpFromPhoneNumberController = async (req, res) => {
+//   const { sessionId, otp } = req.body;
+
+//   try {
+//     const response = await axios.get(
+//       `https://2factor.in/API/V1/${process.env.TWO_FACTOR_API_KEY}/SMS/VERIFY/${sessionId}/${otp}`
+//     );
+ 
+//     const { Status } = response.data;
+
+//     if (Status === 'Success') {
+//       res.status(200).json({ message: 'OTP Verified' });
+//     } else {
+//       res.status(400).json({ message: 'Invalid OTP' });
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: 'OTP verification failed' });
+//   }
+// }
+
 //UPDATE PASSWORD CONTROLLER
 const updatePasswordController = async (req, res) => {
   try {
@@ -940,6 +981,80 @@ const removeProductFromCartController = async (req, res) => {
   }
 };
 
+// 1. Send Reset Code
+const sendResetCodeController = async (req, res) => {
+  const { email } = req.body;
+  if (!email) return res.status(400).send({ success: false, message: "Email is required" });
+
+  const user = await Users.findOne({ email });
+  if (!user) return res.status(404).send({ success: false, message: "No user found with this email" });
+
+  const code = Math.floor(100000 + Math.random() * 900000).toString();
+  const expiry = new Date(Date.now() + 10 * 60 * 1000);
+
+  user.resetPasswordCode = code;
+  user.resetPasswordExpiry = expiry;
+  user.resetPasswordVerified = false;
+  await user.save();
+
+  // Send code via email (reuse your Nodemailer transporter)
+  try {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASS,
+      },
+    });
+
+    await transporter.sendMail({
+      from: process.env.GMAIL_USER,
+      to: email,
+      subject: 'Password Reset Code',
+      text: `Your password reset code is: ${code}. It expires in 10 minutes.`,
+    });
+  } catch (emailError) {
+    console.error("Email sending failed:", emailError);
+    // Don't fail the request if email fails, just log it
+  }
+
+  res.send({ success: true, message: "Reset code sent to your email" });
+};
+
+// 2. Verify Reset Code
+const verifyResetCodeController = async (req, res) => {
+  const { email, code } = req.body;
+  const user = await Users.findOne({ email });
+  if (!user || !user.resetPasswordCode || !user.resetPasswordExpiry)
+    return res.status(400).send({ success: false, message: "No reset request found" });
+
+  if (user.resetPasswordCode !== code)
+    return res.status(400).send({ success: false, message: "Invalid code" });
+
+  if (user.resetPasswordExpiry < new Date())
+    return res.status(400).send({ success: false, message: "Code expired" });
+
+  user.resetPasswordVerified = true;
+  await user.save();
+  res.send({ success: true, message: "Code verified" });
+};
+
+// 3. Reset Password
+const resetPasswordController = async (req, res) => {
+  const { email, password } = req.body;
+  const user = await Users.findOne({ email });
+  if (!user || !user.resetPasswordVerified)
+    return res.status(400).send({ success: false, message: "Code not verified" });
+
+  user.password = await bcrypt.hash(password, 10);
+  user.resetPasswordCode = null;
+  user.resetPasswordExpiry = null;
+  user.resetPasswordVerified = false;
+  await user.save();
+
+  res.send({ success: true, message: "Password reset successful" });
+};
+
 
 module.exports = {
   registerController,
@@ -958,4 +1073,9 @@ module.exports = {
   removeProductFromCartController,
   sendOtpController,
   verifyOtpController,
+  sendResetCodeController,
+  verifyResetCodeController,
+  resetPasswordController,
+  // sendOtpToPhoneNumberController,
+  // verifyOtpFromPhoneNumberController,
 };

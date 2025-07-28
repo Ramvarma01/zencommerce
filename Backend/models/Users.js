@@ -122,6 +122,18 @@ const usersSchema = new mongoose.Schema(
         cart: {
             type: [cartSchema],
             default: []
+        },
+        resetPasswordCode: {
+            type: String,
+            default: null
+        },
+        resetPasswordExpiry: {
+            type: Date,
+            default: null
+        },
+        resetPasswordVerified: {
+            type: Boolean,
+            default: false
         }
     },{timestamps: true}
 );
