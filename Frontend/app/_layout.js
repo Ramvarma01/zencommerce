@@ -1,7 +1,7 @@
-import { Slot, Stack } from 'expo-router';
-import { useContext, useEffect, useState } from 'react';
-import { AuthProvider, AuthContext } from '../context/authContext';
-import { ProductProvider } from '../context/productContext';
+import { Slot, Stack } from "expo-router";
+import { useContext, useEffect, useState } from "react";
+import { AuthProvider, AuthContext } from "../context/authContext";
+import { ProductProvider } from "../context/productContext";
 
 function RootLayoutInner() {
   const [state, , , loading] = useContext(AuthContext);
@@ -15,8 +15,8 @@ function RootLayoutInner() {
   // console.log('isLoggedIn',isLoggedIn)
   return (
     <>
-    {/* <Stack screenOptions={{ headerShown: false }}> */}
-     {/* {console.log('isLoggedIn in layout return',isLoggedIn)} */}
+      {/* <Stack screenOptions={{ headerShown: false }}> */}
+      {/* {console.log('isLoggedIn in layout return',isLoggedIn)} */}
       {!isLoggedIn ? (
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="login" />
@@ -24,12 +24,11 @@ function RootLayoutInner() {
           <Stack.Screen name="forgotPassword" />
           <Stack.Screen name="(profile)" />
           {/* <Stack.Screen name="product" /> */}
-       </Stack>
+        </Stack>
       ) : (
-      
-         <Stack screenOptions={{ headerShown: false }}>
-         <Stack.Screen name="(tabs)" />
-         </Stack>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(tabs)" />
+        </Stack>
       )}
     </>
   );
@@ -39,10 +38,8 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <ProductProvider>
-          <RootLayoutInner />
+        <RootLayoutInner />
       </ProductProvider>
     </AuthProvider>
   );
 }
-   
- 

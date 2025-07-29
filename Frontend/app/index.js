@@ -13,6 +13,6 @@ export default function Index() {
       ) : (
         <Redirect href="/(tabs)" />
       )}
-   </>
+    </>
   );
 }

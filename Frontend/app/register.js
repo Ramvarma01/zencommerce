@@ -1,6 +1,6 @@
-import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
-import axios from 'axios';
+import { useRouter } from "expo-router";
+import React, { useState } from "react";
+import axios from "axios";
 import {
   View,
   Text,
@@ -11,16 +11,16 @@ import {
   Platform,
   ScrollView,
   Alert,
-} from 'react-native';
+} from "react-native";
 
 export default function Register() {
   const router = useRouter();
 
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [otp, setOtp] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [otp, setOtp] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1); // 1: name/email, 2: OTP, 3: password
@@ -30,11 +30,13 @@ export default function Register() {
     let newErrors = {};
 
     if (!name) newErrors.name = "Name is required";
-    else if (name.length > 20) newErrors.name = "Name can only have 20 characters";
+    else if (name.length > 20)
+      newErrors.name = "Name can only have 20 characters";
 
     if (!email) newErrors.email = "Email is required";
-    else if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = "Invalid email format";
-    
+    else if (!/\S+@\S+\.\S+/.test(email))
+      newErrors.email = "Invalid email format";
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -44,7 +46,7 @@ export default function Register() {
 
     if (!otp) newErrors.otp = "OTP is required";
     else if (otp.length !== 6) newErrors.otp = "OTP must be 6 digits";
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -53,9 +55,11 @@ export default function Register() {
     let newErrors = {};
 
     if (!password) newErrors.password = "Password is required";
-    else if (password.length < 6) newErrors.password = "Password must be at least 6 characters";
-    
-    if (password !== confirmPassword) newErrors.confirmPassword = "Passwords do not match";
+    else if (password.length < 6)
+      newErrors.password = "Password must be at least 6 characters";
+
+    if (password !== confirmPassword)
+      newErrors.confirmPassword = "Passwords do not match";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -66,13 +70,16 @@ export default function Register() {
 
     try {
       setLoading(true);
-      const { data } = await axios.post('/send-otp', { name, email });
+      const { data } = await axios.post("/send-otp", { name, email });
 
       Alert.alert("Success", data.message);
       setOtpSent(true);
       setStep(2);
     } catch (error) {
-      Alert.alert("Error", error.response?.data?.message || "Something went wrong");
+      Alert.alert(
+        "Error",
+        error.response?.data?.message || "Something went wrong"
+      );
       console.error(error);
     } finally {
       setLoading(false);
@@ -84,12 +91,15 @@ export default function Register() {
 
     try {
       setLoading(true);
-      const { data } = await axios.post('/verify-otp', { email, otp });
+      const { data } = await axios.post("/verify-otp", { email, otp });
 
       Alert.alert("Success", data.message);
       setStep(3);
     } catch (error) {
-      Alert.alert("Error", error.response?.data?.message || "Something went wrong");
+      Alert.alert(
+        "Error",
+        error.response?.data?.message || "Something went wrong"
+      );
       console.error(error);
     } finally {
       setLoading(false);
@@ -101,25 +111,32 @@ export default function Register() {
 
     try {
       setLoading(true);
-      const { data } = await axios.post('/register', { name, email, password });
+      const { data } = await axios.post("/register", { name, email, password });
 
       Alert.alert("Success", data.message);
-      if (data.success) router.replace('/login');
+      if (data.success) router.replace("/login");
     } catch (error) {
-      Alert.alert("Error", error.response?.data?.message || "Something went wrong");
+      Alert.alert(
+        "Error",
+        error.response?.data?.message || "Something went wrong"
+      );
       console.error(error);
     } finally {
       setLoading(false);
     }
   };
 
+  ///check
   const handleResendOtp = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.post('/send-otp', { name, email });
+      const { data } = await axios.post("/send-otp", { name, email });
       Alert.alert("Success", "OTP resent successfully");
     } catch (error) {
-      Alert.alert("Error", error.response?.data?.message || "Something went wrong");
+      Alert.alert(
+        "Error",
+        error.response?.data?.message || "Something went wrong"
+      );
       console.error(error);
     } finally {
       setLoading(false);
@@ -149,13 +166,13 @@ export default function Register() {
       />
       {errors.email && <Text style={styles.validityText}>{errors.email}</Text>}
 
-      <TouchableOpacity 
-        style={styles.button} 
+      <TouchableOpacity
+        style={styles.button}
         onPress={handleSendOtp}
         disabled={loading}
       >
         <Text style={styles.buttonText}>
-          {loading ? 'Sending OTP...' : 'Send OTP'}
+          {loading ? "Sending OTP..." : "Send OTP"}
         </Text>
       </TouchableOpacity>
     </>
@@ -177,18 +194,18 @@ export default function Register() {
       />
       {errors.otp && <Text style={styles.validityText}>{errors.otp}</Text>}
 
-      <TouchableOpacity 
-        style={styles.button} 
+      <TouchableOpacity
+        style={styles.button}
         onPress={handleVerifyOtp}
         disabled={loading}
       >
         <Text style={styles.buttonText}>
-          {loading ? 'Verifying...' : 'Verify OTP'}
+          {loading ? "Verifying..." : "Verify OTP"}
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity 
-        style={styles.resendButton} 
+      <TouchableOpacity
+        style={styles.resendButton}
         onPress={handleResendOtp}
         disabled={loading}
       >
@@ -201,7 +218,9 @@ export default function Register() {
     <>
       <Text style={styles.title}>Set</Text>
       <Text style={styles.title}>Password</Text>
-      <Text style={styles.subtitle}>Create a secure password for your account</Text>
+      <Text style={styles.subtitle}>
+        Create a secure password for your account
+      </Text>
 
       <TextInput
         style={styles.input}
@@ -210,7 +229,9 @@ export default function Register() {
         value={password}
         onChangeText={setPassword}
       />
-      {errors.password && <Text style={styles.validityText}>{errors.password}</Text>}
+      {errors.password && (
+        <Text style={styles.validityText}>{errors.password}</Text>
+      )}
 
       <TextInput
         style={styles.input}
@@ -219,15 +240,17 @@ export default function Register() {
         value={confirmPassword}
         onChangeText={setConfirmPassword}
       />
-      {errors.confirmPassword && <Text style={styles.validityText}>{errors.confirmPassword}</Text>}
+      {errors.confirmPassword && (
+        <Text style={styles.validityText}>{errors.confirmPassword}</Text>
+      )}
 
-      <TouchableOpacity 
-        style={styles.button} 
+      <TouchableOpacity
+        style={styles.button}
         onPress={handleRegister}
         disabled={loading}
       >
         <Text style={styles.buttonText}>
-          {loading ? 'Creating Account...' : 'Create Account'}
+          {loading ? "Creating Account..." : "Create Account"}
         </Text>
       </TouchableOpacity>
     </>
@@ -236,16 +259,19 @@ export default function Register() {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <ScrollView contentContainerStyle={styles.wrapper} keyboardShouldPersistTaps="handled">
+      <ScrollView
+        contentContainerStyle={styles.wrapper}
+        keyboardShouldPersistTaps="handled"
+      >
         {step === 1 && renderStep1()}
         {step === 2 && renderStep2()}
         {step === 3 && renderStep3()}
 
         <View style={styles.signInRow}>
           <Text>Already have an account? </Text>
-          <TouchableOpacity onPress={() => router.push('/login')}>
+          <TouchableOpacity onPress={() => router.push("/login")}>
             <Text style={styles.link}>Login</Text>
           </TouchableOpacity>
         </View>
@@ -255,65 +281,65 @@ export default function Register() {
 }
 
 const styles = StyleSheet.create({
-  container: { 
-    flex: 1, 
-    backgroundColor: '#fff' 
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
   },
-  wrapper: { 
-    padding: 24, 
-    paddingTop: 50 
+  wrapper: {
+    padding: 24,
+    paddingTop: 50,
   },
-  title: { 
-    fontSize: 36, 
-    fontWeight: '700' 
+  title: {
+    fontSize: 36,
+    fontWeight: "700",
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
+    color: "#666",
     marginBottom: 15,
     marginTop: 10,
   },
   input: {
     height: 50,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#f5f5f5",
     borderRadius: 10,
     paddingHorizontal: 16,
     marginTop: 15,
   },
   validityText: {
-    color: '#b22222',
+    color: "#b22222",
     marginLeft: 15,
-    fontWeight: '450',
+    fontWeight: "450",
   },
   button: {
-    backgroundColor: '#3E64FF',
+    backgroundColor: "#3E64FF",
     height: 50,
     borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 30,
   },
   buttonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    fontWeight: '700'
+    fontWeight: "700",
   },
   resendButton: {
     marginTop: 15,
-    alignItems: 'center',
+    alignItems: "center",
   },
   resendText: {
-    color: '#3E64FF',
+    color: "#3E64FF",
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: "500",
   },
   link: {
-    color: '#3E64FF',
-    fontWeight: '500',
+    color: "#3E64FF",
+    fontWeight: "500",
   },
   signInRow: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginTop: 30,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
 });

@@ -1,22 +1,36 @@
-const products = require('../models/Products');
-
+const products = require("../models/Products");
 
 //ADD PRODUCT CONTROLLER
 const addProductController = async (req, res) => {
   try {
-    const {name, brand, description, category, price, originalPrice, quantity, hasVariant, variantName, variants} = req.body;
+    const {
+      name,
+      brand,
+      description,
+      category,
+      price,
+      originalPrice,
+      quantity,
+      hasVariant,
+      variantName,
+      variants,
+    } = req.body;
 
     // Get Cloudinary URLs and original filenames
-    const thumbnailFile = req.files['thumbnail'] ? req.files['thumbnail'][0] : null;
-    const thumbnailUrl = thumbnailFile ? thumbnailFile.path : '';
+    const thumbnailFile = req.files["thumbnail"]
+      ? req.files["thumbnail"][0]
+      : null;
+    const thumbnailUrl = thumbnailFile ? thumbnailFile.path : "";
     // const thumbnailOriginalName = thumbnailFile ? thumbnailFile.originalname : '';
-    
-    const imageFiles = req.files['images'] ? req.files['images'] : [];
-    const imagesUrls = imageFiles.map(f => f.path);
+
+    const imageFiles = req.files["images"] ? req.files["images"] : [];
+    const imagesUrls = imageFiles.map((f) => f.path);
     // const imagesOriginalNames = imageFiles.map(f => f.originalname);
-    
+
     // Handle variant images
-    const variantImageFiles = req.files['variantImages'] ? req.files['variantImages'] : [];
+    const variantImageFiles = req.files["variantImages"]
+      ? req.files["variantImages"]
+      : [];
 
     // Process variants with images
     let processedVariants = [];
@@ -24,10 +38,12 @@ const addProductController = async (req, res) => {
       try {
         processedVariants = variants.map((variant, index) => ({
           ...variant,
-          image: variantImageFiles[index] ? variantImageFiles[index].path : variant.image || '',
+          image: variantImageFiles[index]
+            ? variantImageFiles[index].path
+            : variant.image || "",
         }));
       } catch (error) {
-        console.error('Error processing variants:', error);
+        console.error("Error processing variants:", error);
         // processedVariants = [];
       }
     }
@@ -52,48 +68,64 @@ const addProductController = async (req, res) => {
 
     res.status(200).send({
       success: true,
-      message: 'Product added successfully',
-      product: newProduct
+      message: "Product added successfully",
+      product: newProduct,
     });
   } catch (error) {
     res.status(500).send({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
-
 
 // GET ALL PRODUCTS CONTROLLER
 const getAllProductsController = async (req, res) => {
   try {
     const allProducts = await products.find();
-    res.status(200).json({ 
-      success: true, 
-      products: allProducts 
+    res.status(200).json({
+      success: true,
+      products: allProducts,
     });
   } catch (error) {
-    res.status(500).json({ 
-      success: false, 
-      message: error.message });
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
-
 
 //EDIT PRODUCT CONTROLLER
 const editProductController = async (req, res) => {
   try {
     const { id } = req.params;
-    const {name, brand, description, category, price, originalPrice, quantity, hasVariant, variantName, variants, existingImages, existingthumbnail, existingVariantImages, variantImageIndexes} = req.body;
+    const {
+      name,
+      brand,
+      description,
+      category,
+      price,
+      originalPrice,
+      quantity,
+      hasVariant,
+      variantName,
+      variants,
+      existingImages,
+      existingthumbnail,
+      existingVariantImages,
+      variantImageIndexes,
+    } = req.body;
 
     // Get Cloudinary URLs and original filenames
-    const thumbnailFile = req.files['thumbnail'] ? req.files['thumbnail'][0] : null;
+    const thumbnailFile = req.files["thumbnail"]
+      ? req.files["thumbnail"][0]
+      : null;
     const thumbnailUrl = thumbnailFile ? thumbnailFile.path : existingthumbnail;
     // const thumbnailOriginalName = thumbnailFile ? thumbnailFile.originalname : '';
-    
+
     let imagesUrls = [];
     if (existingImages) {
-      if (typeof existingImages === 'string') {
+      if (typeof existingImages === "string") {
         try {
           imagesUrls = JSON.parse(existingImages);
         } catch (e) {
@@ -103,11 +135,13 @@ const editProductController = async (req, res) => {
         imagesUrls = existingImages;
       }
     }
-    const imageFiles = req.files['images'] ? req.files['images'] : [];
-    imagesUrls = [...imagesUrls, ...imageFiles.map(f => f.path)];
-    
+    const imageFiles = req.files["images"] ? req.files["images"] : [];
+    imagesUrls = [...imagesUrls, ...imageFiles.map((f) => f.path)];
+
     // Handle variant images
-    const variantImageFiles = req.files['variantImages'] ? req.files['variantImages'] : [];
+    const variantImageFiles = req.files["variantImages"]
+      ? req.files["variantImages"]
+      : [];
 
     // Process variants with images
     let processedVariants = [];
@@ -116,7 +150,7 @@ const editProductController = async (req, res) => {
         // Parse existingVariantImages if it's a string
         let existingVariantImagesArr = [];
         if (existingVariantImages) {
-          if (typeof existingVariantImages === 'string') {
+          if (typeof existingVariantImages === "string") {
             try {
               existingVariantImagesArr = JSON.parse(existingVariantImages);
             } catch (e) {
@@ -129,15 +163,19 @@ const editProductController = async (req, res) => {
 
         let idx = 0;
         processedVariants = variants.map((variant, index) => {
-          let image = '';
+          let image = "";
           if (existingVariantImagesArr && existingVariantImagesArr[index]) {
             image = existingVariantImagesArr[index];
-            console.log(index+image)
+            console.log(index + image);
           }
           // If a new image was uploaded for this variant, use it
-          else if (variantImageFiles && variantImageFiles[idx] && variantImageFiles[idx].path) {
+          else if (
+            variantImageFiles &&
+            variantImageFiles[idx] &&
+            variantImageFiles[idx].path
+          ) {
             image = variantImageFiles[idx].path;
-            console.log(index+image)
+            console.log(index + image);
             idx++;
           }
           return {
@@ -146,7 +184,7 @@ const editProductController = async (req, res) => {
           };
         });
       } catch (error) {
-        console.error('Error processing variants:', error);
+        console.error("Error processing variants:", error);
         processedVariants = [];
       }
     }
@@ -162,7 +200,9 @@ const editProductController = async (req, res) => {
         // price: hasVariant? '': price,
         // originalPrice: hasVariant? '': originalPrice,
         // quantity:hasVariant? '': originalPrice,
-        price,originalPrice,quantity,
+        price,
+        originalPrice,
+        quantity,
         thumbnail: thumbnailUrl,
         // thumbnailOriginalName: thumbnailOriginalName,
         images: imagesUrls,
@@ -179,23 +219,22 @@ const editProductController = async (req, res) => {
     if (!updatedProduct) {
       return res.status(404).send({
         success: false,
-        message: 'Product not found'
+        message: "Product not found",
       });
     }
 
     res.status(200).send({
       success: true,
-      message: 'Product updated successfully',
-      product: updatedProduct
+      message: "Product updated successfully",
+      product: updatedProduct,
     });
   } catch (error) {
     res.status(500).send({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
-
 
 //DELETE PRODUCT CONTROLLER
 const deleteProductController = async (req, res) => {
@@ -221,16 +260,16 @@ const duplicateProductController = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const original = await products.findById({_id: id}).lean();
+    const original = await products.findById({ _id: id }).lean();
     if (original) {
       delete original._id; // Remove _id so MongoDB can generate a new one
       const duplicate = new products(original);
       await duplicate.save();
     } else {
-        res.status(400).send({
-          success: false,
-          message: "Product not found"
-        }) 
+      res.status(400).send({
+        success: false,
+        message: "Product not found",
+      });
     }
     // await products.findByIdAndDelete({ _id: id });
     res.status(200).send({
@@ -255,7 +294,7 @@ const getProductByIdController = async (req, res) => {
     if (!product) {
       return res.status(404).send({
         success: false,
-        message: 'Product not found',
+        message: "Product not found",
       });
     }
     res.status(200).send({
@@ -266,17 +305,17 @@ const getProductByIdController = async (req, res) => {
     console.error(error);
     res.status(500).send({
       success: false,
-      message: 'Error fetching product',
+      message: "Error fetching product",
       error: error.message,
     });
   }
 };
 
-module.exports = { 
+module.exports = {
   addProductController,
-  getAllProductsController, 
-  deleteProductController, 
+  getAllProductsController,
+  deleteProductController,
   duplicateProductController,
   editProductController,
-  getProductByIdController
+  getProductByIdController,
 };

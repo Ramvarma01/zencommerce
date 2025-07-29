@@ -8,9 +8,9 @@ function Dashboard() {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const response = await fetch('/api/dashboard');
+        const response = await fetch("/api/dashboard");
         if (!response.ok) {
-          throw new Error('Failed to fetch dashboard data');
+          throw new Error("Failed to fetch dashboard data");
         }
         const data = await response.json();
         setDashboardData(data);
@@ -22,20 +22,20 @@ function Dashboard() {
     };
     fetchDashboardData();
   }, []);
-  
+
   return (
     <div className="form-container">
       <div className="form-header">
         <h1 className="form-title">Admin Dashboard</h1>
-        <p className="form-subtitle">
-          Welcome to your Zencommerce admin panel
-        </p>
+        <p className="form-subtitle">Welcome to your Zencommerce admin panel</p>
       </div>
-      
+
       <div className="form-grid">
         <div className="form-card">
           <div className="card-title">
-            <span className="card-title-icon">{/* You can use a DashboardIcon here if you want */}</span>
+            <span className="card-title-icon">
+              {/* You can use a DashboardIcon here if you want */}
+            </span>
             Dashboard Overview
           </div>
           <p>Dashboard content will go here...</p>

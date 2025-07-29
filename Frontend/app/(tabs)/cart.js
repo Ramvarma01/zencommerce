@@ -19,7 +19,7 @@ import { ProductContext } from "../../context/productContext";
 import { AuthContext } from "../../context/authContext";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import RazorpayCheckout from 'react-native-razorpay';
+import RazorpayCheckout from "react-native-razorpay";
 const { width } = Dimensions.get("window");
 
 const CartPage = () => {
@@ -408,10 +408,10 @@ const CartPage = () => {
             </>
           )}
         </View>
-        <View style={{ flexDirection: "row", gap: 8, alignItems: "center" }}>
+        <View style={styles.actionContainer}>
           <View style={styles.quantityContainer}>
             <TouchableOpacity
-              style={styles.quantityButton}
+              style={styles.actionButton}
               onPress={(e) => {
                 e.stopPropagation && e.stopPropagation();
                 updateCartQuantity(item, item.cartQuantity - 1);
@@ -426,7 +426,7 @@ const CartPage = () => {
             </TouchableOpacity>
             <Text style={styles.quantityText}>{item.cartQuantity}</Text>
             <TouchableOpacity
-              style={styles.quantityButton}
+              style={styles.actionButton}
               onPress={(e) => {
                 e.stopPropagation && e.stopPropagation();
                 updateCartQuantity(item, item.cartQuantity + 1);
@@ -691,7 +691,8 @@ const CartPage = () => {
           quantity: item.cartQuantity,
           price:
             item.hasVariant && item.variantId
-              ? item.variants.find((v) => v._id === item.variantId)?.price || item.price
+              ? item.variants.find((v) => v._id === item.variantId)?.price ||
+                item.price
               : item.price,
           variantId: item.hasVariant ? item.variantId : undefined,
         };
@@ -703,35 +704,43 @@ const CartPage = () => {
         paymentMethod: paymentMethod === "cod" ? "COD" : "Online",
         totalAmount: total,
       };
-      if (paymentMethod === 'online') {
+      if (paymentMethod === "online") {
         // 1. Create Razorpay order on backend
-        const { data: razorpayData } = await axios.post('/create-razorpay-order', {
-          amount: total,
-          currency: 'INR',
-        });
-        if (!razorpayData.success) throw new Error(razorpayData.message || 'Failed to create Razorpay order');
-        const { id: razorpayOrderId, amount: razorpayAmount } = razorpayData.order;
+        const { data: razorpayData } = await axios.post(
+          "/create-razorpay-order",
+          {
+            amount: total,
+            currency: "INR",
+          }
+        );
+        if (!razorpayData.success)
+          throw new Error(
+            razorpayData.message || "Failed to create Razorpay order"
+          );
+        const { id: razorpayOrderId, amount: razorpayAmount } =
+          razorpayData.order;
         // 2. Open Razorpay payment UI
         const options = {
-          description: 'Order Payment',
-          image: 'https://res.cloudinary.com/dg1wavm3u/image/upload/v1753352208/zencommerce_logo_jyhhkt.png', // Replace with your logo
-          currency: 'INR',
-          key: 'rzp_test_PzGN0iD8UN5M5F', // Replace with your Razorpay key id
+          description: "Order Payment",
+          image:
+            "https://res.cloudinary.com/dg1wavm3u/image/upload/v1753352208/zencommerce_logo_jyhhkt.png", // Replace with your logo
+          currency: "INR",
+          key: "rzp_test_PzGN0iD8UN5M5F", // Replace with your Razorpay key id
           amount: razorpayAmount,
           order_id: razorpayOrderId,
-          name: 'Zencommerce',
+          name: "Zencommerce",
           prefill: {
             email: user.email,
             contact: user.phone,
             name: user.name,
           },
-          theme: { color: '#007AFF' },
+          theme: { color: "#007AFF" },
           method: {
             netbanking: true,
             card: true,
             upi: true, // <-- This enables UPI
-            wallet: true
-          }
+            wallet: true,
+          },
         };
         RazorpayCheckout.open(options)
           .then(async (paymentData) => {
@@ -742,22 +751,34 @@ const CartPage = () => {
               razorpay_signature: paymentData.razorpay_signature,
               orderPayload,
             };
-            const { data: verifyData } = await axios.post('/verify-razorpay-payment', verifyPayload);
+            const { data: verifyData } = await axios.post(
+              "/verify-razorpay-payment",
+              verifyPayload
+            );
             if (verifyData.success) {
               await AsyncStorage.setItem(
                 "@auth",
                 JSON.stringify({ user: verifyData.userDetails })
               );
               getLocalStorageData();
-              Alert.alert("Order Placed", "Your payment was successful and order has been placed!");
+              Alert.alert(
+                "Order Placed",
+                "Your payment was successful and order has been placed!"
+              );
               setShowAddressModal(false);
               setSelectedAddressIdx(null);
             } else {
-              Alert.alert("Payment Verification Failed", verifyData.message || "Could not verify payment.");
+              Alert.alert(
+                "Payment Verification Failed",
+                verifyData.message || "Could not verify payment."
+              );
             }
           })
           .catch((error) => {
-            Alert.alert("Payment Failed", error.description || error.message || "Payment was not completed.");
+            Alert.alert(
+              "Payment Failed",
+              error.description || error.message || "Payment was not completed."
+            );
           })
           .finally(() => {
             setPlacingOrder(false);
@@ -787,7 +808,7 @@ const CartPage = () => {
       );
       setPlacingOrder(false);
     } finally {
-      if (paymentMethod !== 'online') setPlacingOrder(false);
+      if (paymentMethod !== "online") setPlacingOrder(false);
     }
   };
 
@@ -904,15 +925,14 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     width: 80,
-    height: 80,
+    height: 100,
     marginRight: 12,
   },
   itemImage: {
     width: "100%",
     height: "100%",
-    resizeMode: "contain",
-    // borderRadius: 8,
-    // marginRight: 12,
+    objectFit: "contain",
+    // resizeMode: "contain",
   },
   itemInfo: {
     flex: 1,
@@ -968,32 +988,34 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     minWidth: 80,
   },
+  actionContainer: {
+    flexDirection: "row",
+    gap: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: "5",
+  },
   quantityContainer: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#F8F9FA",
     borderRadius: 8,
-    padding: 5,
-    marginTop: 8,
-    width: 100,
   },
-  quantityButton: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: "#fff",
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-  },
+  // quantityButton: {
+  //   width: 28,
+  //   height: 28,
+  //   borderRadius: 14,
+  //   backgroundColor: "#fff",
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   shadowColor: "#000",
+  //   shadowOffset: {
+  //     width: 0,
+  //     height: 1,
+  //   },
+  //   shadowOpacity: 0.1,
+  //   shadowRadius: 2,
+  //   elevation: 2,
+  // },
   quantityText: {
     fontSize: 14,
     fontWeight: "600",
@@ -1004,15 +1026,14 @@ const styles = StyleSheet.create({
   },
   actionButtons: {
     flexDirection: "row",
-    // alignItems: "center",
-    paddingTop: 5,
     gap: 8,
   },
   actionButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: "#F8F9FA",
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    // backgroundColor: "#F8F9FA",
+    backgroundColor: "#FFF",
     justifyContent: "center",
     alignItems: "center",
     shadowColor: "#000",

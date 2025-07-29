@@ -103,11 +103,12 @@ const WishlistPage = () => {
     );
   };
 
-
   const handleAddToCart = async (product) => {
     try {
       // Check if product is already in cart (new cart structure)
-      const isInCart = user.cart.some(cartItem => cartItem.productId === product._id);
+      const isInCart = user.cart.some(
+        (cartItem) => cartItem.productId === product._id
+      );
       if (isInCart) {
         return Alert.alert("Product already in cart");
       }
@@ -115,11 +116,15 @@ const WishlistPage = () => {
       // Prepare cart item data
       const cartItem = {
         productId: product._id,
-        quantity: 1
+        quantity: 1,
       };
 
       // Add variantId if product has variants
-      if (product.hasVariant && product.variants && product.variants.length > 0) {
+      if (
+        product.hasVariant &&
+        product.variants &&
+        product.variants.length > 0
+      ) {
         cartItem.variantId = product.variants[0]._id; // Default to first variant
       }
 
@@ -185,7 +190,8 @@ const WishlistPage = () => {
                 return;
               }
               const { data } = await axios.delete(
-                `/clear-wishlist/${user._id}`);
+                `/clear-wishlist/${user._id}`
+              );
               if (data.success) {
                 await AsyncStorage.setItem(
                   "@auth",
@@ -212,8 +218,12 @@ const WishlistPage = () => {
   };
 
   const renderProductCard = (product) => (
-    <TouchableOpacity  key={product._id} style={styles.productCard} onPress={() => handleProductPress(product)}>
-    {/* <View key={product._id} style={styles.productCard}> */}
+    <TouchableOpacity
+      key={product._id}
+      style={styles.productCard}
+      onPress={() => handleProductPress(product)}
+    >
+      {/* <View key={product._id} style={styles.productCard}> */}
       <View style={styles.productImageContainer}>
         <Image
           source={{ uri: product.thumbnail }}
@@ -315,7 +325,7 @@ const WishlistPage = () => {
           </Text>
         </TouchableOpacity>
       </View>
-    {/* </View> */}
+      {/* </View> */}
     </TouchableOpacity>
   );
 
@@ -340,25 +350,22 @@ const WishlistPage = () => {
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Wishlist</Text>
         {wishlistProducts.length > 0 && (
-          //  <View style={styles.headerActions}> 
+          //  <View style={styles.headerActions}>
           //  <TouchableOpacity
           //     style={styles.headerButton}
           //     onPress={moveAllToCart}
           //   >
           //     <Ionicons name="cart-outline" size={20} color="#007AFF" />
           //     <Text style={styles.headerButtonText}>Move All</Text>
-          //   </TouchableOpacity> 
-            <TouchableOpacity
-              style={styles.headerButton}
-              onPress={clearWishlist}
-            >
-              <Ionicons name="trash-outline" size={20} color="#FF3B30" />
-              <Text style={[styles.headerButtonText, { color: "#FF3B30" }]}>
-                Clear
-              </Text>
-            </TouchableOpacity>
-          //  </View> 
-         )} 
+          //   </TouchableOpacity>
+          <TouchableOpacity style={styles.headerButton} onPress={clearWishlist}>
+            <Ionicons name="trash-outline" size={20} color="#FF3B30" />
+            <Text style={[styles.headerButtonText, { color: "#FF3B30" }]}>
+              Clear
+            </Text>
+          </TouchableOpacity>
+          //  </View>
+        )}
       </View>
 
       {wishlistProducts.length > 0 ? (

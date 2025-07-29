@@ -154,17 +154,17 @@ export default function ForgetPassword() {
 }
 
 const styles = StyleSheet.create({
-  container: { 
-    flex: 1, 
-    backgroundColor: "#fff" 
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
   },
-  wrapper: { 
-    padding: 24, 
-    paddingTop: 50 
+  wrapper: {
+    padding: 24,
+    paddingTop: 50,
   },
-  title: { 
-    fontSize: 32, 
-    fontWeight: "700" 
+  title: {
+    fontSize: 32,
+    fontWeight: "700",
   },
   input: {
     height: 50,
@@ -181,18 +181,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 30,
   },
-  buttonText: { 
-    color: "#fff", 
-    fontSize: 16, 
-    fontWeight: "700" 
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "700",
   },
-  link: { 
-    color: "#3E64FF", 
-    fontWeight: "500" 
+  link: {
+    color: "#3E64FF",
+    fontWeight: "500",
   },
-  signInRow: { 
-    flexDirection: "row", 
-    marginTop: 30, 
+  signInRow: {
+    flexDirection: "row",
+    marginTop: 30,
     justifyContent: "center",
   },
 });

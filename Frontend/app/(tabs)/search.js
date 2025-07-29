@@ -111,7 +111,6 @@ const SearchPage = () => {
     setResults(filtered);
   }, [products, query, selectedCategory, minPrice, maxPrice]);
 
-
   const resetFilters = () => {
     setSelectedCategory("All");
     setMinPrice(0);
@@ -126,7 +125,9 @@ const SearchPage = () => {
   const handleAddToCart = async (product) => {
     try {
       // Check if product is already in cart (new cart structure)
-      const isInCart = user.cart.some(cartItem => cartItem.productId === product._id);
+      const isInCart = user.cart.some(
+        (cartItem) => cartItem.productId === product._id
+      );
       if (isInCart) {
         return Alert.alert("Product already in cart");
       }
@@ -134,11 +135,15 @@ const SearchPage = () => {
       // Prepare cart item data
       const cartItem = {
         productId: product._id,
-        quantity: 1
+        quantity: 1,
       };
 
       // Add variantId if product has variants
-      if (product.hasVariant && product.variants && product.variants.length > 0) {
+      if (
+        product.hasVariant &&
+        product.variants &&
+        product.variants.length > 0
+      ) {
         cartItem.variantId = product.variants[0]._id; // Default to first variant
       }
 
@@ -192,7 +197,10 @@ const SearchPage = () => {
   };
 
   const renderProductCard = ({ item: product }) => (
-    <TouchableOpacity style={styles.productCard}  onPress={() => handleProductPress(product)}>
+    <TouchableOpacity
+      style={styles.productCard}
+      onPress={() => handleProductPress(product)}
+    >
       <View style={styles.productImageContainer}>
         <Image
           source={{ uri: product.thumbnail }}
@@ -310,7 +318,9 @@ const SearchPage = () => {
           placeholderTextColor="#aaa"
         />
         <TouchableOpacity
-          onPress={() => { setFilterModalVisible(true)}}
+          onPress={() => {
+            setFilterModalVisible(true);
+          }}
           style={styles.filterButton}
         >
           <Ionicons name="funnel-outline" size={22} color="#007AFF" />

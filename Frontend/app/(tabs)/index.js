@@ -27,12 +27,12 @@ const HomePage = () => {
   const [state, setState, getLocalStorageData] = useContext(AuthContext);
   const { user, token } = state;
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [refreshing,setRefreshing] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    fetchProducts().then(() => setRefreshing(false));  
-  },[]);
+    fetchProducts().then(() => setRefreshing(false));
+  }, []);
 
   // Sample categories
   const categories = [
@@ -118,7 +118,9 @@ const HomePage = () => {
   const handleAddToCart = async (product) => {
     try {
       // Check if product is already in cart (new cart structure)
-      const isInCart = user.cart.some(cartItem => cartItem.productId === product._id);
+      const isInCart = user.cart.some(
+        (cartItem) => cartItem.productId === product._id
+      );
       if (isInCart) {
         return Alert.alert("Product already in cart");
       }
@@ -126,11 +128,15 @@ const HomePage = () => {
       // Prepare cart item data
       const cartItem = {
         productId: product._id,
-        quantity: 1
+        quantity: 1,
       };
 
       // Add variantId if product has variants
-      if (product.hasVariant && product.variants && product.variants.length > 0) {
+      if (
+        product.hasVariant &&
+        product.variants &&
+        product.variants.length > 0
+      ) {
         cartItem.variantId = product.variants[0]._id; // Default to first variant
       }
 
@@ -444,13 +450,15 @@ const HomePage = () => {
       <ScrollView
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       >
         {renderCategories()}
         {renderDeals()}
         {renderProducts()}
         {/* Bottom spacing */}
-        <View style={{ height: 100}} />
+        <View style={{ height: 100 }} />
       </ScrollView>
     </SafeAreaView>
   );

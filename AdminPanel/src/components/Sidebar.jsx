@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import AddBoxIcon from '@mui/icons-material/AddBox';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import LogoutIcon from '@mui/icons-material/Logout';
-import MenuIcon from '@mui/icons-material/Menu';
-import WarehouseIcon from '@mui/icons-material/Warehouse';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import AddBoxIcon from "@mui/icons-material/AddBox";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import LogoutIcon from "@mui/icons-material/Logout";
+import MenuIcon from "@mui/icons-material/Menu";
+import WarehouseIcon from "@mui/icons-material/Warehouse";
 
 const menuItems = [
   // { text: 'Dashboard', icon: <DashboardIcon />, path: '/' },
-  { text: 'Products', icon: <WarehouseIcon />, path: '/products' },
-  { text: 'Add Product', icon: <AddBoxIcon />, path: '/AddProduct' },
-  { text: 'Orders', icon: <ShoppingCartIcon />, path: '/Orders' },
+  { text: "Products", icon: <WarehouseIcon />, path: "/products" },
+  { text: "Add Product", icon: <AddBoxIcon />, path: "/AddProduct" },
+  { text: "Orders", icon: <ShoppingCartIcon />, path: "/Orders" },
 ];
 
 const Sidebar = () => {
@@ -21,8 +21,8 @@ const Sidebar = () => {
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
   const handleLogout = async () => {
-    localStorage.removeItem('adminToken');
-    navigate('/');
+    localStorage.removeItem("adminToken");
+    navigate("/");
   };
 
   const drawerContent = (
@@ -43,9 +43,11 @@ const Sidebar = () => {
           </Link>
         ))}
       </div>
-      <button onClick={handleLogout} className="logout-button" type="button" >
-      {/* <button onClick={() => navigate('/login')} className="logout-button" type="button" > */}
-        <div className="menu-icon"><LogoutIcon /></div>
+      <button onClick={handleLogout} className="logout-button" type="button">
+        {/* <button onClick={() => navigate('/login')} className="logout-button" type="button" > */}
+        <div className="menu-icon">
+          <LogoutIcon />
+        </div>
         <div className="menu-text">Logout</div>
       </button>
     </div>
@@ -63,12 +65,14 @@ const Sidebar = () => {
 
       {/* Mobile overlay */}
       <div
-        className={`mobile-overlay ${mobileOpen ? 'open' : ''}`}
+        className={`mobile-overlay ${mobileOpen ? "open" : ""}`}
         onClick={handleDrawerToggle}
       ></div>
 
       {/* Mobile drawer */}
-      <div className={`mobile-drawer ${mobileOpen ? 'open' : ''}`}>{drawerContent}</div>
+      <div className={`mobile-drawer ${mobileOpen ? "open" : ""}`}>
+        {drawerContent}
+      </div>
 
       {/* Desktop sidebar */}
       <div className="sidebar">{drawerContent}</div>

@@ -15,18 +15,18 @@ connectDB();
 const app = express();
 
 //middlewares
-app.use(cors())
-app.use(express.json())
-app.use(morgan('dev'))
+app.use(cors());
+app.use(express.json());
+app.use(morgan("dev"));
 
 //ROUTES
-app.use(require('./routes/UserRoutes'));
-app.use(require('./routes/ProductRoutes'));
-app.use(require('./routes/OrderRoutes'));
+app.use(require("./routes/UserRoutes"));
+app.use(require("./routes/ProductRoutes"));
+app.use(require("./routes/OrderRoutes"));
 
 //PORT
-const  PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8080;
 
-app.listen(PORT,()=>{
-    console.log(`Node js server started on PORT : ${PORT} `.bgGreen.white);
-})
+app.listen(PORT, () => {
+  console.log(`Node js server started on PORT : ${PORT} `.bgGreen.white);
+});
