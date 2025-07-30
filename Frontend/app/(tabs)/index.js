@@ -190,7 +190,7 @@ const HomePage = () => {
       {/* <View style={styles.headerTop}> */}
       <View>
         <Text style={styles.greeting}>
-          {user ? `Hello, ${user.name || "User"}!` : "Welcome Guest!"}
+          {user ? `Hello, ${user.name.split(" ")[0] || "User"}!` : "Welcome Guest!"}
         </Text>
         <Text style={styles.subtitle}>Discover amazing products</Text>
       </View>
