@@ -8,6 +8,8 @@
     "scheme": "frontend",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "facebookAppId": "1256943532569768",
+    "facebookDisplayName": "E-commerce",
     "ios": {
       "supportsTablet": true
     },

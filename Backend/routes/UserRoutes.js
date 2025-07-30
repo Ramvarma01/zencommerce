@@ -3,6 +3,7 @@ const {
     registerController,
     loginController, 
     googleLoginController, 
+    facebookLoginController,
     updateUserController, 
     updatePasswordController,                                     
     addShippingAddressController,
@@ -32,6 +33,7 @@ router.post('/verify-otp', verifyOtpController);
 router.post('/register', registerController);
 router.post('/login', loginController);
 router.post('/google-login', googleLoginController);
+router.post('/facebook-login', facebookLoginController);
 router.put("/update-user", updateUserController);
 router.put("/update-password", updatePasswordController);
 router.post("/add-shipping-address", addShippingAddressController);

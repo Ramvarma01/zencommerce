@@ -73,7 +73,7 @@ const usersSchema = new mongoose.Schema(
     password: {
       type: String,
       required: function () {
-        return !this.isGoogleUser && this.isPhoneVerified; // Password only required for non-Google users
+        return !this.isGoogleUser && !this.isFacebookUser // Password only required for non-Google and non-Facebook users
       },
       min: 6,
       max: 64,
@@ -94,6 +94,20 @@ const usersSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    // Facebook-specific fields
+    facebookId: {
+      type: String,
+      unique: true,
+      sparse: true, // Allows multiple null values
+    },
+    isFacebookUser: {
+      type: Boolean,
+      default: false,
+    },
+    // profilePicture: {
+    //   type: String,
+    //   default: null,
+    // },
     // Email verification fields
     emailVerified: {
       type: Boolean,

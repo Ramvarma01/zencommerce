@@ -24,11 +24,24 @@ import {
   statusCodes,
 } from "@react-native-google-signin/google-signin";
 
+import {
+  LoginManager,
+  AccessToken,
+  GraphRequest,
+  GraphRequestManager,
+} from "react-native-fbsdk-next";
+
 GoogleSignin.configure({
   webClientId:
     "226672527950-sjeqb4t9ad8oe7fr53i59di5c67lvk05.apps.googleusercontent.com",
   // webClientId: GOOGLE_CLIENT_ID,
 });
+
+// Facebook configuration
+const facebookConfig = {
+  appId: "1256943532569768", // Replace with your Facebook App ID
+  permissions: ["public_profile", "email"],
+};
 
 export default function Login() {
   const router = useRouter();
@@ -106,8 +119,91 @@ export default function Login() {
   // FACEBOOK LOGIN
   const handleFacebookLogin = async () => {
     setLoading(true);
-    Alert.alert("Login With Facebook", "Coming Soon!!");
-    setLoading(false);
+    try {
+      // Login with permissions
+      LoginManager.setLoginBehavior("NATIVE_WITH_FALLBACK");
+      const result = await LoginManager.logInWithPermissions(
+        facebookConfig.permissions
+      );
+    
+      if (result.isCancelled) {
+        console.log("Facebook login cancelled by user");
+        return;
+      }
+
+      if (result.grantedPermissions && result.grantedPermissions.length > 0) {
+        // Get access token
+        const accessToken = await AccessToken.getCurrentAccessToken();
+
+        if (!accessToken) {
+          Alert.alert("Error", "Failed to get access token");
+          return;
+        }
+
+        // Create Graph API request to get user info
+        const userInfoRequest = new GraphRequest(
+          "/me",
+          {
+            accessToken: accessToken.accessToken,
+            parameters: {
+              fields: {
+                string: "id,name,email,picture.type(large)",
+              },
+            },
+          },
+          async (error, result) => {
+            if (error) {
+              console.error("Facebook Graph API error:", error);
+              Alert.alert(
+                "Error",
+                "Failed to fetch user information from Facebook"
+              );
+              return;
+            }
+
+            if (result) {
+              try {
+                // Send Facebook login data to backend
+                const { data } = await axios.post("/facebook-login", {
+                  name: result.name,
+                  email: result.email,
+                  facebookId: result.id,
+                  // profilePicture: result.picture?.data?.url,
+                });
+
+                if (data.success) {
+                  setState({ user: data.user, token: data.token });
+                  await AsyncStorage.setItem(
+                    "@auth",
+                    JSON.stringify({ token: data.token, user: data.user })
+                  );
+                  router.replace("/(tabs)");
+                  Alert.alert("Success", "Logged in with Facebook!");
+                } else {
+                  Alert.alert("Error", data.message || "Facebook login failed");
+                }
+              } catch (apiError) {
+                console.error("Backend API error:", apiError);
+                Alert.alert("Error", "Failed to authenticate with server");
+              }
+            }
+          }
+        );
+
+        // Execute the Graph API request
+        new GraphRequestManager().addRequest(userInfoRequest).start();
+      } else {
+        Alert.alert("Error", "Facebook login failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Facebook login error:", error);
+      Alert.alert(
+        "Error",
+        "An unexpected error occurred during Facebook login. Please try again later."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   //DON'T DELETE THIS FUNCTION

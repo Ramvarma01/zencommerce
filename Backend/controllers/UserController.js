@@ -319,6 +319,58 @@ const googleLoginController = async (req, res) => {
   }
 };
 
+//FACEBOOK LOGIN CONTROLLER
+const facebookLoginController = async (req, res) => {
+  try {
+    const { name, email, facebookId } = req.body;
+    let user = await Users.findOne({ email });
+
+    if (!user) {
+      // Create new user if doesn't exist
+      user = await Users({
+        name: name,
+        email: email,
+        facebookId: facebookId,
+        isFacebookUser: "true",
+      }).save();
+      console.log("New Facebook user created:", user);
+    } else {
+      // Update existing user with Facebook info if needed
+      if (!user.facebookId) {
+        user.facebookId = facebookId;
+        user.isFacebookUser = "true";
+        // if (profilePicture) {
+        //   user.profilePicture = profilePicture;
+        // }
+        await user.save();
+      }
+      console.log("Existing user found:", user);
+    }
+
+    // Generate JWT token
+    const token = JWT.sign({ _id: user._id }, process.env.JWT_SECURE, {
+      expiresIn: "7d",
+    });
+
+    // Remove password from response
+    user.password = undefined;
+
+    res.status(200).send({
+      success: true,
+      message: "Facebook login success",
+      token,
+      user,
+    });
+  } catch (error) {
+    console.log("Facebook login error:", error);
+    return res.status(500).send({
+      success: false,
+      message: "Error in Facebook login API",
+      error: error.message,
+    });
+  }
+};
+
 //UPDATE USER CONTROLLER
 const updateUserController = async (req, res) => {
   try {
@@ -1089,6 +1141,7 @@ module.exports = {
   registerController,
   loginController,
   googleLoginController,
+  facebookLoginController,
   updateUserController,
   updatePasswordController,
   addShippingAddressController,

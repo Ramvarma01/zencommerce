@@ -164,7 +164,7 @@ export default function EditProfile() {
               </TouchableOpacity>
 
               {/* Divider */}
-              {user.isGoogleUser ? null : (
+              {user.isGoogleUser || user.isFacebookUser ? null : (
                 <>
                   <View style={styles.divider} />
                   <Text style={[styles.headerTitle]}>Edit Password</Text>
