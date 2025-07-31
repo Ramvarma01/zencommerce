@@ -181,7 +181,7 @@ const getUserOrders = async (req, res) => {
   }
 };
 
-// Get a single order by ID
+// Get a single order by ID  (can be used in future)
 // const getOrderById = async (req, res) => {
 //   try {
 //     const { id } = req.params;

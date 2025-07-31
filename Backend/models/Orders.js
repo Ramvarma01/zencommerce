@@ -40,7 +40,6 @@ const orderSchema = new mongoose.Schema(
       pincode: String,
       country: String,
     },
-
     paymentMethod: {
       type: String, // e.g., 'COD', 'Online'
       required: true,
