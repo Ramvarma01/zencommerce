@@ -24,13 +24,14 @@ export default function index() {
 
   const handleLogout = async () => {
     try {
-      await GoogleSignin.signOut();
+      if(user.isGoogleUser) await GoogleSignin.signOut();
+      // await GoogleSignin.signOut();
       await AsyncStorage.removeItem("@auth");
       setState({ user: null, token: "" });
       setTimeout(() => {
         DevSettings.reload(); // This reloads the entire app, clearing all navigation stacks
         // router.replace('/loginn')
-      }, 300);
+      }, 100);
     } catch (err) {
       console.error("Logout error:", err);
       Alert.alert("Error", "Failed to log out");

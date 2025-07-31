@@ -261,8 +261,9 @@ const CartPage = () => {
     if (!user?.phone || !/^\d{10}$/.test(user.phone)) {
       Alert.alert(
         "Phone Number Required",
-        "Please add and verify your phone number by going to Profile → Edit Profile."
+        "Please add your phone number."
       );
+      router.push("../(profile)/editProfile");
       return;
     }
     // Check for shipping address
@@ -273,8 +274,9 @@ const CartPage = () => {
     ) {
       Alert.alert(
         "Shipping Address Required",
-        "Please add a shipping address by going to Profile → Add Shipping Address."
+        "Please add a shipping address"
       );
+      router.push("../(profile)/shippingAddress");
       return;
     }
     // Both present, show address selection modal
@@ -829,6 +831,7 @@ const CartPage = () => {
         <ScrollView
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}
+           keyboardShouldPersistTaps="handled"
         >
           <View style={styles.cartItemsContainer}>
             {cartItems.map(renderCartItem)}
