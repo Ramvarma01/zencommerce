@@ -18,6 +18,7 @@ import { ProductContext } from "../../context/productContext";
 import { AuthContext } from "../../context/authContext";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useMemo } from "react";
 
 const { width } = Dimensions.get("window");
 
@@ -40,12 +41,23 @@ const WishlistPage = () => {
   // }, [products, user]);
 
   // Filter products based on user's wishlist IDs
-  const wishlistProducts =
-    products && user && user.wishlist
-      ? products.filter((product) =>
-          user.wishlist.map(String).includes(String(product._id))
-        )
-      : [];
+  // const wishlistProducts =
+  //   products && user && user.wishlist
+  //     ? products.filter((product) =>
+  //         user.wishlist.map(String).includes(String(product._id))
+  //       )
+  //     : [];
+
+      const wishlistProducts = useMemo(
+        () =>
+          user?.wishlist
+            ?.map((wishlistItem) => {
+              const product = products.find((p) => p._id === wishlistItem);
+              return product
+            })
+            .filter(Boolean).reverse() || [],
+        [user, products]
+      );
 
   // if (loading) {
   //   return (

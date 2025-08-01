@@ -45,7 +45,7 @@ const CartPage = () => {
               }
             : null;
         })
-        .filter(Boolean) || [],
+        .filter(Boolean).reverse() || [],
     [user, products]
   );
 

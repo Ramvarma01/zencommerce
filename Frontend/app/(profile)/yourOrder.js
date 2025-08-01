@@ -28,26 +28,26 @@ const YourOrders = () => {
     const fetchOrders = async () => {
       const { data } = await axios.get(`/user-orders/${user._id}`); // adjust endpoint as needed
       setOrders(data.orders);
-
+      console.log("Orders",orders);
       // Collect all unique productIds from all orders
-      const productIds = [
-        ...new Set(
-          data.orders.flatMap((order) =>
-            order.items.map((item) => item.productId)
-          )
-        ),
-      ];
+      // const productIds = [
+      //   ...new Set(
+      //     data.orders.flatMap((order) =>
+      //       order.items.map((item) => item.productId)
+      //     )
+      //   ),
+      // ];
 
-      // Fetch all products in one go (if you have such an endpoint)
-      const productsRes = await axios.post("/api/products/bulk", {
-        ids: productIds,
-      });
-      // productsRes.data.products should be an array of product objects
-      const productsMap = {};
-      productsRes.data.products.forEach((prod) => {
-        productsMap[prod._id] = prod;
-      });
-      setProducts(productsMap);
+      // // Fetch all products in one go (if you have such an endpoint)
+      // const productsRes = await axios.post("/api/products/bulk", {
+      //   ids: productIds,
+      // });
+      // // productsRes.data.products should be an array of product objects
+      // const productsMap = {};
+      // productsRes.data.products.forEach((prod) => {
+      //   productsMap[prod._id] = prod;
+      // });
+      // setProducts(productsMap);
     };
 
     fetchOrders();

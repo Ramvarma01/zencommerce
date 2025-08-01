@@ -82,7 +82,7 @@ const addProductController = async (req, res) => {
 // GET ALL PRODUCTS CONTROLLER
 const getAllProductsController = async (req, res) => {
   try {
-    const allProducts = await products.find();
+    const allProducts = await products.find().sort({ createdAt: -1 });
     res.status(200).json({
       success: true,
       products: allProducts,
