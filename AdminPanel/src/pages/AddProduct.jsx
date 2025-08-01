@@ -329,7 +329,7 @@ function AddProduct() {
                   />
                 </div>
                 <div className="form-field mb-2">
-                  <label className="form-label">Original Price (₹)</label>
+                  <label className="form-label">Original Price/ MRP (₹)</label>
                   <input
                     type="number"
                     name="originalPrice"
@@ -410,7 +410,7 @@ function AddProduct() {
                     />
                   </div>
                   <div className="form-field">
-                    <label className="form-label">Original Price (₹)</label>
+                    <label className="form-label">Original Price/ MRP (₹)</label>
                     <input
                       type="number"
                       name="originalPrice"
@@ -510,7 +510,7 @@ function AddProduct() {
             </div>
 
             <div className="form-field mb-3">
-              <label className="form-label">Product Thumbnail</label>
+              <label className="form-label">Product Thumbnail (Only 1 Image)</label>
               <div className="file-upload">
                 <input
                   type="file"
@@ -542,7 +542,7 @@ function AddProduct() {
             </div>
 
             <div className="form-field">
-              <label className="form-label">Additional Images</label>
+              <label className="form-label">Additional Images (Max 6 Images)</label>
               <div className="file-upload">
                 <input
                   type="file"
