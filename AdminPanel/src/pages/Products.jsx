@@ -14,12 +14,13 @@ function Products() {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        menuOpen !== null &&
-        // cardRefs.current[menuOpen] &&
-        !cardRefs.current[menuOpen].contains(event.target)
-      ) {
-        setMenuOpen(null);
+      if (menuOpen !== null) {
+        // Check if the click is outside the menu
+        const menuElement = document.querySelector('.product-menu');
+        const menuIcon = event.target.closest('.menu-icon');
+        if (menuElement && !menuElement.contains(event.target) && !menuIcon) {
+          setMenuOpen(null);
+        }
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
