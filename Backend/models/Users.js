@@ -72,9 +72,9 @@ const usersSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: function () {
-        return !this.isGoogleUser && !this.isFacebookUser // Password only required for non-Google and non-Facebook users
-      },
+      // required: function () {
+      //   return !this.isGoogleUser && !this.isFacebookUser && this.emailVerified // Password only required for non-Google and non-Facebook users
+      // },
       min: 6,
       max: 64,
     },

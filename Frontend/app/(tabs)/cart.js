@@ -373,9 +373,9 @@ const CartPage = () => {
                     <Text style={styles.currentPrice}>
                       ₹{selectedVariant.price}
                     </Text>
-                    <Text style={styles.originalPrice}>
+                    {/* <Text style={styles.originalPrice}>
                       ₹{selectedVariant.originalPrice}
-                    </Text>
+                    </Text> */}
                     <Text style={styles.savingsText}>
                       Save ₹
                       {(
@@ -403,7 +403,7 @@ const CartPage = () => {
           ) : (
             <>
               <Text style={styles.currentPrice}>₹{item.price}</Text>
-              <Text style={styles.originalPrice}>₹{item.originalPrice}</Text>
+              {/* <Text style={styles.originalPrice}>₹{item.originalPrice}</Text> */}
               <Text style={styles.savingsText}>
                 Save ₹{(item.originalPrice - item.price).toFixed(2)}
               </Text>
@@ -955,6 +955,7 @@ const styles = StyleSheet.create({
   },
   priceContainer: {
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
     gap: 10,
   },
