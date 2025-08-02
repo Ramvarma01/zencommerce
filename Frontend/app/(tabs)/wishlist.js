@@ -388,6 +388,7 @@ const WishlistPage = () => {
           <View style={styles.productsContainer}>
             {wishlistProducts.map(renderProductCard)}
           </View>
+          <View style={{ height: 100 }} />
         </ScrollView>
       ) : (
         renderEmptyState()

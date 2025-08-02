@@ -396,6 +396,8 @@ const SearchPage = () => {
               renderItem={renderProductCard}
               contentContainerStyle={styles.productsGrid}
               showsVerticalScrollIndicator={false}
+              ListFooterComponent={() => <View style={{ height: 100 }} />
+              }
             />
           )
         }
@@ -472,7 +474,7 @@ const SearchPage = () => {
                   borderColor: "#ccc",
                   borderRadius: 6,
                   padding: 4,
-                  width: 60,
+                  width: 70,
                   marginHorizontal: 5,
                 }}
                 keyboardType="numeric"
@@ -487,7 +489,7 @@ const SearchPage = () => {
                   borderColor: "#ccc",
                   borderRadius: 6,
                   padding: 4,
-                  width: 60,
+                  width: 70,
                   marginHorizontal: 5,
                 }}
                 keyboardType="numeric"
@@ -582,7 +584,7 @@ const styles = StyleSheet.create({
   productCard: {
     backgroundColor: "#fff",
     borderRadius: 12,
-    marginBottom: 15,
+    // marginBottom: 15,
     marginHorizontal: 5,
     shadowColor: "#000",
     shadowOffset: {

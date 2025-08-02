@@ -956,6 +956,7 @@ const styles = StyleSheet.create({
   priceContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
+    // overflow: "hidden",
     alignItems: "center",
     gap: 10,
   },
