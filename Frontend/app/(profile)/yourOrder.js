@@ -4,12 +4,11 @@ import {
   Text,
   StyleSheet,
   Image,
-  TouchableOpacity,
-  ScrollView,
   FlatList,
+  ActivityIndicator,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
 import Header from "../components/header";
 import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
@@ -18,36 +17,24 @@ import { ProductContext } from "../../context/productContext";
 
 const YourOrders = () => {
   const [orders, setOrders] = useState([]);
-  // const [products, setProducts] = useState({}); // productId -> product
   const [state, setState] = useContext(AuthContext);
   const [products, setProducts] = useContext(ProductContext);
-  const { user, token } = state;
+  const { user, token} = state;
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     // Fetch orders for the user
     const fetchOrders = async () => {
-      const { data } = await axios.get(`/user-orders/${user._id}`); // adjust endpoint as needed
-      setOrders(data.orders);
-      console.log("Orders",orders);
-      // Collect all unique productIds from all orders
-      // const productIds = [
-      //   ...new Set(
-      //     data.orders.flatMap((order) =>
-      //       order.items.map((item) => item.productId)
-      //     )
-      //   ),
-      // ];
-
-      // // Fetch all products in one go (if you have such an endpoint)
-      // const productsRes = await axios.post("/api/products/bulk", {
-      //   ids: productIds,
-      // });
-      // // productsRes.data.products should be an array of product objects
-      // const productsMap = {};
-      // productsRes.data.products.forEach((prod) => {
-      //   productsMap[prod._id] = prod;
-      // });
-      // setProducts(productsMap);
+      setLoading(true);
+      try {
+        const { data } = await axios.get(`/user-orders/${user._id}`); // adjust endpoint as needed
+        if(data.success) setOrders(data.orders);
+      } catch (error) {
+        Alert.alert("Error",data.message);
+        console.log(data.error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchOrders();
@@ -84,44 +71,54 @@ const YourOrders = () => {
     );
   };
 
+  const renderOrderCard = ({ item: order }) => (
+    <View
+      style={{
+        marginHorizontal: 16,
+        marginVertical: 10,
+        shadowColor: "#000",
+        elevation: 3,
+        backgroundColor: "#fff",
+        borderRadius: 8,
+        padding: 12,
+      }}
+    >
+      <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+        Order #{order._id}
+      </Text>
+      <Text>Status: {order.Orderstatus}</Text>
+      <Text>Total: ₹{order.totalAmount}</Text>
+      {/* <Text>Date: {new Date(order.createdAt).toLocaleString()}</Text> */}
+      <Text>Date: {new Date(order.createdAt).toLocaleDateString()}</Text>
+      <View style={{ marginTop: 8 }}>
+        {order.items.map((item, idx) => (
+          <View key={idx}>{renderOrderItem(item)}</View>
+        ))}
+      </View>
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.Container}>
       <Header title={"Your Orders"} />
-      {orders.length > 0 ? (
+      {loading ? (
+        <ActivityIndicator
+          size="large"
+          color="#007AFF"
+          style={{ justifyContent: "center", flex: 1 }}
+        />
+      ) : (
         <FlatList
           data={orders}
           keyExtractor={(order) => order._id}
-          renderItem={({ item: order }) => (
-            <View
-              style={{
-                marginHorizontal: 16,
-                marginVertical: 10,
-                shadowColor: "#000",
-                elevation: 3,
-                backgroundColor: "#fff",
-                borderRadius: 8,
-                padding: 12,
-              }}
-            >
-              <Text style={{ fontWeight: "bold", fontSize: 16 }}>
-                Order #{order._id}
-              </Text>
-              <Text>Status: {order.Orderstatus}</Text>
-              <Text>Total: ₹{order.totalAmount}</Text>
-              {/* <Text>Date: {new Date(order.createdAt).toLocaleString()}</Text> */}
-              <Text>
-                Date: {new Date(order.createdAt).toLocaleDateString()}
-              </Text>
-              <View style={{ marginTop: 8 }}>
-                {order.items.map((item, idx) => (
-                  <View key={idx}>{renderOrderItem(item)}</View>
-                ))}
-              </View>
-            </View>
-          )}
+          renderItem={renderOrderCard}
+          ListEmptyComponent={
+            <Text style={styles.emptyText}>No Orders Found</Text>
+          }
+          contentContainerStyle={
+            orders.length === 0 && { flex: 1, justifyContent: "center" }
+          }
         />
-      ) : (
-        <Text style={styles.emptyText}>No Orders Found</Text>
       )}
     </SafeAreaView>
   );
@@ -240,8 +237,6 @@ const styles = StyleSheet.create({
     height: "100%",
     textAlign: "center",
     textAlignVertical: "center",
-    // paddingVertical: 250,
-    // marginTop: 50,
   },
 });
 
