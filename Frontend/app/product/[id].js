@@ -198,7 +198,7 @@ const ProductPage = () => {
         {/* Variant Selector */}
         {variantName && variantOptions && (
           <View style={styles.variantSection}>
-            <Text style={styles.variantLabel}>{variantName}:</Text>
+            <Text style={styles.sectionTitle}>{variantName}:</Text>
             <View style={styles.variantOptionsRow}>
               {variantOptions.map((variant) => (
                 <TouchableOpacity
@@ -212,13 +212,22 @@ const ProductPage = () => {
                   onPress={() => setSelectedVariant(variant)}
                   disabled={variant.quantity === 0}
                 >
-                  <Text
+                  {/* <Text
                     style={{
                       color: variant.quantity === 0 ? "#989CA0" : "#000000",
                     }}
                   >
                     {variant.name}
-                  </Text>
+                  </Text> */}
+                  <Image
+                    source={{ uri: variant.image }}
+                    style={{
+                      width: "95%",
+                      height: "95%",
+                      borderRadius: 30,
+                      objectFit: "cover",
+                    }}
+                  />
                   {variant.quantity === 0 && (
                     <Text style={styles.outOfStockText}>Out of Stock</Text>
                   )}
@@ -258,11 +267,21 @@ const ProductPage = () => {
           </Text>
         </TouchableOpacity>
 
-        <View style={styles.infoSection}>
+        {/* <View style={styles.infoSection}>
           <Text style={{ fontSize: 15, fontWeight: "600", marginTop: 6 }}>
             Description:
           </Text>
           <Text style={styles.description}>{product.description}</Text>
+        </View> */}
+
+        <View style={styles.infoSection}>
+          <Text style={styles.sectionTitle}>Description:</Text>
+          {product.description.split("\n").map((line, index) => (
+            <View key={index} style={styles.bulletRow}>
+              <Text style={styles.bullet}>{"\u2022"}</Text>
+              <Text style={styles.description}>{line.trim()}</Text>
+            </View>
+          ))}
         </View>
 
         {/* Reviews */}
@@ -376,10 +395,34 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "#666",
   },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: "700",
+    marginTop: 6,
+    color: "#222",
+  },
+  bulletRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    marginTop: 6,
+  },
+  bullet: {
+    fontSize: 16,
+    color: "#3E64FF", //  blue bullet
+    // color: "#222", //  black bullet
+    marginRight: 8,
+    lineHeight: 20,
+  },
+  // description: {
+  //   fontSize: 15,
+  //   color: "#444",
+  //   marginTop: 8,
+  // },
   description: {
+    flex: 1,
     fontSize: 15,
-    color: "#444",
-    marginTop: 8,
+    color: "#555",
+    lineHeight: 20,
   },
   variantSection: {
     paddingHorizontal: 20,
@@ -392,19 +435,20 @@ const styles = StyleSheet.create({
   },
   variantOptionsRow: {
     flexDirection: "row",
-    gap: 10,
+    // gap: 1,
   },
   variantOption: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: "#007AFF",
+    width: 45,
+    height: 45,
+    borderRadius: 30,
     marginRight: 8,
-    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1.2,
+    borderColor: "#D3D3D3",
   },
   selectedVariant: {
-    backgroundColor: "#007AFF",
+    borderWidth: 1.2,
     borderColor: "#007AFF",
   },
   outOfStockText: {
