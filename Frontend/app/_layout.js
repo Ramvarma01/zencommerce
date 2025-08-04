@@ -11,25 +11,31 @@ function RootLayoutInner() {
     return null;
   }
 
-  const isLoggedIn = !!state?.user;
+  // const isLoggedIn = !!state?.user;
   // console.log('isLoggedIn',isLoggedIn)
   return (
     <>
       {/* <Stack screenOptions={{ headerShown: false }}> */}
       {/* {console.log('isLoggedIn in layout return',isLoggedIn)} */}
-      {!isLoggedIn ? (
+      {/* {!isLoggedIn ? (
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="login" />
           <Stack.Screen name="register" />
           <Stack.Screen name="forgotPassword" />
           <Stack.Screen name="(profile)" />
-          {/* <Stack.Screen name="product" /> */}
         </Stack>
       ) : (
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(tabs)" />
         </Stack>
-      )}
+      )} */}
+   <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="login" />
+      <Stack.Screen name="register" />
+      <Stack.Screen name="forgotPassword" />
+      <Stack.Screen name="(profile)" />
+      <Stack.Screen name="(tabs)" />
+    </Stack>
     </>
   );
 }

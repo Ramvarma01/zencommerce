@@ -1,35 +1,9 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
-import { useRouter } from "expo-router";
-
-// Custom Header Component
-// function CustomHeader({ title }) {
-//     const router = useRouter();
-
-//     const handleProfilePress = () => {
-//         // Navigate to profile page - you'll need to create this page
-//         router.push('/(profile)');
-//     };
-
-//     return (
-//         <View style={styles.header}>
-//             {/* <View style={styles.logoContainer}> */}
-//                 {/* <Text style={styles.logoText}>ZenCommerce</Text> */}
-//             <TouchableOpacity style={styles.logoContainer} onPress={() => router.push('/')}>
-//                 <Image source={require('../../assets/images/icon.png')} style={styles.logo} />
-//           </TouchableOpacity>
-//             {/* </View> */}
-//             <Text style={styles.title}>{title}</Text>
-//             <TouchableOpacity style={styles.profileButton} onPress={handleProfilePress}>
-//             {/* <TouchableOpacity style={styles.profileButton} onPress={() => router.push('/(profile)')}> */}
-//                 <Ionicons name="person-circle-outline" size={30} color="#007AFF" />
-//             </TouchableOpacity>
-//         </View>
-//     );
-// }
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Layout() {
+  const insets = useSafeAreaInsets();
   return (
     <Tabs
       screenOptions={({ route }) => ({
@@ -47,15 +21,19 @@ export default function Layout() {
           }
 
           return (
+            // <View  style={[{flex:1, justifyContent:"center", borderRadius:30 ,position:"absolute", top:(focused ? -15 : null), backgroundColor:(focused? "red": null)}]}>
             <Ionicons
               name={iconName}
               size={size}
               color={focused ? "#007AFF" : "#8e8e93"}
             />
+            // </View>
           );
         },
         tabBarActiveTintColor: "#007AFF",
         tabBarInactiveTintColor: "#8e8e93",
+        // tabBarStyle: {paddingTop: 0, height: 60 + insets.bottom, paddingBottom: insets.bottom,},
+        // tabBarStyle: {height:"70"},
         headerShown: false,
         // header: ({ route }) => <CustomHeader title={route.name === 'index' ? 'Home' : route.name.charAt(0).toUpperCase() + route.name.slice(1)} />,
       })}
@@ -67,44 +45,3 @@ export default function Layout() {
     </Tabs>
   );
 }
-
-// const styles = StyleSheet.create({
-//     header: {
-//         flexDirection: 'row',
-//         alignItems: 'center',
-//         justifyContent: 'space-between',
-//         paddingHorizontal: 16,
-//         paddingVertical: 8,
-//         paddingTop: 35,
-//         backgroundColor: '#fff',
-//         borderBottomWidth: 1,
-//         borderBottomColor: '#e0e0e0',
-//     },
-//     logoContainer: {
-//         flex: 1,
-//         alignItems: 'flex-start',
-//     },
-//     logo: {
-//         width: 30,
-//         height: 30,
-//         resizeMode: 'contain',
-//         borderRadius: 15,
-//     },
-//     logoText: {
-//         fontSize: 15,
-//         fontWeight: 'bold',
-//         color: '#007AFF',
-//     },
-//     title: {
-//         flex: 1,
-//         fontSize: 20,
-//         fontWeight: '700',
-//         textAlign: 'center',
-//         color: '#000',
-//     },
-//     profileButton: {
-//         flex: 1,
-//         alignItems: 'flex-end',
-//         padding: 4,
-//     },
-// });

@@ -43,22 +43,21 @@ const FAQS = [
 export default function HelpAndSupport() {
   const [expanded, setExpanded] = useState(null);
 
-  const handleContactSupport = () => {
-    // You can replace this with your support email or chat link
-    Linking.openURL("mailto:support@zencommerce.com").catch(() => {
-      Alert.alert("Error", "Could not open email client.");
-    });
+  const handleContactSupport = async () => {
+    //  const phoneNumber = '+919876543210';
+    // const url = `whatsapp://send?phone=${phoneNumber}`;
+
+    const email= 'support@zencommerce.com';
+    const url= `mailto:${email}`;
+    
+    const supported = await Linking.canOpenURL(url);
+
+    if (supported) Linking.openURL(url);
+     else Alert.alert("App not installed");
   };
 
   return (
     <SafeAreaView style={styles.Container}>
-      {/* <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#007AFF" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Help & Support</Text>
-        <View style={styles.placeholder} />
-      </View> */}
       <Header title={"Help & Support"} />
       <ScrollView
         contentContainerStyle={styles.content}
@@ -104,29 +103,6 @@ const styles = StyleSheet.create({
   Container: {
     flex: 1,
     backgroundColor: "#F8F9FA",
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    paddingTop: 35,
-    backgroundColor: "#fff",
-    borderBottomWidth: 1,
-    borderBottomColor: "#e0e0e0",
-  },
-  backButton: {
-    padding: 4,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#1A1A1A",
-  },
-  placeholder: {
-    width: 28,
-    height: 28,
   },
   content: {
     padding: 16,
