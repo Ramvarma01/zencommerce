@@ -458,6 +458,7 @@ const styles = StyleSheet.create({
   },
   priceRow: {
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
     gap: 10,
     paddingHorizontal: 20,
@@ -472,12 +473,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#999",
     textDecorationLine: "line-through",
-    marginLeft: 8,
   },
   savings: {
     fontSize: 14,
     color: "#4CAF50",
-    marginLeft: 8,
+    // marginLeft: 8,
+    // paddingHorizontal:20,
   },
   stockText: {
     fontSize: 14,
