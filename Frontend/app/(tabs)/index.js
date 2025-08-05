@@ -445,7 +445,7 @@ const HomePage = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView edges={["top"]} style={styles.container}>
       {renderHeader()}
       <ScrollView
         style={styles.scrollView}
@@ -460,7 +460,7 @@ const HomePage = () => {
         {/* Bottom spacing */}
         <View style={{ height: 100 }} />
       </ScrollView>
-    </SafeAreaView>
+     </SafeAreaView>
   );
 };
 

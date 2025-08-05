@@ -302,7 +302,7 @@ const SearchPage = () => {
     //       keyboardShouldPersistTaps="handled"
     //       showsVerticalScrollIndicator={false}
     //     >
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView edges={["top"]} style={styles.container}>
       <View style={styles.searchBar}>
         <Ionicons
           name="search"

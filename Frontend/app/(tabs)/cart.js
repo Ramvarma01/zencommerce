@@ -815,7 +815,7 @@ const CartPage = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView edges={["top"]} style={styles.container}>
       {renderAddressModal()}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Shopping Cart</Text>

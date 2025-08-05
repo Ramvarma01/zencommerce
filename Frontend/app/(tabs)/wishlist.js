@@ -358,7 +358,7 @@ const WishlistPage = () => {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView edges={["top"]} style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Wishlist</Text>
         {wishlistProducts.length > 0 && (
