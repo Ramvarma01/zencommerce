@@ -769,6 +769,7 @@ const CartPage = () => {
               );
               setShowAddressModal(false);
               setSelectedAddressIdx(null);
+              setAppliedCoupon(null);
             } else {
               Alert.alert(
                 "Payment Verification Failed",

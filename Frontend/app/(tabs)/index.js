@@ -16,7 +16,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { AuthContext } from "../../context/authContext";
 import { ProductContext } from "../../context/productContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { router } from "expo-router";
+import { Redirect, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
 
@@ -25,7 +25,7 @@ const { width, height } = Dimensions.get("window");
 const HomePage = () => {
   const [products, , fetchProducts] = useContext(ProductContext);
   const [state, setState, getLocalStorageData] = useContext(AuthContext);
-  const { user, token } = state;
+  const user = state.user;
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [refreshing, setRefreshing] = useState(false);
 
@@ -33,7 +33,6 @@ const HomePage = () => {
     setRefreshing(true);
     fetchProducts().then(() => setRefreshing(false));
   }, []);
-
   // Sample categories
   const categories = [
     { id: "all", name: "All", icon: "grid-outline" },
@@ -110,7 +109,7 @@ const HomePage = () => {
       endTime: "1d 5h",
     },
   ];
-
+  
   const handleProductPress = (product) => {
     router.push(`/product/${product._id}`);
   };
@@ -190,7 +189,8 @@ const HomePage = () => {
       {/* <View style={styles.headerTop}> */}
       <View>
         <Text style={styles.greeting}>
-          {user ? `Hello, ${user.name.split(" ")[0] || "User"}!` : "Welcome Guest!"}
+          {/* {user ? `Hello, ${user.name.split(" ")[0] || "User"}!` : "Welcome Guest!"} */}
+          Hello, {user?.name.split(" ")[0]}
         </Text>
         <Text style={styles.subtitle}>Discover amazing products</Text>
       </View>
@@ -447,19 +447,24 @@ const HomePage = () => {
   return (
     <SafeAreaView edges={["top"]} style={styles.container}>
       {renderHeader()}
+      {user ? (
       <ScrollView
-        style={styles.scrollView}
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
-        {renderCategories()}
-        {renderDeals()}
-        {renderProducts()}
-        {/* Bottom spacing */}
-        <View style={{ height: 100 }} />
-      </ScrollView>
+      style={styles.scrrollView}
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
+      {renderCategories()}
+      {renderDeals()}
+      {renderProducts()}
+      {/* Bottom spacing */}
+      <View style={{ height: 100 }} />
+    </ScrollView>
+       ) : (
+        <Redirect href="/login"></Redirect>
+       )}
+      
      </SafeAreaView>
   );
 };
@@ -756,6 +761,37 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#999",
     textAlign: "center",
+  },
+  emptyStateContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 40,
+  },
+  emptyStateTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#1A1A1A",
+    marginTop: 20,
+    marginBottom: 8,
+  },
+  emptyStateSubtitle: {
+    fontSize: 16,
+    color: "#666",
+    textAlign: "center",
+    lineHeight: 22,
+    marginBottom: 30,
+  },
+  browseButton: {
+    backgroundColor: "#007AFF",
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+  },
+  browseButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
   },
 });
 

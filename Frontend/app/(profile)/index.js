@@ -13,11 +13,10 @@ import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Header from "../components/header.js";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useNavigation, useRouter } from "expo-router";
-import { CommonActions } from "@react-navigation/native";
+import { router, useRouter } from "expo-router";
 
 export default function index() {
-  const router = useRouter();
+  // const router = useRouter();
   const [state, setState, getLocalStorageData, loading] =
     useContext(AuthContext);
   const { user = {}, token } = state;
@@ -29,9 +28,13 @@ export default function index() {
       await AsyncStorage.removeItem("@auth");
       setState({ user: null, token: "" });
       setTimeout(() => {
-        DevSettings.reload(); // This reloads the entire app, clearing all navigation stacks
-        // router.replace('/loginn')
-      }, 100);
+        // if (__DEV__) {
+        //   DevSettings.reload();
+        // } else {
+        //   router.replace("/login");
+        // }
+        router.replace("/login");
+      }, 300);
     } catch (err) {
       console.error("Logout error:", err);
       Alert.alert("Error", "Failed to log out");
