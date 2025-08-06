@@ -114,7 +114,7 @@ const SearchPage = () => {
   const resetFilters = () => {
     setSelectedCategory("All");
     setMinPrice(0);
-    setMaxPrice(100000);
+    setMaxPrice(1000000);
     setFilterModalVisible(false);
   };
 
