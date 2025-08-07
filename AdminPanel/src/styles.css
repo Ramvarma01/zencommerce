@@ -563,11 +563,12 @@ body {
   box-shadow: 0 2px 8px rgba(0,0,0,0.13);
   padding: 1.2rem 1.5rem;
   position: relative;
-  transition: box-shadow 0.2s;
+  transition: box-shadow 0.2s, transform 0.5s;
 }
 .product-card-horizontal:hover {
   /* box-shadow: 0 4px 16px rgba(255, 255, 255, 0.18); */
   box-shadow: 0 4px 16px rgb(20, 20, 35);
+  transform: scale(1.02);
 }
 .product-card-horizontal .product-thumbnail {
   width: 80px;
@@ -579,8 +580,11 @@ body {
   transition-duration: 0.3s;
 }
 .product-card-horizontal .product-thumbnail:hover {
-  width:160px;
-  height:200px;
+  /* width:160px; */
+  /* height:200px; */
+  width: 120px;
+  height: 150px;
+
 }
 .product-card-horizontal .product-name {
   color: #fff;
