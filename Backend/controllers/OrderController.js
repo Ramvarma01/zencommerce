@@ -235,7 +235,7 @@ const updateOrderStatus = async (req, res) => {
     await order.save();
     res
       .status(200)
-      .json({ success: true, message: "Order status updatedd", order });
+      .json({ success: true, message: "Order status updated", order });
   } catch (error) {
     res.status(500).json({
       success: false,
