@@ -15,6 +15,12 @@ import Header from "../components/header.js";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router, useRouter } from "expo-router";
 
+GoogleSignin.configure({
+  webClientId:
+    "226672527950-sjeqb4t9ad8oe7fr53i59di5c67lvk05.apps.googleusercontent.com",
+  // webClientId: GOOGLE_CLIENT_ID,
+});
+
 export default function index() {
   // const router = useRouter();
   const [state, setState, getLocalStorageData, loading] =

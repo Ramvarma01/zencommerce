@@ -38,10 +38,10 @@ GoogleSignin.configure({
 });
 
 // Facebook configuration
-const facebookConfig = {
-  appId: "1256943532569768", // Replace with your Facebook App ID
-  permissions: ["public_profile", "email"],
-};
+// const facebookConfig = {
+//   appId: "1256943532569768", // Replace with your Facebook App ID
+//   permissions: ["public_profile", "email"],
+// };
 
 export default function Login() {
   const router = useRouter();
@@ -123,7 +123,8 @@ export default function Login() {
       // Login with permissions
       LoginManager.setLoginBehavior("NATIVE_WITH_FALLBACK");
       const result = await LoginManager.logInWithPermissions(
-        facebookConfig.permissions
+        // facebookConfig.permissions
+        ["public_profile", "email"]
       );
     
       if (result.isCancelled) {
