@@ -31,6 +31,8 @@ import {
   GraphRequestManager,
 } from "react-native-fbsdk-next";
 
+// import notifee from '@notifee/react-native';
+
 GoogleSignin.configure({
   webClientId:
     "226672527950-sjeqb4t9ad8oe7fr53i59di5c67lvk05.apps.googleusercontent.com",
@@ -52,6 +54,31 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   // const [userInfo, setUserInfo] = useState(null);
   // console.log("local storage data=>", state.user, state.token);
+
+  // async function onDisplayNotification() {
+  //   // Request permissions (required for iOS)
+  //   await notifee.requestPermission()
+
+  //   // Create a channel (required for Android)
+  //   const channelId = await notifee.createChannel({
+  //     id: 'default',
+  //     name: 'Default Channel',
+  //   });
+
+  //   // Display a notification
+  //   await notifee.displayNotification({
+  //     title: 'Notification Title',
+  //     body: 'Main body content of the notification',
+  //     android: {
+  //       channelId,
+  //       smallIcon: 'name-of-a-small-icon', // optional, defaults to 'ic_launcher'.
+  //       // pressAction is needed if you want the notification to open the app when pressed
+  //       pressAction: {
+  //         id: 'default',
+  //       },
+  //     },
+  //   });
+  // }
 
   // GOOGLE LOGIN
   const handleGoogleLogin = async () => {
@@ -310,6 +337,7 @@ export default function Login() {
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          {/* <TouchableOpacity style={styles.button} onPress={onDisplayNotification}> */}
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
 

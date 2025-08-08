@@ -33,14 +33,15 @@ export default function index() {
       // await GoogleSignin.signOut();
       await AsyncStorage.removeItem("@auth");
       setState({ user: null, token: "" });
-      setTimeout(() => {
+      // setTimeout(() => {
         // if (__DEV__) {
         //   DevSettings.reload();
         // } else {
         //   router.replace("/login");
         // }
+        router.back();
         router.replace("/login");
-      }, 300);
+      // }, 300);
     } catch (err) {
       console.error("Logout error:", err);
       Alert.alert("Error", "Failed to log out");
