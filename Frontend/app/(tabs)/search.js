@@ -396,8 +396,7 @@ const SearchPage = () => {
               renderItem={renderProductCard}
               contentContainerStyle={styles.productsGrid}
               showsVerticalScrollIndicator={false}
-              ListFooterComponent={() => <View style={{ height: 100 }} />
-              }
+              // ListFooterComponent={() => <View style={{ height: 100 }} />}
             />
           )
         }

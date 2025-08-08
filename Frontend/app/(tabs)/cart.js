@@ -842,7 +842,7 @@ const CartPage = () => {
           {renderPaymentMethod()}
           {/* {renderShippingOptions()} */}
           {renderOrderSummary()}
-          <View style={{ height: 100 }} />
+          {/* <View style={{ height: 100 }} /> */}
         </ScrollView>
       ) : (
         renderEmptyCart()
@@ -1143,6 +1143,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     marginHorizontal: 15,
     marginTop: 15,
+    marginBottom: 15,
     borderRadius: 12,
     padding: 15,
     shadowColor: "#000",

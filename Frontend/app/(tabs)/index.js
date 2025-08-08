@@ -361,6 +361,8 @@ const HomePage = () => {
                       {[1, 2, 3, 4, 5].map((star) => (
                         <Ionicons
                           key={star}
+
+                          
                           name={
                             star <= product.rating ? "star" : "star-outline"
                           }
@@ -459,12 +461,12 @@ const HomePage = () => {
       {renderDeals()}
       {renderProducts()}
       {/* Bottom spacing */}
-      <View style={{ height: 100 }} />
+      {/* <View style={{ height: 100 }} /> */}
     </ScrollView>
        ) : (
-        <Redirect href="/login"></Redirect>
+         //this is added because after logout even after router.relpace() a stack is created which lets to this page if tried to get back from login page after logout
+         <Redirect href="/login"></Redirect>
        )}
-      
      </SafeAreaView>
   );
 };
