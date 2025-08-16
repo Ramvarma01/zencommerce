@@ -78,7 +78,7 @@ function Products() {
   };
 
   return (
-    <div className="products-container">
+    <div data-page= "Products" className="products-container">
       <h1 className="products-title">All Products</h1>
       <div className="products-grid">
         {products.length === 0 ? (

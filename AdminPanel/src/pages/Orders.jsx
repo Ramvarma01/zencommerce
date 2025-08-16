@@ -70,19 +70,6 @@ function Orders() {
     }
   };
 
-  const handleCancel = async (orderId) => {
-    try {
-      const { data } = await axios.put(`/cancel-order/${orderId}`);
-      alert(data.message);
-      fetchOrders();
-    } catch (error) {
-      alert(error.response?.data?.message || "Failed to cancel order");
-      console.error(error);
-    } finally {
-      setMenuOpen(null);
-    }
-  };
-
   // Helper to get product and variant details
   const getProductDetails = (item) => {
     const product = products.find((p) => p._id === item.productId);
@@ -231,7 +218,7 @@ function Orders() {
                   >
                     Mark as Delivered
                   </div>
-                  <div onClick={() => handleCancel(order._id)}>
+                  <div onClick={() => handleStatusUpdate(order._id, "Cancelled")}>
                     Cancel Order
                   </div>
                 </div>
