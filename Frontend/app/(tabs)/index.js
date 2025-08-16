@@ -15,6 +15,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { AuthContext } from "../../context/authContext";
 import { ProductContext } from "../../context/productContext";
+import { usePushNotifications } from "../../context/pushNotificationContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Redirect, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -25,6 +26,7 @@ const { width, height } = Dimensions.get("window");
 const HomePage = () => {
   const [products, , fetchProducts] = useContext(ProductContext);
   const [state, setState, getLocalStorageData] = useContext(AuthContext);
+  const { fcmToken, updateFCMTokenOnServer } = usePushNotifications();
   const user = state.user;
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [refreshing, setRefreshing] = useState(false);
@@ -33,6 +35,14 @@ const HomePage = () => {
     setRefreshing(true);
     fetchProducts().then(() => setRefreshing(false));
   }, []);
+
+  // Update FCM token on server once both user and token are available
+  useEffect(() => {
+    if (user?._id && fcmToken) {
+      updateFCMTokenOnServer(user._id);
+    }
+  }, [user?._id, fcmToken, updateFCMTokenOnServer]);
+  
   // Sample categories
   const categories = [
     { id: "all", name: "All", icon: "grid-outline" },

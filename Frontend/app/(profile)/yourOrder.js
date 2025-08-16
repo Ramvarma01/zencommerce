@@ -14,23 +14,25 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
 import { AuthContext } from "../../context/authContext";
 import { ProductContext } from "../../context/productContext";
+// import { useLocalSearchParams } from "expo-router";
 
 const YourOrders = () => {
   const [orders, setOrders] = useState([]);
   const [state, setState] = useContext(AuthContext);
   const [products, setProducts] = useContext(ProductContext);
-  const { user, token} = state;
+  const { user, token } = state;
   const [loading, setLoading] = useState(false);
-
+  // const { orderId } = useLocalSearchParams();
+  // console.log("OrderId :",orderId);
   useEffect(() => {
     // Fetch orders for the user
     const fetchOrders = async () => {
       setLoading(true);
       try {
         const { data } = await axios.get(`/user-orders/${user._id}`); // adjust endpoint as needed
-        if(data.success) setOrders(data.orders);
+        if (data.success) setOrders(data.orders);
       } catch (error) {
-        Alert.alert("Error",data.message);
+        Alert.alert("Error", data.message);
         console.log(data.error);
       } finally {
         setLoading(false);
@@ -50,10 +52,10 @@ const YourOrders = () => {
     }
     return (
       <View style={{ flexDirection: "row", marginBottom: 12 }}>
-        <View style={{ width: 60, height: 60, borderRadius: 8 }}>
+        <View style={{ width: 60, height: 60}}>
           <Image
             source={{ uri: product?.thumbnail }}
-            style={{ width: "100%", height: 60, objectFit: "contain" }}
+            style={{ width: "100%", height: 60, objectFit: "cover",borderRadius: 8 }}
           />
         </View>
         <View style={{ marginLeft: 12 }}>
@@ -71,29 +73,63 @@ const YourOrders = () => {
     );
   };
 
+  const statusColor = {
+    Ordered: "#2196F3",
+    Shipped: "#FF9800",
+    Delivered: "#4CAF50",
+    Cancelled: "#F44336",
+  };
+
   const renderOrderCard = ({ item: order }) => (
     <View
       style={{
         marginHorizontal: 16,
         marginVertical: 10,
-        shadowColor: "#000",
+        // shadowColor: statusColor[order.Orderstatus],
+        // shadowColor: "#000",
         elevation: 3,
         backgroundColor: "#fff",
         borderRadius: 8,
         padding: 12,
       }}
     >
-      <Text style={{ fontWeight: "bold", fontSize: 16 }}>
-        Order #{order._id}
-      </Text>
-      <Text>Status: {order.Orderstatus}</Text>
-      <Text>Total: ₹{order.totalAmount}</Text>
-      {/* <Text>Date: {new Date(order.createdAt).toLocaleString()}</Text> */}
-      <Text>Date: {new Date(order.createdAt).toLocaleDateString()}</Text>
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+          Order #{order._id.toString().slice(-8).toUpperCase()};
+        </Text>
+        <Text style={{ color: statusColor[order.Orderstatus] }}>
+          {order.Orderstatus}
+        </Text>
+      </View>
       <View style={{ marginTop: 8 }}>
         {order.items.map((item, idx) => (
           <View key={idx}>{renderOrderItem(item)}</View>
         ))}
+      </View>
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row-reverse",
+          justifyContent: "space-between",
+        }}
+      >
+        {/* <Text>Date: {new Date(order.createdAt).toLocaleString()}</Text> */}
+        {/* <Text>Date: {new Date(order.createdAt).toLocaleDateString()}</Text> */}
+        <Text>
+          {new Date(order.createdAt).toLocaleDateString(undefined, {
+            // weekday: "long",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          })}
+        </Text>
+        <Text>Total: ₹{order.totalAmount}</Text>
       </View>
     </View>
   );

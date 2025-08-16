@@ -14,6 +14,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Header from "../components/header.js";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router, useRouter } from "expo-router";
+import axios from "axios";
 
 GoogleSignin.configure({
   webClientId:
@@ -31,6 +32,13 @@ export default function index() {
     try {
       if(user.isGoogleUser) await GoogleSignin.signOut();
       // await GoogleSignin.signOut();
+      const response = await axios.put(`/update-fcm-token/${user._id}`, {
+        fcmToken: undefined,
+      });
+      
+      if (response.data.success) {
+        console.log('FCM token removed on server');
+      }
       await AsyncStorage.removeItem("@auth");
       setState({ user: null, token: "" });
       // setTimeout(() => {

@@ -2,6 +2,7 @@ import { Slot, Stack } from "expo-router";
 import { useContext, useEffect, useState } from "react";
 import { AuthProvider, AuthContext } from "../context/authContext";
 import { ProductProvider } from "../context/productContext";
+import { PushNotificationProvider } from "../context/pushNotificationContext";
 
 function RootLayoutInner() {
   const [state, , , loading] = useContext(AuthContext);
@@ -44,7 +45,9 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <ProductProvider>
-        <RootLayoutInner />
+        <PushNotificationProvider>
+          <RootLayoutInner />
+        </PushNotificationProvider>
       </ProductProvider>
     </AuthProvider>
   );
