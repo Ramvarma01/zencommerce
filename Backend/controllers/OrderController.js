@@ -2,6 +2,7 @@ const Orders = require("../models/Orders");
 const Users = require("../models/Users");
 const Products = require("../models/Products");
 const Razorpay = require("razorpay");
+const { sendPushNotification } = require("../services/pushNotificationService");
 const instance = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET,
@@ -226,16 +227,54 @@ const updateOrderStatus = async (req, res) => {
         .status(404)
         .json({ success: false, message: "Order not found" });
 
+    // const previousStatus = order.Orderstatus;
     order.Orderstatus = status;
+    
     // If delivered and paymentMethod is COD, set paymentStatus to Paid
     if (status === "Delivered" && order.paymentMethod === "COD") {
       order.paymentStatus = "Paid";
       order.deliveredAt = new Date();
     }
-    await order.save();
-    res
-      .status(200)
-      .json({ success: true, message: "Order status updated", order });
+    
+    await order.save(); 
+
+    const productId= order.items[0].productId;
+    const product= await Products.findById(productId);
+    const imageUrl= product.thumbnail; 
+
+    // Send push notification to user about status change
+    try {
+      const user = await Users.findById(order.user);
+      if (user && (user.fcmToken)) {
+        const statusMessages = {
+          "Shipped": `Order #${order._id.toString().slice(-8).toUpperCase()} has been shipped! 🚚`,
+          "Delivered": `Order #${order._id.toString().slice(-8).toUpperCase()} has been delivered! 🎉`,
+          "Cancelled": `Order #${order._id.toString().slice(-8).toUpperCase()} has been cancelled. 😔`
+        };
+
+        const title = "Order Status Update";
+        const body = statusMessages[status] || `Your order status has been updated to: ${status}`;
+        const data = {
+          orderId: order._id.toString(),
+          status: status,
+          type: "order_status_update"
+        };
+
+        // For prebuilt apps, use FCM token if available
+        if (user.fcmToken) {
+          await sendPushNotification(user.fcmToken, title, body, imageUrl, data);
+        }
+      }
+    } catch (notificationError) {
+      console.error("Error sending push notification:", notificationError);
+      // Don't fail the request if notification fails
+    }
+
+    res.status(200).json({ 
+      success: true, 
+      message: "Order status updated", 
+      order 
+    });
   } catch (error) {
     res.status(500).json({
       success: false,

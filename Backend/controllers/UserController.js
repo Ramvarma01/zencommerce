@@ -290,9 +290,9 @@ const googleLoginController = async (req, res) => {
         isGoogleUser: "true",
         password: password,
       }).save();
-      console.log("New Google user created:", user);
+      // console.log("New Google user created:", user);
     } else {
-      console.log("Existing user found:", user);
+      // console.log("Existing user found:", user);
     }
 
     // Generate JWT token
@@ -1137,6 +1137,38 @@ const resetPasswordController = async (req, res) => {
   res.send({ success: true, message: "Password reset successful" });
 };
 
+// Update FCM token for push notifications
+const updateFCMToken = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { fcmToken } = req.body;
+
+    const user = await Users.findByIdAndUpdate(userId, 
+      { fcmToken: fcmToken? fcmToken : null }, 
+      { new: true });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "FCM token updated successfully",
+      user,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Error updating FCM token",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   registerController,
   loginController,
@@ -1158,6 +1190,7 @@ module.exports = {
   sendResetCodeController,
   verifyResetCodeController,
   resetPasswordController,
+  updateFCMToken,
   // sendOtpToPhoneNumberController,
   // verifyOtpFromPhoneNumberController,
 };

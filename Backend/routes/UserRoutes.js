@@ -20,6 +20,7 @@ const {
     sendResetCodeController,
     verifyResetCodeController,
     resetPasswordController,
+    updateFCMToken,
     // sendOtpToPhoneNumberController,
     // verifyOtpFromPhoneNumberController,
 } = require('../controllers/UserController');
@@ -48,6 +49,7 @@ router.delete("/remove-product-from-cart/:id", removeProductFromCartController);
 router.post('/send-reset-code', sendResetCodeController);
 router.post('/verify-reset-code', verifyResetCodeController);
 router.post('/reset-password', resetPasswordController);
+router.put("/update-fcm-token/:userId", updateFCMToken);
 // router.post('/send-otp-to-phone-number', sendOtpToPhoneNumberController);
 // router.post('/verify-otp-from-phone-number', verifyOtpFromPhoneNumberController);
 
