@@ -627,7 +627,8 @@ body {
 }
 /* .product-card-horizontal .product-menu > div { */
 .product-menu > div {
-  padding: 10px 16px;
+  /* padding: 10px 16px; */
+  padding: 6px 15px;
   cursor: pointer;
   transition: background 0.15s;
 }
@@ -635,6 +636,7 @@ body {
 .product-menu > div:hover {
   /* background: #a52e2e; */
   background: #36364a;
+  border-radius: 8px;
 }
 .selected-thumbnail{
   width: 100px; 
