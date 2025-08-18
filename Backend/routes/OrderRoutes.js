@@ -6,7 +6,7 @@ const {
   // getOrderById,
   getAllOrders,
   updateOrderStatus,
-  cancelOrder,
+  // cancelOrder,
   createRazorpayOrder,
   verifyRazorpayPayment,
 } = require("../controllers/OrderController");
@@ -22,7 +22,7 @@ router.get("/all-orders", getAllOrders);
 // Admin: Update order status
 router.put("/order-status/:id", updateOrderStatus);
 // User: Cancel order
-router.put("/cancel-order/:id", cancelOrder);
+// router.put("/cancel-order/:id", cancelOrder);
 // Create Razorpay order
 router.post("/create-razorpay-order", createRazorpayOrder);
 // Verify Razorpay payment

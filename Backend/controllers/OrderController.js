@@ -285,30 +285,30 @@ const updateOrderStatus = async (req, res) => {
 };
 
 // User: Cancel order
-const cancelOrder = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const order = await Orders.findById(id);
-    if (!order)
-      return res
-        .status(404)
-        .json({ success: false, message: "Order not found" });
-    if (order.Orderstatus === "Cancelled") {
-      return res
-        .status(400)
-        .json({ success: false, message: "Order already cancelled" });
-    }
-    order.Orderstatus = "Cancelled";
-    await order.save();
-    res.status(200).json({ success: true, message: "Order cancelled", order });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Error cancelling order",
-      error: error.message,
-    });
-  }
-};
+// const cancelOrder = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const order = await Orders.findById(id);
+//     if (!order)
+//       return res
+//         .status(404)
+//         .json({ success: false, message: "Order not found" });
+//     if (order.Orderstatus === "Cancelled") {
+//       return res
+//         .status(400)
+//         .json({ success: false, message: "Order already cancelled" });
+//     }
+//     order.Orderstatus = "Cancelled";
+//     await order.save();
+//     res.status(200).json({ success: true, message: "Order cancelled", order });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: "Error cancelling order",
+//       error: error.message,
+//     });
+//   }
+// };
 
 module.exports = {
   createOrder,
@@ -318,5 +318,5 @@ module.exports = {
   // getOrderById,
   getAllOrders,
   updateOrderStatus,
-  cancelOrder,
+  // cancelOrder,
 };
