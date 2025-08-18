@@ -37,7 +37,8 @@ function Login() {
     >
       <div
         style={{
-          padding: "50px",
+          // padding: "50px",
+          padding: "5%",
           borderRadius: "10px",
           boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.1)",
           justifyContent: "center",

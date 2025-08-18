@@ -26,7 +26,8 @@ const Sidebar = () => {
   };
 
   const drawerContent = (
-    <div className="sidebar">
+    // <div className="sidebar">
+    <div className="sidebar-container">
       <div className="sidebar-header">
         <div className="sidebar-title">Zencommerce</div>
       </div>
@@ -72,10 +73,12 @@ const Sidebar = () => {
       {/* Mobile drawer */}
       <div className={`mobile-drawer ${mobileOpen ? "open" : ""}`}>
         {drawerContent}
+        {/* <drawerContent></drawerContent> */}
       </div>
 
       {/* Desktop sidebar */}
       <div className="sidebar">{drawerContent}</div>
+      {/* <div>{drawerContent}</div> */}
     </>
   );
 };
