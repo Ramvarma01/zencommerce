@@ -16,7 +16,7 @@ function Login() {
     // TODO: Replace with real authentication logic
     if (email === "admin@example.com" && password === "password") {
       setLoading(false);
-      navigate("/Products");
+      navigate("/products");
     } else {
       setLoading(false);
       setError("Invalid email or password");

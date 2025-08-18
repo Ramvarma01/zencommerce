@@ -31,10 +31,10 @@ function App() {
             {/* <Sidebar /> */}
             <Routes>
               {/* <Route path="/" element={<Dashboard />} /> */}
-              <Route path="/Products" element={<Products />} />
-              <Route path="/AddProduct" element={<AddProduct />} />
-              <Route path="/Orders" element={<Orders />} />
-              <Route path="/Products/EditProduct" element={<EditProduct />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/addproduct" element={<AddProduct />} />
+              <Route path="/orders" element={<Orders />} />
+              <Route path="/products/editproduct" element={<EditProduct />} />
               {/* <Route path="/login" element={<Login />} /> */}
             </Routes>
           </div>

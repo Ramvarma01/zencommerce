@@ -46,7 +46,7 @@ function Products() {
 
   // HANDLE EDIT PRODUCT
   const handleEdit = async (prod) => {
-    navigate("/Products/EditProduct", { state: { prod } });
+    navigate("/products/editproduct", { state: { prod } });
   };
 
   // HANDLE DELETE PRODUCTS
