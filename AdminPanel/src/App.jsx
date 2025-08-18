@@ -18,11 +18,9 @@ function App() {
 
       {onLoginPage && (
         <div className="login-container">
-          <BrowserRouter>
           <Routes>
             <Route path="/" element={<Login />} />
           </Routes>
-          </BrowserRouter>
         </div>
       )}
 
@@ -31,7 +29,6 @@ function App() {
           <Sidebar />
           <div className="main-content">
             {/* <Sidebar /> */}
-            <BrowserRouter>
             <Routes>
               {/* <Route path="/" element={<Dashboard />} /> */}
               <Route path="/Products" element={<Products />} />
@@ -40,7 +37,6 @@ function App() {
               <Route path="/Products/EditProduct" element={<EditProduct />} />
               {/* <Route path="/login" element={<Login />} /> */}
             </Routes>
-            </BrowserRouter>
           </div>
         </>
       )}
