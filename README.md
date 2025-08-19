@@ -4,7 +4,7 @@
 **Zencommerce** is a comprehensive full-stack e-commerce platform designed for modern retail businesses. The platform consists of three integrated components:
 
 - **📱 Mobile Customer App** - React Native/Expo mobile application
-- **🖥️ Admin Dashboard** - React-based web admin panel
+- **🖥️ Admin Dashboard** - React-based web admin panel [Visit ZenCommerce](https://zencommerce-admin.onrender.com/ "Go to Admin Panel")
 - **⚙️ Backend API** - Node.js/Express RESTful API with MongoDB database
 - **💳 Payment Integration** - Razorpay gateway supporting multiple payment methods
 
