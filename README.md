@@ -76,9 +76,9 @@
 **🖥️ Admin Panel**
 
 <p align="center">
-  <img src="./UI/Admin-login (1).png" width="267" />
-  <img src="./UI/Admin-products.png" width="267" />
-  <img src="./UI/Admin-Orders.png" width="267" />
+  <img src="./UI/Admin-login (1).png" width="270" />
+  <img src="./UI/Admin-products.png" width="270" />
+  <img src="./UI/Admin-Orders.png" width="270" />
 </p>
 
 <p align="center">
