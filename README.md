@@ -1,7 +1,7 @@
 # Zencommerce 
 <!-- ![Zencommerce Logo](https://res.cloudinary.com/dg1wavm3u/image/upload/v1753352208/zencommerce_logo_jyhhkt.png) -->
 
-**Zencommerce** is a comprehensive full-stack e-commerce platform designed for modern retail businesses. The platform consists of three integrated components:
+**Zencommerce** is a comprehensive full-stack single vender e-commerce platform designed for modern retail businesses. The platform consists of three integrated components:
 
 - **📱 Mobile Customer App** - React Native/Expo mobile application [Download Zencommerce](https://drive.google.com/file/d/1iLU9Swzjt1Z0y8D9raMsSyY1YtGOkkRr/view?usp=drive_link)
 - **🖥️ Admin Dashboard** - React-based web admin panel [Visit ZenCommerce-AdminPanel](https://zencommerce-admin.onrender.com/)
@@ -41,11 +41,11 @@
 **📱 Android App**
 
 <p align="center">
-  <img src="https://www.dropbox.com/scl/fi/31be4mrmqo6t0ptgap7a7/Screenshot_2025-07-24-12-39-54-462_com.ramvarma01.Frontend.jpg?rlkey=80tci30c1we373matbmq6ylxd&raw=1" width="20%" />
-  <img src="https://www.dropbox.com/scl/fi/i16wc4ie5izisqpqhd44p/Screenshot_2025-07-24-12-39-50-180_com.ramvarma01.Frontend.jpg?rlkey=sw6w4akixmcfeagl50nwbxnq7&raw=1" width="20%" />
-  <img src="https://www.dropbox.com/scl/fi/jyww8eax0he7itmbmn30w/Screenshot_2025-07-24-12-39-47-063_com.ramvarma01.Frontend.jpg?rlkey=1ueoeo3cro2m45kclxjuno6cc&raw=1" width="20%" />
-   <img src="https://www.dropbox.com/scl/fi/9lxckfn77vcnhr1roko7m/Screenshot_2025-07-24-12-39-29-783_com.ramvarma01.Frontend.jpg?rlkey=vqo6u1031wrxgwc8ytqv2u9uy&raw=1" width="20%" />
-  <img src="https://www.dropbox.com/scl/fi/jskg846uadfiufm0s44r6/Screenshot_2025-07-24-12-38-04-280_com.ramvarma01.Frontend.jpg?rlkey=euxtyrp3nuv6i9bl1ep5337h7&raw=1" width="20%" />
+  <img src="https://www.dropbox.com/scl/fi/31be4mrmqo6t0ptgap7a7/Screenshot_2025-07-24-12-39-54-462_com.ramvarma01.Frontend.jpg?rlkey=80tci30c1we373matbmq6ylxd&raw=1" width="150" />
+  <img src="https://www.dropbox.com/scl/fi/i16wc4ie5izisqpqhd44p/Screenshot_2025-07-24-12-39-50-180_com.ramvarma01.Frontend.jpg?rlkey=sw6w4akixmcfeagl50nwbxnq7&raw=1" width="150" />
+  <img src="https://www.dropbox.com/scl/fi/jyww8eax0he7itmbmn30w/Screenshot_2025-07-24-12-39-47-063_com.ramvarma01.Frontend.jpg?rlkey=1ueoeo3cro2m45kclxjuno6cc&raw=1" width="150" />
+   <img src="https://www.dropbox.com/scl/fi/9lxckfn77vcnhr1roko7m/Screenshot_2025-07-24-12-39-29-783_com.ramvarma01.Frontend.jpg?rlkey=vqo6u1031wrxgwc8ytqv2u9uy&raw=1" width="150" />
+  <img src="https://www.dropbox.com/scl/fi/jskg846uadfiufm0s44r6/Screenshot_2025-07-24-12-38-04-280_com.ramvarma01.Frontend.jpg?rlkey=euxtyrp3nuv6i9bl1ep5337h7&raw=1" width="150" />
 </p>
 
 <p align="center">
@@ -71,20 +71,21 @@
 **🖥️ Admin Panel**
 
 <p align="center">
-  <img src="https://www.dropbox.com/scl/fi/8oplw3vvlawwu3r4y5ry4/Screenshot-2025-07-24-123526.png?rlkey=iujb0r7ukm7sdmlsrj2x1byh9&raw=1" width="250" />
-  <img src="https://www.dropbox.com/scl/fi/z5owgd6n40pvdcdpblg7h/Screenshot-2025-07-24-123513.png?rlkey=kqaq0voqxj0jboheu033ol6oa&raw=1" width="250" />
-  <img src="https://www.dropbox.com/scl/fi/fhe5r94jt7t5fap2vxmvw/Screenshot-2025-07-24-123500.png?rlkey=6x8bphs0iz05b03pr71p749xo&raw=1" width="250" />
+  <img src="https://www.dropbox.com/scl/fi/358vwld3up89xpv5r4a2z/Admin-login-1.png?rlkey=c9ofe0mkd8vw1bb8x9wbxavuv&st=uh2fqpgw&dl=0" width="250" />
+  <img src="https://www.dropbox.com/scl/fi/p2ggtk2i1r82yiakyfjgg/Admin-products.png?rlkey=cclxod80dr5qmj0w7efg809wu&st=13zn6ngl&dl=0" width="250" />
+  <img src="https://www.dropbox.com/scl/fi/he2nq773my7osyyfnmgvl/Admin-Orders.png?rlkey=896tpbv822dh8482kr83vxgh7&st=785y1nie&dl=0" width="250" />
 </p>
 
 <p align="center">
-  <img src="https://www.dropbox.com/scl/fi/36d4vxbxaqz8dw3eg5he1/Screenshot-2025-07-24-123440.png?rlkey=5qqchykud9pwai3nhmqnanw0q&raw=1" width="250" />
-  <img src="https://www.dropbox.com/scl/fi/gfluveo0rxo3tre5110n9/Screenshot-2025-07-24-123430.png?rlkey=o7hd1rns82rbfzoecksfvtcii&raw=1" width="250" />
-  <img src="https://www.dropbox.com/scl/fi/lfav1opmjxx8y3cdhv6ly/Screenshot-2025-07-24-123411.png?rlkey=omrt1qat8wcbl8ggb8ud32x5w&raw=1" width="250" />
+  <img src="https://www.dropbox.com/scl/fi/661ncf997por271vt07gb/Add-product-1.png?rlkey=uy720u583lx2duv9g2nyj1kko&st=rug1ai6i&dl=0" width="250" />
+  <img src="https://www.dropbox.com/scl/fi/o2ttwu8h0mru90xkmik45/Add-product-2.png?rlkey=9dta5yyuic9mtmhxvcgaep7a5&st=sdqe7pfa&dl=0" width="250" />
+  <img src="https://www.dropbox.com/scl/fi/j2inmbxe2xbkr045jbjx8/Add-product-3.png?rlkey=zf9a6akfyxvc5y43svt6xir8o&st=gwa4w4eo&dl=0" width="250" />
 </p>
 
 <p align="center">
-  <img src="https://www.dropbox.com/scl/fi/7pm3j9732bjp2amgf9f71/Screenshot-2025-07-24-123356.png?rlkey=6wse57u6ap9rxjlkwnhuvu939&raw=1" width="250" />
-  <img src="https://www.dropbox.com/scl/fi/sj2to0wwpx07gfv2g0j4w/Screenshot-2025-07-24-123318.png?rlkey=wexe13ogqpscm50vmmne3vkb2&raw=1" width="250" />
+  <img src="https://www.dropbox.com/scl/fi/d4mey7264f2up1l0h1i0d/Edit-product-1.png?rlkey=sdsousbugcl91qz66ntgudx3a&st=ydrlhdjd&dl=0" width="250" />
+  <img src="https://www.dropbox.com/scl/fi/ufmvytfetnczjfgvhqmqd/Edit-product-2.png?rlkey=yhmek2uflqxw34fripcwop8k5&st=xsel9mu2&dl=0" width="250" />
+  <img src="https://www.dropbox.com/scl/fi/vpdfbx0fxnl0tpn3xhwmh/Edit-product-3.png?rlkey=hmlgr6fpxyptzi6ol1e2r356e&st=4xucf9l6&dl=0" width="250" />
 </p>
 
 ---
