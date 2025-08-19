@@ -41,11 +41,11 @@
 **📱 Android App**
 
 <p align="center">
-  <img src="./UI/Splash-screen.jpg" width="150" />
-  <img src="./UI/Login.jpg" width="150" />
-  <img src="./UI/Registe(1).jpg" width="150" />
-  <img src="./UI/Register(2).jpg" width="150" />
-  <img src="./UI/Register(3).jpg" width="150" />
+  <img src="./UI/Splash-screen.jpg" width="200" />
+  <img src="./UI/Registe(1).jpg" width="200" />
+  <img src="./UI/Register(2).jpg" width="200" />
+  <img src="./UI/Register(3).jpg" width="200" />
+  <!-- <img src="./UI/Login.jpg" width="150" /> -->
 </p>
 
 <p align="center">
@@ -65,6 +65,7 @@
 </p>
 
 <p align="center">
+  
   <img src="./UI/cart.jpg" width="150" />
   <img src="./UI/Products.jpg" width="150" />
 </p>
