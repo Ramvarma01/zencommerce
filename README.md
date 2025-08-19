@@ -65,7 +65,7 @@
   <img src="./UI/Orders.jpg" width="200" />
   <img src="./UI/FAQ.jpg" width="200" />
 </p>
-<p align="center">
+<p align="center" justify="center">
   <img src="./UI/cart.jpg" width="200" />
   <img src="./UI/cart(3).jpg" width="200" />
   <img src="./UI/Products.jpg" width="200" />
