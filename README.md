@@ -1,14 +1,54 @@
-# 🛒 Zencommerce 
+<div align="center">
+
+# 🛒 **Zencommerce**
+
+### *Modern Full-Stack E-commerce Platform*
+
 <!-- ![Zencommerce Logo](https://res.cloudinary.com/dg1wavm3u/image/upload/v1753352208/zencommerce_logo_jyhhkt.png) -->
 
-## 📋 Overview
+[![React Native](https://img.shields.io/badge/React%20Native-0.79.4-blue.svg)](https://reactnative.dev/)
+[![Expo](https://img.shields.io/badge/Expo-53.0.12-000020.svg)](https://expo.dev/)
+[![Node.js](https://img.shields.io/badge/Node.js-Express-green.svg)](https://nodejs.org/)
+[![MongoDB](https://img.shields.io/badge/Database-MongoDB-47A248.svg)](https://mongodb.com/)
+[![React](https://img.shields.io/badge/React-19.0.0-61DAFB.svg)](https://reactjs.org/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**Zencommerce** is a comprehensive full-stack e-commerce platform designed for modern retail businesses. The platform consists of three integrated components:
+**🚀 Production Ready** • **📱 Cross Platform** • **💳 Payment Integrated** • **☁️ Cloud Native**
 
-- **📱 Mobile Customer App** - React Native/Expo cross-platform mobile application
-- **🖥️ Admin Dashboard** - React-based web admin panel for business management
-- **⚙️ Backend API** - Node.js/Express RESTful API with MongoDB database
-- **💳 Payment Integration** - Razorpay gateway supporting multiple payment methods
+</div>
+
+---
+
+## 📋 **Overview**
+
+> **Zencommerce** is a comprehensive, production-ready e-commerce platform built with modern technologies. Designed for scalability and user experience, it provides everything needed to launch and manage a successful online retail business.
+
+<table>
+<tr>
+<td width="50%">
+
+### 🏗️ **Platform Components**
+- **📱 Mobile Customer App**  
+  *React Native/Expo cross-platform*
+- **🖥️ Admin Dashboard**  
+  *React-based management panel*
+- **⚙️ Backend API**  
+  *Node.js/Express RESTful services*
+- **💳 Payment Gateway**  
+  *Razorpay multi-method integration*
+
+</td>
+<td width="50%">
+
+### 🎯 **Perfect For**
+- 🏪 Retail businesses going digital
+- 🛍️ Startups launching e-commerce
+- 📈 Businesses scaling online presence
+- 🔧 Developers learning full-stack
+
+</td>
+</tr>
+</table>
 
 ## ✨ Key Features
 
