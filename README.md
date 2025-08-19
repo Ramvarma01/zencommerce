@@ -91,8 +91,7 @@
  <img src="https://www.dropbox.com/scl/fi/pfe57ht4mszartzlw1xn9/original-imagtc4g22rcatjg.webp?rlkey=viqgn496g1k52e3qvixb1t9a4&st=g85fe3so&dl=0" width="250" />
   <img src="https://www.dropbox.com/scl/fi/661ncf997por271vt07gb/Add-product-1.png?rlkey=uy720u583lx2duv9g2nyj1kko&st=7i8vh0by&dl=0"/>
   <img src="https://dl.dropboxusercontent.com/scl/fi/358vwld3up89xpv5r4a2z/Admin-login-1.png" width="250" />
-  <img src="https://previews.dropbox.com/p/thumb/ACtRbn65Yjf89jRM1f5HaGMJggAciFIv34SHjl0zbNSXUBhhVbJNTnEGn1vNbdQUcV9CuTFqIp05vRVJtn8YtOl-yg3ks14TgVkkVcxjEQ9ecwwUFugddN7QZxOuQMdwRiZ5_j2KEgZ-MkdmjNV2jit8Oi6Dd1phvr8a-YpOH7dna9qGfm_BeJvgI2FeKAt4Wx_QzKgoEWrMZ8nR-r8HdMwyKNCAyU3pyFODujR184X87JtyrnTEeLpHegJdryv3MknpnH8hB6ZWmBBoc1bN9Hqf9rr7p6an_xs8n_769D66qtP9QhZ88N014lPuCJE5sls/p.png" width="250" />
-  ![Admin Login](UI/Admin-login-1.png)
+  <img src="./UI/Add-product (1).png" width="250" />
 ---
 
 ## 🏗️ Architecture & Tech Stack
