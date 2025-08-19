@@ -76,21 +76,21 @@
 **🖥️ Admin Panel**
 
 <p align="center">
-  <img src="./UI/Admin-login (1).png" width="250" />
-  <img src="./UI/Admin-products.png" width="250" />
-  <img src="./UI/Admin-Orders.png" width="250" />
+  <img src="./UI/Admin-login (1).png" width="267" />
+  <img src="./UI/Admin-products.png" width="267" />
+  <img src="./UI/Admin-Orders.png" width="267" />
 </p>
 
 <p align="center">
-  <img src="./UI/Add-product (1).png" width="250" />
-  <img src="./UI/Add-product (2).png" width="250" />
-  <img src="./UI/Add-product (3).png" width="250" />
+  <img src="./UI/Add-product (1).png" width="267" />
+  <img src="./UI/Add-product (2).png" width="267" />
+  <img src="./UI/Add-product (3).png" width="267" />
 </p>
 
 <p align="center">
-  <img src="./UI/Edit-product (1).png" width="250" />
-  <img src="./UI/Edit-product (2).png" width="250" />
-  <img src="./UI/Edit-product (3).png" width="250" />
+  <img src="./UI/Edit-product (1).png" width="267" />
+  <img src="./UI/Edit-product (2).png" width="267" />
+  <img src="./UI/Edit-product (3).png" width="267" />
 </p>
 ---
 
