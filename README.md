@@ -66,9 +66,9 @@
 <p align="center">
   <img src="./UI/Orders.jpg" width="160" />
   <img src="./UI/FAQ.jpg" width="160" />
-  <img src="./UI/Forget-pass(1).jpg.jpg" width="160" />
-  <img src="./UI/Forget-pass(2).jpg.jpg" width="160" />
-  <img src="./UI/Forget-pass(3).jpg.jpg" width="160" />
+  <img src="./UI/Forget-pass(1).jpg" width="160" />
+  <img src="./UI/Forget-pass(2).jpg" width="160" />
+  <img src="./UI/Forget-pass(3).jpg" width="160" />
 </p>
 
 ---
