@@ -1,8 +1,6 @@
 # Zencommerce 
 <!-- ![Zencommerce Logo](https://res.cloudinary.com/dg1wavm3u/image/upload/v1753352208/zencommerce_logo_jyhhkt.png) -->
 
-## Overview
-
 **Zencommerce** is a comprehensive full-stack e-commerce platform designed for modern retail businesses. The platform consists of three integrated components:
 
 - **📱 Mobile Customer App** - React Native/Expo mobile application
