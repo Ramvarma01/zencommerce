@@ -41,11 +41,11 @@
 **📱 Android App**
 
 <p align="center">
-  <img src="https://www.dropbox.com/scl/fi/31be4mrmqo6t0ptgap7a7/Screenshot_2025-07-24-12-39-54-462_com.ramvarma01.Frontend.jpg?rlkey=80tci30c1we373matbmq6ylxd&raw=1" width="150" />
-  <img src="https://www.dropbox.com/scl/fi/i16wc4ie5izisqpqhd44p/Screenshot_2025-07-24-12-39-50-180_com.ramvarma01.Frontend.jpg?rlkey=sw6w4akixmcfeagl50nwbxnq7&raw=1" width="150" />
-  <img src="https://www.dropbox.com/scl/fi/jyww8eax0he7itmbmn30w/Screenshot_2025-07-24-12-39-47-063_com.ramvarma01.Frontend.jpg?rlkey=1ueoeo3cro2m45kclxjuno6cc&raw=1" width="150" />
-   <img src="https://www.dropbox.com/scl/fi/9lxckfn77vcnhr1roko7m/Screenshot_2025-07-24-12-39-29-783_com.ramvarma01.Frontend.jpg?rlkey=vqo6u1031wrxgwc8ytqv2u9uy&raw=1" width="150" />
-  <img src="https://www.dropbox.com/scl/fi/jskg846uadfiufm0s44r6/Screenshot_2025-07-24-12-38-04-280_com.ramvarma01.Frontend.jpg?rlkey=euxtyrp3nuv6i9bl1ep5337h7&raw=1" width="150" />
+  <img src="https://www.dropbox.com/scl/fi/31be4mrmqo6t0ptgap7a7/Screenshot_2025-07-24-12-39-54-462_com.ramvarma01.Frontend.jpg?rlkey=80tci30c1we373matbmq6ylxd&raw=1" width="20%" />
+  <img src="https://www.dropbox.com/scl/fi/i16wc4ie5izisqpqhd44p/Screenshot_2025-07-24-12-39-50-180_com.ramvarma01.Frontend.jpg?rlkey=sw6w4akixmcfeagl50nwbxnq7&raw=1" width="20%" />
+  <img src="https://www.dropbox.com/scl/fi/jyww8eax0he7itmbmn30w/Screenshot_2025-07-24-12-39-47-063_com.ramvarma01.Frontend.jpg?rlkey=1ueoeo3cro2m45kclxjuno6cc&raw=1" width="20%" />
+   <img src="https://www.dropbox.com/scl/fi/9lxckfn77vcnhr1roko7m/Screenshot_2025-07-24-12-39-29-783_com.ramvarma01.Frontend.jpg?rlkey=vqo6u1031wrxgwc8ytqv2u9uy&raw=1" width="20%" />
+  <img src="https://www.dropbox.com/scl/fi/jskg846uadfiufm0s44r6/Screenshot_2025-07-24-12-38-04-280_com.ramvarma01.Frontend.jpg?rlkey=euxtyrp3nuv6i9bl1ep5337h7&raw=1" width="20%" />
 </p>
 
 <p align="center">
