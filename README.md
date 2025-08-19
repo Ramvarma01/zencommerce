@@ -41,34 +41,35 @@
 **📱 Android App**
 
 <p align="center">
-  <img src="./UI/Splash-screen.jpg" width="200" />
-  <img src="./UI/Registe(1).jpg" width="200" />
-  <img src="./UI/Register(2).jpg" width="200" />
-  <img src="./UI/Register(3).jpg" width="200" />
+  <img src="./UI/Splash-screen.jpg" width="160" />
+  <img src="./UI/Registe(1).jpg" width="160" />
+  <img src="./UI/Register(2).jpg" width="160" />
+  <img src="./UI/Register(3).jpg" width="160" />
+  <img src="./UI/Login.jpg" width="160" />
 </p>
 
 <p align="center">
-  <img src="./UI/Login.jpg" width="200" />
-  <img src="./UI/Home.jpg" width="200" />
-  <img src="./UI/Wishlist.jpg" width="200" />
-  <img src="./UI/Search.jpg" width="200" />
+  <img src="./UI/Home.jpg" width="160" />
+  <img src="./UI/Wishlist.jpg" width="160" />
+  <img src="./UI/Search.jpg" width="160" />
+  <img src="./UI/filter.jpg" width="160" />
+  <img src="./UI/Profile.jpg" width="160" />
 </p>
 
 <p align="center">
-  <img src="./UI/filter.jpg" width="200" />
-  <img src="./UI/Profile.jpg" width="200" />
-  <img src="./UI/Edit-profile.jpg" width="200" />
-  <img src="./UI/Add-address.jpg" width="200" />
+  <img src="./UI/Edit-profile.jpg" width="160" />
+  <img src="./UI/Add-address.jpg" width="160" />
+  <img src="./UI/Orders.jpg" width="160" />
+  <img src="./UI/FAQ.jpg" width="160" />
 </p>
 
 <p align="center">
-  <img src="./UI/Orders.jpg" width="200" />
-  <img src="./UI/FAQ.jpg" width="200" />
+ 
 </p>
-<p align="center" justify="center">
-  <img src="./UI/cart.jpg" width="200" />
-  <img src="./UI/cart(3).jpg" width="200" />
-  <img src="./UI/Products.jpg" width="200" />
+<p align="center">
+  <img src="./UI/cart.jpg" width="160" />
+  <img src="./UI/cart(3).jpg" width="160" />
+  <img src="./UI/Products.jpg" width="160" />
 </p>
 
 ---
