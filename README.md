@@ -53,7 +53,7 @@
   <img src="./UI/Wishlist.jpg" width="150" />
   <img src="./UI/Search.jpg" width="150" />
   <img src="./UI/filter.jpg" width="150" />
-  <img src="./UI/Profile.jpg.jpg" width="150" />
+  <img src="./UI/Profile.jpg" width="150" />
 </p>
 
 <p align="center">
@@ -61,7 +61,7 @@
   <img src="./UI/Add-address.jpg" width="150" />
   <img src="./UI/Orders.jpg" width="150" />
   <img src="./UI/FAQ.jpg" width="150" />
-  <img src="./UI/cart(3).jpg.jpg" width="150" />
+  <img src="./UI/cart(3).jpg" width="150" />
 </p>
 
 <p align="center">
