@@ -2,7 +2,7 @@
 diff --git a/README.md b/README.md
 --- a/README.md
 +++ b/README.md
-@@ -1,143 +1,403 @@
+@@ -1,143 +1,523 @@
 -# Zencommerce 
 -<!-- ![Zencommerce Logo](https://res.cloudinary.com/dg1wavm3u/image/upload/v1753352208/zencommerce_logo_jyhhkt.png) -->
 -
@@ -146,43 +146,163 @@ diff --git a/README.md b/README.md
 -  - `Frontend/context/authContext.js` for API base URL
 -
 ----
-+# 🛒 Zencommerce 
++<div align="center">
++
++# 🛒 **Zencommerce**
++
++### *Modern Full-Stack E-commerce Platform*
++
 +<!-- ![Zencommerce Logo](https://res.cloudinary.com/dg1wavm3u/image/upload/v1753352208/zencommerce_logo_jyhhkt.png) -->
 +
-+## 📋 Overview
++[![React Native](https://img.shields.io/badge/React%20Native-0.79.4-blue.svg)](https://reactnative.dev/)
++[![Expo](https://img.shields.io/badge/Expo-53.0.12-000020.svg)](https://expo.dev/)
++[![Node.js](https://img.shields.io/badge/Node.js-Express-green.svg)](https://nodejs.org/)
++[![MongoDB](https://img.shields.io/badge/Database-MongoDB-47A248.svg)](https://mongodb.com/)
++[![React](https://img.shields.io/badge/React-19.0.0-61DAFB.svg)](https://reactjs.org/)
++[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 +
-+**Zencommerce** is a comprehensive full-stack e-commerce platform designed for modern retail businesses. The platform consists of three integrated components:
++**🚀 Production Ready** • **📱 Cross Platform** • **💳 Payment Integrated** • **☁️ Cloud Native**
 +
-+- **📱 Mobile Customer App** - React Native/Expo cross-platform mobile application
-+- **🖥️ Admin Dashboard** - React-based web admin panel for business management
-+- **⚙️ Backend API** - Node.js/Express RESTful API with MongoDB database
-+- **💳 Payment Integration** - Razorpay gateway supporting multiple payment methods
++</div>
 +
-+## ✨ Key Features
++---
 +
-+### 🛍️ Customer Features
-+- **Multi-platform Support** - Native Android and iOS apps via Expo
-+- **Social Authentication** - Email, Google, and Facebook login options
-+- **Product Discovery** - Advanced search, filtering, and categorization
-+- **Shopping Experience** - Cart management, wishlist, product variants
-+- **Secure Payments** - Razorpay integration (UPI, cards, wallets, net banking)
-+- **Order Management** - Real-time order tracking and history
-+- **Push Notifications** - Firebase-powered notifications for order updates
++## 📋 **Overview**
 +
-+### 👨‍💼 Admin Features
-+- **Product Management** - Complete CRUD operations with image uploads
-+- **Order Processing** - Order tracking and status management
-+- **Inventory Control** - Real-time stock management with variants
-+- **Analytics Dashboard** - Business insights and performance metrics
-+- **Image Management** - Cloudinary integration for optimized image storage
++> **Zencommerce** is a comprehensive, production-ready e-commerce platform built with modern technologies. Designed for scalability and user experience, it provides everything needed to launch and manage a successful online retail business.
 +
-+### 🔧 Technical Features
-+- **JWT Authentication** - Secure token-based authentication system
-+- **RESTful API** - Well-structured API endpoints for all operations
-+- **Database Design** - Optimized MongoDB schemas for scalability
-+- **Cloud Storage** - Cloudinary for image optimization and CDN
-+- **Responsive Design** - Mobile-first UI/UX across all platforms
-+- **Email Notifications** - Automated email system for user communications
++<table>
++<tr>
++<td width="50%">
++
++### 🏗️ **Platform Components**
++- **📱 Mobile Customer App**  
++  *React Native/Expo cross-platform*
++- **🖥️ Admin Dashboard**  
++  *React-based management panel*
++- **⚙️ Backend API**  
++  *Node.js/Express RESTful services*
++- **💳 Payment Gateway**  
++  *Razorpay multi-method integration*
++
++</td>
++<td width="50%">
++
++### 🎯 **Perfect For**
++- 🏪 Retail businesses going digital
++- 🛍️ Startups launching e-commerce
++- 📈 Businesses scaling online presence
++- 🔧 Developers learning full-stack
++
++</td>
++</tr>
++</table>
++
++## ✨ **Key Features**
++
++<div align="center">
++
++### 🌟 **Why Choose Zencommerce?**
++
++</div>
++
++<table>
++<tr>
++<td width="33%" align="center">
++
++### 🛍️ **Customer Experience**
++```
++📱 Cross-Platform Mobile Apps
++🔐 Social Login Integration  
++🔍 Advanced Product Search
++🛒 Smart Cart Management
++💳 Secure Payment Gateway
++📦 Real-time Order Tracking
++🔔 Push Notifications
++💝 Wishlist & Favorites
++```
++
++</td>
++<td width="33%" align="center">
++
++### 👨‍💼 **Admin Control**
++```
++📊 Analytics Dashboard
++🛍️ Product Management
++📦 Order Processing
++📈 Inventory Control
++🖼️ Image Management
++👥 User Management
++📧 Email Automation
++🎯 Business Insights
++```
++
++</td>
++<td width="33%" align="center">
++
++### 🔧 **Technical Excellence**
++```
++🔒 JWT Authentication
++🌐 RESTful API Design
++🗄️ MongoDB Optimization
++☁️ Cloud-Native Storage
++📱 Responsive Design
++⚡ Performance Optimized
++🔄 Real-time Updates
++🛡️ Security First
++```
++
++</td>
++</tr>
++</table>
++
++---
++
++### 🚀 **Feature Highlights**
++
++<details>
++<summary><b>📱 Mobile App Features</b></summary>
++
++- ✅ **Cross-Platform Compatibility** - Single codebase for iOS and Android
++- ✅ **Social Authentication** - Google, Facebook, and email login
++- ✅ **Advanced Search** - Filter by category, price, brand, and more
++- ✅ **Product Variants** - Size, color, and style options
++- ✅ **Smart Cart** - Persistent cart across sessions
++- ✅ **Wishlist** - Save products for later purchase
++- ✅ **Secure Checkout** - Multiple payment methods via Razorpay
++- ✅ **Order Tracking** - Real-time status updates
++- ✅ **Push Notifications** - Order updates and promotional alerts
++- ✅ **Address Management** - Multiple shipping addresses
++
++</details>
++
++<details>
++<summary><b>🖥️ Admin Panel Features</b></summary>
++
++- ✅ **Dashboard Analytics** - Sales, orders, and customer insights
++- ✅ **Product Management** - Add, edit, delete products with variants
++- ✅ **Image Upload** - Drag-and-drop with Cloudinary integration
++- ✅ **Order Management** - Process and track customer orders
++- ✅ **Inventory Control** - Real-time stock management
++- ✅ **User Management** - Customer account oversight
++- ✅ **Reports** - Sales and performance analytics
++- ✅ **Responsive Design** - Works on desktop and mobile
++
++</details>
++
++<details>
++<summary><b>⚙️ Backend Features</b></summary>
++
++- ✅ **RESTful API** - Clean, documented endpoints
++- ✅ **Authentication** - JWT with refresh tokens
++- ✅ **Database Design** - Optimized MongoDB schemas
++- ✅ **File Upload** - Cloudinary integration with optimization
++- ✅ **Payment Processing** - Razorpay webhook handling
++- ✅ **Email Service** - Automated notifications
++- ✅ **Error Handling** - Comprehensive error management
++- ✅ **Security** - CORS, validation, and sanitization
++
++</details>
 +
 +---
 +
