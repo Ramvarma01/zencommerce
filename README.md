@@ -1,6 +1,8 @@
 # Zencommerce 
 <!-- ![Zencommerce Logo](https://res.cloudinary.com/dg1wavm3u/image/upload/v1753352208/zencommerce_logo_jyhhkt.png) -->
 
+---
+
 ## Overview
 
 **Zencommerce** is a comprehensive full-stack e-commerce platform designed for modern retail businesses. The platform consists of three integrated components:
@@ -9,6 +11,8 @@
 - **🖥️ Admin Dashboard** - React-based web admin panel
 - **⚙️ Backend API** - Node.js/Express RESTful API with MongoDB database
 - **💳 Payment Integration** - Razorpay gateway supporting multiple payment methods
+
+---
 
 ## ✨ Key Features
 
@@ -86,9 +90,6 @@
   <img src="https://www.dropbox.com/scl/fi/7pm3j9732bjp2amgf9f71/Screenshot-2025-07-24-123356.png?rlkey=6wse57u6ap9rxjlkwnhuvu939&raw=1" width="250" />
   <img src="https://www.dropbox.com/scl/fi/sj2to0wwpx07gfv2g0j4w/Screenshot-2025-07-24-123318.png?rlkey=wexe13ogqpscm50vmmne3vkb2&raw=1" width="250" />
 </p>
-
-Or use your Dropbox images, e.g.:
-![Dropbox Image](https://www.dropbox.com/scl/fi/your-image-path/image.jpg?rlkey=yr7h232jqy3lqd22413jo9d2e&raw=1)
 
 ---
 
