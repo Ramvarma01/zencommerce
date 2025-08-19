@@ -53,23 +53,22 @@
   <img src="./UI/Wishlist.jpg" width="160" />
   <img src="./UI/Search.jpg" width="160" />
   <img src="./UI/filter.jpg" width="160" />
-  <img src="./UI/Profile.jpg" width="160" />
+  <img src="./UI/Products.jpg" width="160" />
 </p>
 
-<p align="center">
-  <img src="./UI/Edit-profile.jpg" width="160" />
-  <img src="./UI/Add-address.jpg" width="160" />
-  <img src="./UI/Orders.jpg" width="160" />
-  <img src="./UI/FAQ.jpg" width="160" />
-</p>
-
-<p align="center">
- 
-</p>
 <p align="center">
   <img src="./UI/cart.jpg" width="160" />
   <img src="./UI/cart(3).jpg" width="160" />
-  <img src="./UI/Products.jpg" width="160" />
+  <img src="./UI/Profile.jpg" width="160" />
+  <img src="./UI/Edit-profile.jpg" width="160" />
+  <img src="./UI/Add-address.jpg" width="160" />
+</p>
+<p align="center">
+  <img src="./UI/Orders.jpg" width="160" />
+  <img src="./UI/FAQ.jpg" width="160" />
+  <img src="./UI/Forget-pass(1).jpg.jpg" width="160" />
+  <img src="./UI/Forget-pass(2).jpg.jpg" width="160" />
+  <img src="./UI/Forget-pass(3).jpg.jpg" width="160" />
 </p>
 
 ---
