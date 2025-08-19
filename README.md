@@ -4,7 +4,7 @@
 **Zencommerce** is a comprehensive full-stack e-commerce platform designed for modern retail businesses. The platform consists of three integrated components:
 
 - **📱 Mobile Customer App** - React Native/Expo mobile application
-- **🖥️ Admin Dashboard** - React-based web admin panel [Visit ZenCommerce](https://zencommerce-admin.onrender.com/ "Go to Admin Panel")
+- **🖥️ Admin Dashboard** - React-based web admin panel [Visit ZenCommerce-AdminPanel](https://zencommerce-admin.onrender.com/)
 - **⚙️ Backend API** - Node.js/Express RESTful API with MongoDB database
 - **💳 Payment Integration** - Razorpay gateway supporting multiple payment methods
 
@@ -274,29 +274,43 @@ expo run
 ## 🌐 API Endpoints
 
 **👤 User Routes**
+- `POST /send-otp` - Send OTP to the email for Registration.
+- `POST /verify-otp` - Verify OTP
 - `POST /register` - User registration
 - `POST /login` - User authentication
 - `POST /google-auth` - Google OAuth
 - `POST /facebook-auth` - Facebook OAuth
-- `GET /profile` - Get user profile
-- `PUT /profile` - Update user profile
-- `POST /forgot-password` - Password reset request
-- `POST /reset-password` - Reset password with OTP
+- `PUT /update-user` - Update user profile
+- `PUT /update-password` - Update user password
+- `POST /add-shipping-address` - Add user Address
+- `PUT /delete-shipping-address` - Delete user Address
+- `PUT /update-shipping-address` - Update user Address
+- `PUT /set-default-address` - Set a address as default shippig address
+- `PUT /add-product-to-wishlist/:id` - Add a product to wishlist
+- `DELETE /remove-product-from-wishlist/:id` - Remove a product from user's wishlist
+- `DELTE /clear-wishlist/:id` - Remove all products from user's wishlist
+- `PUT /add-product-to-cart/:id` - Add a product to cart
+- `DELETE /remove-product-from-cart/:id` - Remove a product from user's cart
+- `POST /send-reset-code` - Send code to the email for password reset.
+- `POST /verify-reset-code` - Verify code
+- `POST /resend-password` - Reset user's passsord
+- `PUT /update-fcm-token/:userId` - Update devices token for FCM(Firebase Cloud Messaging)
 
 **🛍️ Product Routes**
-- `GET /products` - Get all products
-- `GET /products/:id` - Get single product
-- `POST /products` - Create product (Admin)
-- `PUT /products/:id` - Update product (Admin)
-- `DELETE /products/:id` - Delete product (Admin)
-- `GET /products/search` - Search products
+- `GET /get-products` - Get all products
+- `GET /product/:id` - Get single product
+- `POST /add-product` - Create product (Admin)
+- `POST /duplicate-product` - Duplicate an existing product (Admin)
+- `DELETE /delete-product/:id` - Delete a product (Admin)
+- `PUT /edit-products/:id` - Update product (Admin)
 
 **📦 Order Routes**
-- `POST /orders` - Create new order
-- `GET /orders` - Get user orders
-- `GET /orders/:id` - Get single order
-- `PUT /orders/:id/status` - Update order status (Admin)
-- `POST /payment/verify` - Verify Razorpay payment
+- `GET /all-orders` - Get All orders (Admin)
+- `GET /user-orders/:userId` - Get a user's orders
+- `POST /create-orders` - Create new order
+- `POST /create-razorpay-order` - creates Razorpay order
+- `POST /verify-razorpay-payment` - Verify Razorpay payment
+- `PUT /order-status/:id` - Update order status (Admin)
 
 ---
 
