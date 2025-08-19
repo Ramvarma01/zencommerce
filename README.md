@@ -77,17 +77,16 @@
 </p>
 
 <p align="center">
-  <img src="https://www.dropbox.com/scl/fi/661ncf997por271vt07gb/Add-product-1.png?rlkey=uy720u583lx2duv9g2nyj1kko&st=rug1ai6i&dl=0" width="250" />
-  <img src="https://www.dropbox.com/scl/fi/o2ttwu8h0mru90xkmik45/Add-product-2.png?rlkey=9dta5yyuic9mtmhxvcgaep7a5&st=sdqe7pfa&dl=0" width="250" />
-  <img src="https://www.dropbox.com/scl/fi/j2inmbxe2xbkr045jbjx8/Add-product-3.png?rlkey=zf9a6akfyxvc5y43svt6xir8o&st=gwa4w4eo&dl=0" width="250" />
+  <img src="./UI/Add-product (1).png" width="250" />
+  <img src="./UI/Add-product (2).png" width="250" />
+  <img src="./UI/Add-product (3).png" width="250" />
 </p>
 
 <p align="center">
-  <img src="https://www.dropbox.com/scl/fi/d4mey7264f2up1l0h1i0d/Edit-product-1.png?rlkey=sdsousbugcl91qz66ntgudx3a&st=ydrlhdjd&dl=0" width="250" />
-  <img src="https://www.dropbox.com/scl/fi/ufmvytfetnczjfgvhqmqd/Edit-product-2.png?rlkey=yhmek2uflqxw34fripcwop8k5&st=xsel9mu2&dl=0" width="250" />
-  <img src="https://www.dropbox.com/scl/fi/vpdfbx0fxnl0tpn3xhwmh/Edit-product-3.png?rlkey=hmlgr6fpxyptzi6ol1e2r356e&st=4xucf9l6&dl=0" width="250" />
+  <img src="./UI/Edit-product (1).png" width="250" />
+  <img src="./UI/Edit-product (2).png" width="250" />
+  <img src="./UI/Edit-product (3).png" width="250" />
 </p>
-  <img src="./UI/Add-product (1).png" width="250" />
 ---
 
 ## 🏗️ Architecture & Tech Stack
