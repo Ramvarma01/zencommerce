@@ -4,22 +4,6 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import Modal from "../components/Modal"
-// import CloseIcon from "@mui/icons-material/Close";
-
-// const Modal = ({ isOpen, onClose, children }) => {
-//   if (!isOpen) return null;
-
-//   return (
-//     <div className="modal-overlay" onClick={onClose}>
-//       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-//         <button className="modal-close" onClick={onClose}>
-//           <CloseIcon></CloseIcon>
-//         </button>
-//         {children}
-//       </div>
-//     </div>
-//   );
-// };
 
 function Products() {
   const [products, setProducts, fetchProducts] = useContext(ProductContext);
@@ -165,7 +149,6 @@ function Products() {
               {menuOpen === idx && (
                 <div className="product-menu">
                   <div onClick={() => handleEdit(product)}>Edit</div>
-                  {/* <div onClick={() => navigate('/Products/EditProduct', { state: { prod: product } })}>Edit</div> */}
                   {/* <div onClick={() => handleDelete(product._id)}>Delete</div> */}
                   <div onClick={() => openDeleteModal(product)}>Delete </div>
                   <div onClick={() => handleDuplicate(product._id)}>
@@ -197,7 +180,7 @@ function Products() {
               style={{ width: "30%", backgroundColor: "#4A4A5F"}}
               onClick={() => setDeleteModalOpen(false)}
             >
-              cancel
+              Cancel
             </button>
           </div>
         </Modal>

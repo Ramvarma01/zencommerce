@@ -3,12 +3,15 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import axios from "axios";
 import { ProductContext } from "../context/productContext";
+import Modal from "../components/Modal"
 
 function Orders() {
   const [orders, setOrders] = useState([]);
   // const [products, setProducts] = useState([]);
   const [products, setProducts, fetchProducts] = useContext(ProductContext);
   const [menuOpen, setMenuOpen] = useState(null); // index of open menu
+  const [isCancelModalOpen, setCancelModalOpen] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState({});
   const cardRefs = useRef([]);
 
   useEffect(() => {
@@ -56,6 +59,11 @@ function Orders() {
     fetchOrders();
     fetchProducts();
   }, []);
+
+  const openCancelModal = (orderId) => {
+    setSelectedOrder(orderId);
+    setCancelModalOpen(true);
+  };
 
   const handleStatusUpdate = async (orderId, status) => {
     try {
@@ -125,7 +133,7 @@ function Orders() {
                   }}
                 >
                   {/* <h2 className="product-name">Order #{order._id.slice(-6)}</h2> */}
-                  <h2 className="product-name">Order #{order._id}</h2>
+                  <h2 className="product-name">Order #{order._id.toString().slice(-8).toUpperCase()}</h2>
                   <span
                     className="menu-icon"
                     onClick={() => setMenuOpen(menuOpen === idx ? null : idx)}
@@ -218,7 +226,8 @@ function Orders() {
                   >
                     Mark as Delivered
                   </div>
-                  <div onClick={() => handleStatusUpdate(order._id, "Cancelled")}>
+                  {/* <div onClick={() => handleStatusUpdate(order._id, "Cancelled")}> */}
+                  <div onClick={() => openCancelModal(order._id)}>
                     Cancel Order
                   </div>
                 </div>
@@ -226,6 +235,31 @@ function Orders() {
             </div>
           ))
         )}
+      </div>
+      <div>
+        <Modal
+          isOpen={isCancelModalOpen}
+          onClose={() => setCancelModalOpen(false)}
+        >
+          <h3 style={{ marginBottom: 10 }}>Confirm Order Cancel</h3>
+          <p class="mb-2">
+            Are you sure you want to cancel <br />Order "#{selectedOrder.toString().slice(-8).toUpperCase()}"
+          </p>
+          <div style={{ display: "flex", flexDirection: "row-reverse" }}>
+            <button
+              style={{ marginLeft: 10, width: "30%", backgroundColor: "#ff6b6b" }}
+              onClick={() => handleStatusUpdate(selectedOrder, "Cancelled")}
+            >
+              Cancel
+            </button>
+            {/* <button
+              style={{ width: "30%", backgroundColor: "#4A4A5F"}}
+              onClick={() => setCancelModalOpen(false)}
+            >
+              cancel
+            </button> */}
+          </div>
+        </Modal>
       </div>
     </div>
   );
