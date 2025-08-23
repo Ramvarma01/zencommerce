@@ -3,21 +3,44 @@ import { ProductContext } from "../context/productContext";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
+import Modal from "../components/Modal"
+// import CloseIcon from "@mui/icons-material/Close";
+
+// const Modal = ({ isOpen, onClose, children }) => {
+//   if (!isOpen) return null;
+
+//   return (
+//     <div className="modal-overlay" onClick={onClose}>
+//       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+//         <button className="modal-close" onClick={onClose}>
+//           <CloseIcon></CloseIcon>
+//         </button>
+//         {children}
+//       </div>
+//     </div>
+//   );
+// };
 
 function Products() {
   const [products, setProducts, fetchProducts] = useContext(ProductContext);
+  const [selectedProduct, setSelectedProduct] = useState({});
   const [menuOpen, setMenuOpen] = useState(null); // index of open menu
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const cardRefs = useRef([]);
   const navigate = useNavigate();
   // const location = useLocation();
   // const { product } = location.state || {};
 
   useEffect(() => {
+    fetchProducts();
+  })
+
+  useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuOpen !== null) {
         // Check if the click is outside the menu
-        const menuElement = document.querySelector('.product-menu');
-        const menuIcon = event.target.closest('.menu-icon');
+        const menuElement = document.querySelector(".product-menu");
+        const menuIcon = event.target.closest(".menu-icon");
         if (menuElement && !menuElement.contains(event.target) && !menuIcon) {
           setMenuOpen(null);
         }
@@ -49,6 +72,11 @@ function Products() {
     navigate("/products/editproduct", { state: { prod } });
   };
 
+  const openDeleteModal = (product) => {
+    setSelectedProduct(product);
+    setDeleteModalOpen(true);
+  };
+
   // HANDLE DELETE PRODUCTS
   const handleDelete = async (productId) => {
     try {
@@ -59,6 +87,7 @@ function Products() {
       alert(error.response?.data?.message);
       console.log(error);
     } finally {
+      setDeleteModalOpen(false)
       setMenuOpen(null);
     }
   };
@@ -78,8 +107,19 @@ function Products() {
   };
 
   return (
-    <div data-page= "Products" className="products-container">
+    <div data-page="Products" className="products-container">
       <h1 className="products-title">All Products</h1>
+
+      {/* <div>
+      <h1>My React Website</h1>
+      <button onClick={() => setModalOpen(true)}>Open Modal</button>
+
+      <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
+        <h2>Hello 👋</h2>
+        <p>This is a custom modal in React.</p>
+      </Modal>
+    </div> */}
+
       <div className="products-grid">
         {products.length === 0 ? (
           <p>No products found.</p>
@@ -126,7 +166,8 @@ function Products() {
                 <div className="product-menu">
                   <div onClick={() => handleEdit(product)}>Edit</div>
                   {/* <div onClick={() => navigate('/Products/EditProduct', { state: { prod: product } })}>Edit</div> */}
-                  <div onClick={() => handleDelete(product._id)}>Delete</div>
+                  {/* <div onClick={() => handleDelete(product._id)}>Delete</div> */}
+                  <div onClick={() => openDeleteModal(product)}>Delete </div>
                   <div onClick={() => handleDuplicate(product._id)}>
                     Duplicate
                   </div>
@@ -135,6 +176,31 @@ function Products() {
             </div>
           ))
         )}
+      </div>
+      <div>
+        <Modal
+          isOpen={isDeleteModalOpen}
+          onClose={() => setDeleteModalOpen(false)}
+        >
+          <h3 style={{ marginBottom: 10 }}>Confirm Delete</h3>
+          <p class="mb-2">
+            Are you sure you want to delete "{selectedProduct.name}"
+          </p>
+          <div style={{ display: "flex", flexDirection: "row-reverse" }}>
+            <button
+              style={{ marginLeft: 10, width: "30%", backgroundColor: "#ff6b6b" }}
+              onClick={() => handleDelete(selectedProduct._id)}
+            >
+              Delete
+            </button>
+            <button
+              style={{ width: "30%", backgroundColor: "#4A4A5F"}}
+              onClick={() => setDeleteModalOpen(false)}
+            >
+              cancel
+            </button>
+          </div>
+        </Modal>
       </div>
     </div>
   );
