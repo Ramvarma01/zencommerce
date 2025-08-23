@@ -16,10 +16,6 @@ function Products() {
   // const { product } = location.state || {};
 
   useEffect(() => {
-    fetchProducts();
-  })
-
-  useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuOpen !== null) {
         // Check if the click is outside the menu

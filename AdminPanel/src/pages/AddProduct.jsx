@@ -7,7 +7,7 @@ import axios from "axios";
 import { ProductContext } from "../context/productContext.jsx";
 
 function AddProduct() {
-  const [products, setProducts] = useContext(ProductContext);
+  const [products, setProducts, fetchProducts] = useContext(ProductContext);
   const [product, setProduct] = useState({
     name: "",
     price: "",
@@ -181,7 +181,8 @@ function AddProduct() {
 
       if (data.success) {
         alert("Product added successfully");
-        setProducts((prev) => [...prev, data.product]);
+        fetchProducts();
+        // setProducts((prev) => [...prev, data.product]);
         setProduct({
           name: "",
           price: "",
