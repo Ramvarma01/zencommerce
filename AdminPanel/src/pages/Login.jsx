@@ -19,6 +19,8 @@ function Login() {
       // localStorage.setItem("Login", "true");
       sessionStorage.setItem("Login", true);
       navigate("/products");
+      setEmail("");
+      setPassword("");
     } else {
       setLoading(false);
       setError("Invalid email or password");
