@@ -7,6 +7,7 @@ import Sidebar from "./components/Sidebar";
 import "./styles.css";
 import Products from "./pages/Products";
 import EditProduct from "./pages/EditProduct";
+import NotLoggedIn from "./pages/NotLoggedIn";
 
 function App() {
   const location = useLocation();
@@ -33,7 +34,8 @@ function App() {
       )}
       <div className="login-container">
         <Routes>
-          <Route path="/*" element={<Login />} />
+          <Route path="/" element={<Login />} />
+          <Route path="*" element={<NotLoggedIn />} />
         </Routes>
       </div>
     </div>
