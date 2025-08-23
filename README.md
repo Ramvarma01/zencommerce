@@ -93,6 +93,12 @@
   <img src="./UI/Edit-product (3).png" width="267" />
 </p>
 
+<p align="center">
+  <img src="./UI/confirm-delete.png" width="267" />
+  <img src="./UI/confirm-cancel.png" width="267" />
+  <img src="./UI/Access denied.png" width="267" />
+</p>
+
 ---
 
 ## 🏗️ Architecture & Tech Stack
