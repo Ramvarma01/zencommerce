@@ -16,6 +16,8 @@ function Login() {
     // TODO: Replace with real authentication logic
     if (email === "admin@example.com" && password === "password") {
       setLoading(false);
+      // localStorage.setItem("Login", "true");
+      sessionStorage.setItem("Login", true);
       navigate("/products");
     } else {
       setLoading(false);

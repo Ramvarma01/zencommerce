@@ -21,7 +21,8 @@ const Sidebar = () => {
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
   const handleLogout = async () => {
-    localStorage.removeItem("adminToken");
+    // localStorage.removeItem("Login");
+    sessionStorage.removeItem("Login");
     navigate("/");
   };
 

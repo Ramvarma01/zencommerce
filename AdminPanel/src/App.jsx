@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation, Router, BrowserRouter } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import AddProduct from "./pages/AddProduct";
 import Orders from "./pages/Orders";
@@ -10,36 +10,32 @@ import EditProduct from "./pages/EditProduct";
 
 function App() {
   const location = useLocation();
-  const onLoginPage = location.pathname === "/";
-
+  // const onLoginPage = location.pathname === "/";
+  // const isLogin = localStorage.getItem("Login");
+  const isLogin = sessionStorage.getItem("Login");
   return (
     <div className="app-container">
-      {/* {!onLoginPage && <Sidebar />} */}
-
-      {onLoginPage && (
-        <div className="login-container">
-          <Routes>
-            <Route path="/" element={<Login />} />
-          </Routes>
-        </div>
-      )}
-
-      {!onLoginPage && (
+      {isLogin && (
         <>
           <Sidebar />
           <div className="main-content">
-            {/* <Sidebar /> */}
             <Routes>
               {/* <Route path="/" element={<Dashboard />} /> */}
               <Route path="/products" element={<Products />} />
               <Route path="/addproduct" element={<AddProduct />} />
               <Route path="/orders" element={<Orders />} />
               <Route path="/products/editproduct" element={<EditProduct />} />
-              {/* <Route path="/login" element={<Login />} /> */}
+
+              <Route path="*" element={<Navigate to="/products" replace />} />
             </Routes>
           </div>
         </>
       )}
+      <div className="login-container">
+        <Routes>
+          <Route path="/*" element={<Login />} />
+        </Routes>
+      </div>
     </div>
   );
 }
