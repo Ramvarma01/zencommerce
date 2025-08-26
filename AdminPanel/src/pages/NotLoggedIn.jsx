@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import GppBadIcon from "@mui/icons-material/GppBad";
+import GppMaybeTwoToneIcon from '@mui/icons-material/GppMaybeTwoTone';
+import HttpsIcon from '@mui/icons-material/Https';
+import LockTwoToneIcon from '@mui/icons-material/LockTwoTone';
 
 function NotLoggedIn() {
   return (
@@ -20,7 +22,7 @@ function NotLoggedIn() {
           width: "100%",
         }}
       >
-        <GppBadIcon style={{ fontSize: "120px", color: "#ff4d4f", marginBottom: "20px" }} />
+        <LockTwoToneIcon style={{ fontSize: "120px", color: "#ff4d4f", marginBottom: "20px"}} />
         <h1 style={{ marginBottom: "10px", fontSize: "28px", color: "#333" }}>
           Access Denied
         </h1>

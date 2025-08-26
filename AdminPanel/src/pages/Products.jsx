@@ -67,7 +67,7 @@ function Products() {
       alert(error.response?.data?.message);
       console.log(error);
     } finally {
-      setDeleteModalOpen(false)
+      setDeleteModalOpen(false);
       setMenuOpen(null);
     }
   };
