@@ -1,8 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import GppMaybeTwoToneIcon from '@mui/icons-material/GppMaybeTwoTone';
-import HttpsIcon from '@mui/icons-material/Https';
 import LockTwoToneIcon from '@mui/icons-material/LockTwoTone';
+
 
 function NotLoggedIn() {
   return (
@@ -23,10 +22,10 @@ function NotLoggedIn() {
         }}
       >
         <LockTwoToneIcon style={{ fontSize: "120px", color: "#ff4d4f", marginBottom: "20px"}} />
-        <h1 style={{ marginBottom: "10px", fontSize: "28px", color: "#333" }}>
+        <h1 style={{ marginBottom: "5px", fontSize: "28px", color: "#333" }}>
           Access Denied
         </h1>
-        <p style={{ marginBottom: "30px", fontSize: "16px", color: "#666" }}>
+        <p style={{ marginBottom: "20px", fontSize: "16px", color: "#666" }}>
           You need to be logged in to access this page
         </p>
         <Link
